@@ -1,0 +1,65 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+
+    // Active tous les contrôles stricts de TS (inclut noImplicitAny, etc.)
+    "strict": true,
+
+    //Erreur si une variable ou un paramètre est typé `any` sans être explicite
+    "noImplicitAny": true,
+
+    //Les null/undefined doivent être explicitement gérés
+    "strictNullChecks": true,
+
+    //Fonction incompatible dans une assignation = erreur (ex: `(a: number) => void` ≠ `(a: string) => void`)
+    "strictFunctionTypes": true,
+
+    //Vérifie les `.bind()`, `.call()`, `.apply()` pour qu’ils respectent bien les types
+    "strictBindCallApply": true,
+
+    //Vérifie `this` dans les fonctions (utile surtout pour les méthodes de classe)
+    "noImplicitThis": true,
+
+    //Active `use strict` dans tous les fichiers générés
+    "alwaysStrict": true,
+
+    //Erreur si une variable locale est déclarée mais jamais utilisée
+    "noUnusedLocals": true,
+
+    //Erreur si un paramètre de fonction n’est jamais utilisé
+    "noUnusedParameters": true,
+
+    //Erreur si un `case` dans un `switch` tombe sans `break`
+    "noFallthroughCasesInSwitch": true,
+
+    //Les options `?:` doivent être exactement typées (ex: `{ a?: string | undefined }` ≠ `{ a?: string }`)
+    "exactOptionalPropertyTypes": true,
+
+    //Pour compatibilité avec des libs CommonJS (nécessaire si tu utilises des packages non ESM)
+    "esModuleInterop": true,
+
+    //Permet d’écrire `import x from "..."` même si pas de `default export` explicite
+    "allowSyntheticDefaultImports": true,
+
+    //Permet d'importer des fichiers `.json`
+    "resolveJsonModule": true,
+
+    //Active les décorateurs (NestJS en a besoin)
+    "experimentalDecorators": true,
+
+    //Génère les métadonnées pour les décorateurs (NestJS + typage DI)
+    "emitDecoratorMetadata": true,
+
+    //Erreur si usage incohérent de la casse dans les imports (utile en CI/Linux)
+    "forceConsistentCasingInFileNames": true,
+
+    //Ignore les `.d.ts` de node_modules (améliore perf, évite du bruit inutile)
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "dist"]
+}
