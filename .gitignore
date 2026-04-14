@@ -35,3 +35,5 @@ service-worker.js
 # Others
 coverage/
 *.local
+
+.dist
