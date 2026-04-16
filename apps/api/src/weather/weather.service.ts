@@ -1,0 +1,55 @@
+import {Injectable, Logger} from '@nestjs/common';
+import {WeatherData} from '@wander/types';
+import {RedisService} from '../redis/redis.service';
+import {HttpClientService} from '../http-client/http-client.service';
+import {PARIS_COORDINATES} from '../config/constants';
+
+const {latitude, longitude} = PARIS_COORDINATES;
+const CACHE_KEY = 'weather:paris';
+const CACHE_TTL = 900;
+
+const OPEN_METEO_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,precipitation,weathercode,windspeed_10m&timezone=Europe/Paris`;
+
+interface OpenMeteoResponse {
+  current: {
+    temperature_2m: number;
+    precipitation: number;
+    weathercode: number;
+    windspeed_10m: number;
+    time: string;
+  };
+}
+
+@Injectable()
+export class WeatherService {
+  private readonly logger = new Logger(WeatherService.name);
+
+  constructor(
+    private readonly redisService: RedisService,
+    private readonly httpClient: HttpClientService
+  ) {}
+
+  async getWeather(): Promise<WeatherData> {
+    const cached = await this.redisService.get<WeatherData>(CACHE_KEY);
+
+    if (cached) {
+      this.logger.log('🎯 Weather cache hit');
+      return cached;
+    }
+
+    const data = await this.httpClient.get<OpenMeteoResponse>(OPEN_METEO_URL);
+
+    const weather: WeatherData = {
+      temperature: data.current.temperature_2m,
+      precipitation: data.current.precipitation,
+      weatherCode: data.current.weathercode,
+      windSpeed: data.current.windspeed_10m,
+      time: data.current.time,
+    };
+
+    await this.redisService.set(CACHE_KEY, weather, CACHE_TTL);
+    this.logger.log('💾 Weather cached');
+
+    return weather;
+  }
+}
