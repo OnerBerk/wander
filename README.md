@@ -1,68 +1,132 @@
-# 🎯 nest-prisma-react-template-ts
+# 🗺️ Wander
 
-A TypeScript monorepo boilerplate for building fullstack apps with:
+> Carte interactive de Paris avec donnees temps reel et suggestions de parcours assistees par IA.
 
-- 🚀 **NestJS** (backend)
-- 🧬 **Prisma** (PostgreSQL ORM)
-- ⚛️ **React + Vite** (frontend)
-- 🧹 **ESLint v9** (Flat Config)
-- 🎨 **Prettier** (shared)
-- 📦 **PNPM workspaces**
-- 🛠️ Shared **TypeScript config**
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue?logo=typescript)
+![NestJS](https://img.shields.io/badge/API-NestJS-ea2845?logo=nestjs)
+![React](https://img.shields.io/badge/Web-React-61dafb?logo=react&logoColor=222)
+![Vite](https://img.shields.io/badge/Build-Vite-646cff?logo=vite)
+![PNPM](https://img.shields.io/badge/Monorepo-pnpm-f69220?logo=pnpm&logoColor=fff)
+![Redis](https://img.shields.io/badge/Cache-Redis-dc382d?logo=redis&logoColor=fff)
+![Docker](https://img.shields.io/badge/Dev-Docker-2496ed?logo=docker&logoColor=fff)
 
 ---
 
-## 🗂️ Project structure
+## ✨ Vision
 
-```
-.
+Wander agrege plusieurs APIs publiques pour afficher des infos utiles en direct (mobilite, evenements, meteo, etc.) sur une carte de Paris, puis genere des idees de parcours personnalisees.
+
+Le projet est pense comme un portfolio **propre, type strict, et production-ready**.
+
+---
+
+## 🏗️ Architecture
+
+```txt
+wander/
 ├── apps/
-│   ├── api/       # NestJS backend
-│   │   └── .env   # Environment variables for backend
-│   └── web/       # React + Vite frontend
-│       └── .env   # Environment variables for frontend
-├── prisma/        # Prisma schema
-├── tsconfig.base.json
-├── eslint.config.js
-├── prettier.config.cjs
-├── .eslintignore
-├── .prettierignore
-├── pnpm-workspace.yaml
+│   ├── api/          # Backend NestJS
+│   └── web/          # Frontend React + Vite
+└── packages/
+    └── types/        # Types TypeScript partages (@wander/types)
 ```
 
 ---
 
-## 📦 Install dependencies
+## 🧰 Stack
 
-```bash
-pnpm install
-cd apps/api && pnpm install
-cd ../web && pnpm install
-```
+| Couche | Technologie |
+| --- | --- |
+| Frontend | React, TypeScript, Vite, Leaflet |
+| Backend | NestJS, TypeScript |
+| Cache | Redis |
+| Types partages | `@wander/types` (workspace pnpm) |
+| Conteneurs | Docker + Docker Compose |
+| CI/CD | GitHub Actions |
+| Deploiement | Vercel (web), Render (api) |
+| IA | Claude API |
 
 ---
 
-## 🔐 Environment variables
+## 🌍 APIs externes (prevues / integrees)
 
-Create the following files:
+- 🚲 Velib API
+- 🎭 Que Faire a Paris
+- 🗓️ OpenAgenda IDF
+- 🏛️ Paris Musees
+- 🏋️ Equipements sportifs IDF
+- 🚴 Pistes cyclables Paris
+- 🍽️ DATAtourisme
+- 🌤️ Open-Meteo
 
-**`apps/api/.env`**
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/your-db
+---
+
+## ⚙️ Variables d'environnement
+
+### `apps/api/.env`
+
+```env
+REDIS_URL=redis://localhost:6379
+CLAUDE_API_KEY=
+PORT=3000
 ```
 
-**`apps/web/.env`**
-```
+### `apps/web/.env`
+
+```env
 VITE_API_URL=http://localhost:3000
 ```
 
-## 🧹 Lint & Format
+---
+
+## 🚀 Commandes utiles
 
 ```bash
-pnpm lint       # Check code quality
-pnpm format     # Format codebase with Prettier
+# A la racine
+pnpm install
+pnpm lint
+pnpm format
+
+# API
+cd apps/api
+pnpm start:dev
+pnpm test
+
+# Web
+cd apps/web
+pnpm dev
+pnpm test
 ```
 
 ---
 
-✨ Ready to build, extend and ship.
+## 🐳 Docker (dev)
+
+```bash
+docker-compose up -d
+docker-compose down
+```
+
+### Redis dockerise (local dev)
+
+- Service lance via `docker-compose.yml` avec l'image `redis:7-alpine`
+- Container local: `wander-redis`
+- Port expose: `6379:6379`
+- Donnees persistantes via le volume Docker `redis_data`
+- Variable API: `REDIS_URL=redis://localhost:6379`
+
+---
+
+## ✅ Principes du projet
+
+- 🔒 Jamais de cle API exposee cote frontend
+- 🧠 TypeScript strict partout
+- ⚡ Cache Redis avant tout appel externe
+- 🧩 Une responsabilite claire par module
+
+---
+
+## 📝 Notes
+
+- Pas de PostgreSQL / Prisma dans l'etat actuel du projet.
+- Le socle est volontairement modulaire pour evoluer rapidement.
