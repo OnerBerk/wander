@@ -35,16 +35,16 @@ wander/
 
 ## 🧰 Stack
 
-| Couche | Technologie |
-| --- | --- |
-| Frontend | React, TypeScript, Vite, Leaflet |
-| Backend | NestJS, TypeScript |
-| Cache | Redis |
+| Couche         | Technologie                      |
+| -------------- | -------------------------------- |
+| Frontend       | React, TypeScript, Vite, Leaflet |
+| Backend        | NestJS, TypeScript               |
+| Cache          | Redis                            |
 | Types partages | `@wander/types` (workspace pnpm) |
-| Conteneurs | Docker + Docker Compose |
-| CI/CD | GitHub Actions |
-| Deploiement | Vercel (web), Render (api) |
-| IA | Claude API |
+| Conteneurs     | Docker + Docker Compose          |
+| CI/CD          | GitHub Actions                   |
+| Deploiement    | Vercel (web), Render (api)       |
+| IA             | Claude API                       |
 
 ---
 
@@ -116,17 +116,3 @@ docker-compose down
 - Variable API: `REDIS_URL=redis://localhost:6379`
 
 ---
-
-## ✅ Principes du projet
-
-- 🔒 Jamais de cle API exposee cote frontend
-- 🧠 TypeScript strict partout
-- ⚡ Cache Redis avant tout appel externe
-- 🧩 Une responsabilite claire par module
-
----
-
-## 📝 Notes
-
-- Pas de PostgreSQL / Prisma dans l'etat actuel du projet.
-- Le socle est volontairement modulaire pour evoluer rapidement.
