@@ -121,8 +121,9 @@ pnpm dev                  # dev Vite
 pnpm test                 # tests Vitest
 
 # Docker (dev)
-docker-compose up         # lance Redis
-docker-compose down       # arrête tout
+docker compose up -d      # lance Redis en arrière-plan
+docker compose down       # arrête tout
+docker exec -it wander-redis redis-cli ping  # vérifie que Redis répond
 ```
 
 # Git workflow
@@ -141,7 +142,8 @@ docker-compose down       # arrête tout
 
 ### Husky
 
-- Lint + tests bloquants avant chaque push local
+- Lint bloquant avant chaque push local (`pre-push`)
+- Tests bloquant
 - Config dans `.husky/`
 
 ---

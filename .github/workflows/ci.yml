@@ -31,6 +31,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Test API
+        run: pnpm --filter api test:cov
+
       - name: Build API
         run: pnpm --filter api build
 

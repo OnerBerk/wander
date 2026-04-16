@@ -9,7 +9,7 @@ export default [
     languageOptions: {
       parser: parserTs,
       parserOptions: {
-        project: ['./apps/*/tsconfig.json'],
+        project: ['./apps/*/tsconfig.json', './packages/*/tsconfig.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
