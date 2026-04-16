@@ -10,7 +10,7 @@ export default [
       parser: parserTs,
       parserOptions: {
         project: ['./apps/*/tsconfig.json'],
-        tsconfigRootDir: new URL('.', import.meta.url),
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
