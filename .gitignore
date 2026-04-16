@@ -1,6 +1,5 @@
 # node + pnpm
 node_modules/
-pnpm-lock.yaml
 
 # build output
  dev-dist/
