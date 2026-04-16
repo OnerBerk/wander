@@ -1,6 +1,6 @@
 # Wander — CLAUDE.md
 
-## Contexte du projet
+# Contexte du projet
 
 Wander est une carte interactive de Paris qui agrège des données temps réel depuis plusieurs APIs publiques gratuites, avec des suggestions de parcours générées par IA.
 
@@ -8,7 +8,7 @@ Projet portfolio : le code doit être propre, typé strictement, et production-r
 
 ---
 
-## Architecture
+# Architecture
 
 ```
 wander/
@@ -21,7 +21,7 @@ wander/
 
 ---
 
-## Stack technique
+# Stack technique
 
 | Couche          | Technologie                          |
 | --------------- | ------------------------------------ |
@@ -37,7 +37,7 @@ wander/
 
 ---
 
-## APIs externes intégrées
+# APIs externes intégrées
 
 | Source                   | Données                    | TTL Redis |
 | ------------------------ | -------------------------- | --------- |
@@ -52,7 +52,7 @@ wander/
 
 ---
 
-## Conventions de code
+# Conventions de code
 
 ### Général
 
@@ -84,7 +84,7 @@ wander/
 
 ---
 
-## Variables d'environnement
+# Variables d'environnement
 
 ### apps/api/.env
 
@@ -102,7 +102,7 @@ VITE_API_URL=http://localhost:3000
 
 ---
 
-## Commandes utiles
+# Commandes utiles
 
 ```bash
 # Depuis la racine
@@ -121,9 +121,30 @@ pnpm dev                  # dev Vite
 pnpm test                 # tests Vitest
 
 # Docker (dev)
-docker-compose up         # lance Redis
-docker-compose down       # arrête tout
+docker compose up -d      # lance Redis en arrière-plan
+docker compose down       # arrête tout
+docker exec -it wander-redis redis-cli ping  # vérifie que Redis répond
 ```
+
+# Git workflow
+
+- Branche `main` : protégée, PR obligatoire avant merge
+- Branche `dev` : branche de travail principale
+- Branches features : `feat/nom-feature` → PR vers `dev`
+- Ne jamais pousser directement sur `main`
+
+# CI/CD
+
+### GitHub Actions
+
+- Pipeline sur chaque push : lint + tests + build
+- Fichiers dans `.github/workflows/`
+
+### Husky
+
+- Lint bloquant avant chaque push local (`pre-push`)
+- Tests bloquant
+- Config dans `.husky/`
 
 ---
 

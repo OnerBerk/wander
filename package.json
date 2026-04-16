@@ -1,16 +1,26 @@
 {
-	"type": "commonjs",
-	"devDependencies": {
-		"@eslint/js": "^9.27.0",
-		"@nestjs/cli": "^11.0.7",
-		"@typescript-eslint/eslint-plugin": "^8.32.1",
-		"@typescript-eslint/parser": "^8.32.1",
-		"eslint": "^9.27.0",
-		"eslint-config-prettier": "^10.1.5",
-		"eslint-plugin-prettier": "^5.4.0",
-		"prettier": "^3.5.3"
-	},
-	"scripts": {
-		"lint": "eslint apps/*/src --ext .ts"
-	}
+  "type": "commonjs",
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@nestjs/cli": "^11.0.7",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.5.3"
+  },
+  "scripts": {
+    "lint": "eslint apps/*/src --ext .ts",
+    "prepare": "husky"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@swc/core",
+      "esbuild"
+    ]
+  }
 }
