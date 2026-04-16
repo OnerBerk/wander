@@ -13,7 +13,7 @@ export class RedisService implements OnModuleDestroy {
     });
 
     this.client.on('error', (err) => {
-      this.logger.error('❌ Redis error', err);
+      this.logger.error('❌ Redis error', err.message);
     });
   }
 

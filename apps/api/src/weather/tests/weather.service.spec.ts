@@ -1,8 +1,9 @@
-import {Test, TestingModule} from '@nestjs/testing';
-import {WeatherData} from '@wander/types';
+import {InternalServerErrorException} from '@nestjs/common';
 import {WeatherService} from '../weather.service';
-import {HttpClientService} from '../../http-client/http-client.service';
 import {RedisService} from '../../redis/redis.service';
+import {HttpClientService} from '../../http-client/http-client.service';
+import {WeatherData} from '@wander/types';
+import {setupUnitTest} from '../../test-utils/setup-unit-test';
 
 const mockWeatherData: WeatherData = {
   temperature: 18.9,
@@ -22,60 +23,60 @@ const mockOpenMeteoResponse = {
   },
 };
 
+const mockRedisService = {
+  get: jest.fn(),
+  set: jest.fn(),
+};
+
+const mockHttpClient = {
+  get: jest.fn(),
+};
+
 describe('WeatherService', () => {
   let service: WeatherService;
-  let redisService: jest.Mocked<RedisService>;
-  let httpClient: jest.Mocked<HttpClientService>;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        WeatherService,
-        {
-          provide: RedisService,
-          useValue: {
-            get: jest.fn(),
-            set: jest.fn(),
-          },
-        },
-        {
-          provide: HttpClientService,
-          useValue: {
-            get: jest.fn(),
-          },
-        },
-      ],
-    }).compile();
-
-    service = module.get<WeatherService>(WeatherService);
-    redisService = module.get(RedisService);
-    httpClient = module.get(HttpClientService);
+  beforeAll(async () => {
+    service = await setupUnitTest(WeatherService, [
+      {provide: RedisService, useValue: mockRedisService},
+      {provide: HttpClientService, useValue: mockHttpClient},
+    ]);
   });
 
-  it('returns the cached weather data when it exists', async () => {
-    redisService.get.mockResolvedValue(mockWeatherData);
-
-    const result = await service.getWeather();
-
-    expect(result).toEqual(mockWeatherData);
-    expect(httpClient.get).not.toHaveBeenCalled();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('calls Open-Meteo and caches the data when the cache is empty', async () => {
-    redisService.get.mockResolvedValue(null);
-    httpClient.get.mockResolvedValue(mockOpenMeteoResponse);
+  describe('cache hit', () => {
+    it('retourne les données du cache sans appeler Open-Meteo', async () => {
+      mockRedisService.get.mockResolvedValue(mockWeatherData);
 
-    const result = await service.getWeather();
+      const result = await service.getWeather();
 
-    expect(result).toEqual(mockWeatherData);
-    expect(httpClient.get).toHaveBeenCalledTimes(1);
-    expect(redisService.set).toHaveBeenCalledWith('weather:paris', mockWeatherData, 900);
+      expect(result).toEqual(mockWeatherData);
+      expect(mockHttpClient.get).not.toHaveBeenCalled();
+      expect(mockRedisService.set).not.toHaveBeenCalled();
+    });
   });
 
-  it('propagates the error if Open-Meteo fails', async () => {
-    redisService.get.mockResolvedValue(null);
-    httpClient.get.mockRejectedValue(new Error('External API error'));
+  describe('cache miss', () => {
+    it('appelle Open-Meteo, transforme la réponse et met en cache', async () => {
+      mockRedisService.get.mockResolvedValue(null);
+      mockHttpClient.get.mockResolvedValue(mockOpenMeteoResponse);
 
-    await expect(service.getWeather()).rejects.toThrow('External API error');
+      const result = await service.getWeather();
+
+      expect(result).toEqual(mockWeatherData);
+      expect(mockHttpClient.get).toHaveBeenCalledTimes(1);
+      expect(mockRedisService.set).toHaveBeenCalledWith('weather:paris', mockWeatherData, 900);
+    });
+  });
+
+  describe('erreur', () => {
+    it('lance InternalServerErrorException si Open-Meteo échoue', async () => {
+      mockRedisService.get.mockResolvedValue(null);
+      mockHttpClient.get.mockRejectedValue(new Error('Network error'));
+
+      await expect(service.getWeather()).rejects.toThrow(InternalServerErrorException);
+    });
   });
 });

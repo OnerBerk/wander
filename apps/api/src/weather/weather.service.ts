@@ -1,4 +1,4 @@
-import {Injectable, Logger} from '@nestjs/common';
+import {Injectable, InternalServerErrorException, Logger} from '@nestjs/common';
 import {WeatherData} from '@wander/types';
 import {RedisService} from '../redis/redis.service';
 import {HttpClientService} from '../http-client/http-client.service';
@@ -30,26 +30,30 @@ export class WeatherService {
   ) {}
 
   async getWeather(): Promise<WeatherData> {
-    const cached = await this.redisService.get<WeatherData>(CACHE_KEY);
+    try {
+      const cached = await this.redisService.get<WeatherData>(CACHE_KEY);
 
-    if (cached) {
-      this.logger.log('🎯 Weather cache hit');
-      return cached;
+      if (cached) {
+        this.logger.log('🎯 Weather cache hit');
+        return cached;
+      }
+
+      const data = await this.httpClient.get<OpenMeteoResponse>(OPEN_METEO_URL);
+
+      const weather: WeatherData = {
+        temperature: data.current.temperature_2m,
+        precipitation: data.current.precipitation,
+        weatherCode: data.current.weathercode,
+        windSpeed: data.current.windspeed_10m,
+        time: data.current.time,
+      };
+
+      await this.redisService.set(CACHE_KEY, weather, CACHE_TTL);
+      this.logger.log('💾 Weather cached');
+
+      return weather;
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to fetch weather data');
     }
-
-    const data = await this.httpClient.get<OpenMeteoResponse>(OPEN_METEO_URL);
-
-    const weather: WeatherData = {
-      temperature: data.current.temperature_2m,
-      precipitation: data.current.precipitation,
-      weatherCode: data.current.weathercode,
-      windSpeed: data.current.windspeed_10m,
-      time: data.current.time,
-    };
-
-    await this.redisService.set(CACHE_KEY, weather, CACHE_TTL);
-    this.logger.log('💾 Weather cached');
-
-    return weather;
   }
 }
