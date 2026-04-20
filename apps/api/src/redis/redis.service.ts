@@ -7,7 +7,10 @@ export class RedisService implements OnModuleDestroy {
   private readonly logger = new Logger(RedisService.name);
 
   constructor() {
-    this.client = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379');
+    this.client = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379', {
+      maxRetriesPerRequest: 2,
+      retryStrategy: () => null,
+    });
     this.client.on('connect', () => {
       this.logger.log('🚀 Redis connected');
     });
