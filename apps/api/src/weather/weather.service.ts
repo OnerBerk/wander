@@ -8,7 +8,13 @@ const {latitude, longitude} = PARIS_COORDINATES;
 const CACHE_KEY = 'weather:paris';
 const CACHE_TTL = 900;
 
-const OPEN_METEO_URL = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,precipitation,weathercode,windspeed_10m&timezone=Europe/Paris`;
+const OPEN_METEO_URL =
+  `https://api.open-meteo.com/v1/forecast?latitude=${latitude}` +
+  `&longitude=${longitude}` +
+  `&current=temperature_2m,` +
+  `precipitation,weathercode,windspeed_10m` +
+  `&daily=sunrise,sunset` +
+  `&timezone=Europe/Paris`;
 
 interface OpenMeteoResponse {
   current: {
@@ -17,6 +23,10 @@ interface OpenMeteoResponse {
     weathercode: number;
     windspeed_10m: number;
     time: string;
+  };
+  daily: {
+    sunrise: string[];
+    sunset: string[];
   };
 }
 
@@ -32,6 +42,7 @@ export class WeatherService {
   async getWeather(): Promise<WeatherData> {
     try {
       const cached = await this.redisService.get<WeatherData>(CACHE_KEY);
+      this.logger.log('data', cached);
 
       if (cached) {
         this.logger.log('🎯 Weather cache hit');
@@ -46,6 +57,8 @@ export class WeatherService {
         weatherCode: data.current.weathercode,
         windSpeed: data.current.windspeed_10m,
         time: data.current.time,
+        sunrise: data.daily.sunrise[0],
+        sunset: data.daily.sunset[0],
       };
 
       await this.redisService.set(CACHE_KEY, weather, CACHE_TTL);
@@ -53,6 +66,7 @@ export class WeatherService {
 
       return weather;
     } catch (error) {
+      this.logger.log(error);
       throw new InternalServerErrorException('Failed to fetch weather data');
     }
   }

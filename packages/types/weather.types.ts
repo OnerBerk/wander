@@ -4,4 +4,6 @@ export interface WeatherData {
   weatherCode: number;
   windSpeed: number;
   time: string;
+  sunrise: string;
+  sunset: string;
 }

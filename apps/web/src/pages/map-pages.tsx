@@ -2,7 +2,7 @@ import WanderMap from '@/components/map/wander-map';
 
 const MapPage = () => {
   return (
-    <div className='h-screen w-full p-20'>
+    <div className='h-full w-full'>
       <WanderMap />
     </div>
   );

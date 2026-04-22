@@ -1,10 +1,8 @@
-import {Routes, Route} from 'react-router-dom';
-import MapPage from '@/pages/map-pages';
+import {useRoutes} from 'react-router-dom';
+import {routes} from '@/pages/routes';
 
-export default function App() {
-  return (
-    <Routes>
-      <Route path='/' element={<MapPage />} />
-    </Routes>
-  );
-}
+const App = () => {
+  return useRoutes(routes);
+};
+
+export default App;
