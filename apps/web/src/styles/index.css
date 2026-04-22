@@ -1,7 +1,13 @@
 @import 'tailwindcss';
 
+@theme {
+  --font-default: 'Montserrat', sans-serif;
+  --font-alternate: 'Montserrat Alternates', sans-serif;
+  --color-wander-orange: #cc4b10;
+}
+
 body {
-  background-color: #fff1e8;
+  font-family: var(--font-default);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -12,5 +18,15 @@ body {
       linear-gradient(to right, transparent, white 10%, white 90%, transparent),
       linear-gradient(to bottom, transparent, white 20%, white 90%, transparent);
     mask-composite: intersect;
+  }
+  .header-day {
+    background-image: url('/header-day.webp');
+    background-size: cover;
+    background-position: center;
+  }
+  .header-night {
+    background-image: url('/header-night.webp');
+    background-size: cover;
+    background-position: center;
   }
 }
