@@ -3,29 +3,19 @@ import {RedisService} from '../redis/redis.service';
 import {HttpClientService} from '../http-client/http-client.service';
 import {EventData, PriceType, Coordinates} from '@wander/types';
 import {QueryFilterDto} from '../filters/dtos/query-filter.dto';
-import {QueryBuilder} from '../filters/utils/query-builder';
-import {FieldMapper, ParisEventRaw, ParisEventsApiResponse} from './local-types/paris-events.types';
+import {buildParisEventUrl} from './utils/build-paris-event-url';
+import {ParisEventRaw, ParisEventsApiResponse} from './local-types/paris-events.types';
 
-const BASE_URL = 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records';
 const CACHE_TTL = 21600;
 
 @Injectable()
 export class ParisEventsService {
   private readonly logger = new Logger(ParisEventsService.name);
 
-  private readonly FIELD_MAP: FieldMapper = {
-    tag: (v) => `qfap_tags like '%${v}%'`,
-    price: (v) => `price_type='${v === 'free' ? 'gratuit' : 'payant'}'`,
-    city: (v) => `address_city='${v}'`,
-  };
   constructor(
     private readonly redisService: RedisService,
     private readonly httpClient: HttpClientService
   ) {}
-
-  private buildUrl(query: QueryFilterDto): string {
-    return new QueryBuilder(query, this.FIELD_MAP).build(BASE_URL);
-  }
 
   async getEvents(query: QueryFilterDto): Promise<{total: number; events: EventData[]}> {
     const cacheKey = `paris-events:${JSON.stringify(query)}`;
@@ -37,7 +27,7 @@ export class ParisEventsService {
         return cached;
       }
 
-      const url = this.buildUrl(query);
+      const url = buildParisEventUrl(query);
       const data = await this.httpClient.get<ParisEventsApiResponse>(url);
 
       const events = data.results.reduce<EventData[]>((acc: EventData[], raw: ParisEventRaw) => {
@@ -53,7 +43,6 @@ export class ParisEventsService {
 
       return result;
     } catch (error) {
-      this.logger.error('❌ Failed to fetch paris events');
       throw new InternalServerErrorException('Failed to fetch paris events');
     }
   }

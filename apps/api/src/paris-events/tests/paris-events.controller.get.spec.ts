@@ -2,6 +2,14 @@ import {INestApplication} from '@nestjs/common';
 import {setupApi} from '../../test-utils/setup-api';
 import {TestTool} from '../../test-utils/test-tools';
 
+const invalidRequests: [string, string][] = [
+  ['/paris-events', 'missing lat lng radius'],
+  ['/paris-events?lat=48.8566&lng=2.3522&radius=5&limit=999', 'limit too high'],
+  ['/paris-events?lng=2.3522&radius=5', 'missing lat'],
+  ['/paris-events?lat=48.8566&radius=5', 'missing lng'],
+  ['/paris-events?lat=48.8566&lng=2.3522', 'missing radius'],
+];
+
 describe('GET /paris-events', () => {
   let app: INestApplication;
   let testTool: TestTool;
@@ -15,27 +23,16 @@ describe('GET /paris-events', () => {
     await testTool.destroy();
   });
 
-  it('returns 200 with events list', async () => {
-    const res = await testTool.get('/paris-events');
+  it('returns 200 with valid params', async () => {
+    const res = await testTool.get('/paris-events?lat=48.8566&lng=2.3522&radius=5&limit=5');
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('total');
     expect(res.body).toHaveProperty('events');
     expect(Array.isArray(res.body.events)).toBe(true);
   });
 
-  it('returns 200 with tag filter', async () => {
-    const res = await testTool.get('/paris-events?filter=tag:Concert&limit=5');
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('events');
-  });
-
-  it('returns 400 with invalid limit', async () => {
-    const res = await testTool.get('/paris-events?limit=999', 400);
-    expect(res.status).toBe(400);
-  });
-
-  it('returns 400 with malformed filter', async () => {
-    const res = await testTool.get('/paris-events?filter=invalid', 400);
+  it.each(invalidRequests)('returns 400 for %s (%s)', async (url) => {
+    const res = await testTool.get(url, 400);
     expect(res.status).toBe(400);
   });
 });

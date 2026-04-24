@@ -89,7 +89,12 @@ describe('ParisEventsService', () => {
     jest.clearAllMocks();
   });
 
-  const dto = plainToInstance(QueryFilterDto, {limit: 5, offset: 0});
+  const dto = plainToInstance(QueryFilterDto, {
+    lat: 48.8566,
+    lng: 2.3522,
+    radius: 5,
+    limit: 5,
+  });
 
   describe('cache hit', () => {
     it('returns cached data without calling API', async () => {
@@ -170,7 +175,13 @@ describe('ParisEventsService', () => {
       mockRedisService.get.mockResolvedValue(null);
       mockHttpClient.get.mockResolvedValue(mockApiResponse);
 
-      const dtoWithFilter = plainToInstance(QueryFilterDto, {filter: 'tag:Concert', limit: 5});
+      const dtoWithFilter = plainToInstance(QueryFilterDto, {
+        lat: 48.8566,
+        lng: 2.3522,
+        radius: 5,
+        tag: 'Concert',
+        limit: 5,
+      });
       await service.getEvents(dtoWithFilter);
 
       expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('Concert'));
@@ -180,7 +191,14 @@ describe('ParisEventsService', () => {
       mockRedisService.get.mockResolvedValue(null);
       mockHttpClient.get.mockResolvedValue(mockApiResponse);
 
-      const dtoWithFilter = plainToInstance(QueryFilterDto, {filter: 'price:free', limit: 5});
+      const dtoWithFilter = plainToInstance(QueryFilterDto, {
+        lat: 48.8566,
+        lng: 2.3522,
+        radius: 5,
+        tag: 'Concert',
+        price: 'free',
+        limit: 5,
+      });
       await service.getEvents(dtoWithFilter);
 
       expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('gratuit'));
@@ -190,20 +208,17 @@ describe('ParisEventsService', () => {
       mockRedisService.get.mockResolvedValue(null);
       mockHttpClient.get.mockResolvedValue(mockApiResponse);
 
-      const dtoWithFilter = plainToInstance(QueryFilterDto, {filter: 'price:paid', limit: 5});
+      const dtoWithFilter = plainToInstance(QueryFilterDto, {
+        lat: 48.8566,
+        lng: 2.3522,
+        radius: 5,
+        tag: 'Concert',
+        price: 'paid',
+        limit: 5,
+      });
       await service.getEvents(dtoWithFilter);
 
       expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('payant'));
-    });
-
-    it('calls API with city filter', async () => {
-      mockRedisService.get.mockResolvedValue(null);
-      mockHttpClient.get.mockResolvedValue(mockApiResponse);
-
-      const dtoWithFilter = plainToInstance(QueryFilterDto, {filter: 'city:Paris', limit: 5});
-      await service.getEvents(dtoWithFilter);
-
-      expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('Paris'));
     });
   });
 
