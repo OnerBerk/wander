@@ -13,7 +13,8 @@ export type EventTag =
   | 'Loisirs'
   | 'Nature'
   | 'Spectacle musical'
-  | 'Théâtre';
+  | 'Théâtre'
+  | 'Balade urbaine';
 
 export interface EventData {
   id: string;
