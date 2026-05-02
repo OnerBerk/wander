@@ -1,22 +1,25 @@
 import {useEffect, useRef} from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import {calculateRadius, getEventMarkerElement} from '@/utils/map-utils';
+import {calculateRadius, getEventMarkerElement, getVelibMarkerElement} from '@/utils/map-utils';
 import useMapStore from '@/store/zustand/useMapStore';
-import {EventData} from '@wander/types';
+import {EventData, VelibStation} from '@wander/types';
 
 const PARIS_CENTER: [number, number] = [2.3522, 48.8566];
 const DEFAULT_ZOOM = 12;
 
 interface WanderMapProps {
   events: EventData[];
+  velibStations: VelibStation[];
 }
 
-const WanderMap: React.FC<WanderMapProps> = ({events}) => {
+const WanderMap: React.FC<WanderMapProps> = ({events, velibStations}) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const markers = useRef<maplibregl.Marker[]>([]);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  const eventMarkers = useRef<maplibregl.Marker[]>([]);
+  const velibMarkers = useRef<maplibregl.Marker[]>([]);
 
   const setMapView = useMapStore((state) => state.setMapView);
 
@@ -48,16 +51,25 @@ const WanderMap: React.FC<WanderMapProps> = ({events}) => {
 
   useEffect(() => {
     if (!map.current) return;
-
-    markers.current.forEach((marker) => marker.remove());
-    markers.current = events.map((event) => {
-      const markerElement = getEventMarkerElement(event.tags);
-
-      return new maplibregl.Marker({element: markerElement})
+    eventMarkers.current.forEach((m) => m.remove());
+    eventMarkers.current = events.map((event) => {
+      const el = getEventMarkerElement(event.tags);
+      return new maplibregl.Marker({element: el})
         .setLngLat([event.location.lng, event.location.lat])
         .addTo(map.current!);
     });
   }, [events]);
+
+  useEffect(() => {
+    if (!map.current) return;
+    velibMarkers.current.forEach((m) => m.remove());
+    velibMarkers.current = velibStations.map((station) => {
+      const el = getVelibMarkerElement(station.bikesAvailable);
+      return new maplibregl.Marker({element: el})
+        .setLngLat([station.location.lng, station.location.lat])
+        .addTo(map.current!);
+    });
+  }, [velibStations]);
 
   return <div ref={mapContainer} className='h-full w-full' />;
 };

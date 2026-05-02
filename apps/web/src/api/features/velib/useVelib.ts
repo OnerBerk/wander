@@ -1,23 +1,23 @@
 import {apiClient} from '@/api/client';
 import useMapStore from '@/store/zustand/useMapStore';
 import {useQuery} from '@tanstack/react-query';
-import {EventData} from '@wander/types';
+import {VelibStation} from '@wander/types';
 
-export const useEvents = () => {
+export const useVelib = () => {
   const {mapView} = useMapStore();
 
-  return useQuery<EventData[]>({
-    queryKey: ['events', mapView.lat, mapView.lng, mapView.radius],
+  return useQuery<VelibStation[]>({
+    queryKey: ['velib', mapView.lat, mapView.lng, mapView.radius],
     queryFn: async () => {
-      const {data} = await apiClient.get<EventData[]>('/events', {
+      const {data} = await apiClient.get<VelibStation[]>('/velib', {
         params: {
           lat: mapView.lat,
           lng: mapView.lng,
           radius: mapView.radius,
-          limit: 100,
         },
       });
       return data;
     },
+    refetchInterval: 1000 * 60,
   });
 };

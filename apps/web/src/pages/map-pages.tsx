@@ -1,13 +1,14 @@
 import {useEvents} from '@/api/features/events/useEvents';
+import {useVelib} from '@/api/features/velib/useVelib';
 import WanderMap from '@/components/map/wander-map';
 
 const MapPage = () => {
   const {data: events} = useEvents();
-  console.log(events?.map((e) => e.tags));
+  const {data: velibStations} = useVelib();
 
   return (
     <div className='h-full w-full'>
-      <WanderMap events={events ?? []} />
+      <WanderMap velibStations={velibStations ?? []} events={events ?? []} />
     </div>
   );
 };

@@ -5,7 +5,7 @@ export const createMusicMarkerElement = (): HTMLElement => {
 
   image.src = musicMarkerImageUrl;
   image.alt = '';
-  image.className = 'h-14 w-14 object-contain';
+  image.className = 'h-11 w-11 object-contain';
 
   return image;
 };
