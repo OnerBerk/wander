@@ -3,14 +3,14 @@ import {setupApi} from '../../test-utils/setup-api';
 import {TestTool} from '../../test-utils/test-tools';
 
 const invalidRequests: [string, string][] = [
-  ['/paris-events', 'missing lat lng radius'],
-  ['/paris-events?lat=48.8566&lng=2.3522&radius=5&limit=999', 'limit too high'],
-  ['/paris-events?lng=2.3522&radius=5', 'missing lat'],
-  ['/paris-events?lat=48.8566&radius=5', 'missing lng'],
-  ['/paris-events?lat=48.8566&lng=2.3522', 'missing radius'],
+  ['/events', 'missing lat lng radius'],
+  ['/events?lat=48.8566&lng=2.3522&radius=5&limit=999', 'limit too high'],
+  ['/events?lng=2.3522&radius=5', 'missing lat'],
+  ['/events?lat=48.8566&radius=5', 'missing lng'],
+  ['/events?lat=48.8566&lng=2.3522', 'missing radius'],
 ];
 
-describe('GET /paris-events', () => {
+describe('GET /events', () => {
   let app: INestApplication;
   let testTool: TestTool;
 
@@ -24,11 +24,9 @@ describe('GET /paris-events', () => {
   });
 
   it('returns 200 with valid params', async () => {
-    const res = await testTool.get('/paris-events?lat=48.8566&lng=2.3522&radius=5&limit=5');
+    const res = await testTool.get('/events?lat=48.8566&lng=2.3522&radius=5&limit=5');
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('total');
-    expect(res.body).toHaveProperty('events');
-    expect(Array.isArray(res.body.events)).toBe(true);
+    expect(Array.isArray(res.body)).toBe(true);
   });
 
   it.each(invalidRequests)('returns 400 for %s (%s)', async (url) => {

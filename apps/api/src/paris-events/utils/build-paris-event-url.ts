@@ -5,7 +5,13 @@ const BASE_URL = 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/qu
 export const buildParisEventUrl = (query: QueryFilterDto): string => {
   const conditions: string[] = ['date_start>=now()'];
 
-  if (query.tag) conditions.push(`qfap_tags like '%${query.tag}%'`);
+  conditions.push(`within_distance(lat_lon, geom'POINT(${query.lng} ${query.lat})', ${query.radius}km)`);
+
+  if (query.tags?.length) {
+    const tagConditions = query.tags.map((t) => `qfap_tags like '%${t}%'`).join(' OR ');
+    conditions.push(`(${tagConditions})`);
+  }
+
   if (query.price === 'free') conditions.push(`price_type='gratuit'`);
   else if (query.price === 'paid') conditions.push(`price_type='payant'`);
 
@@ -13,7 +19,6 @@ export const buildParisEventUrl = (query: QueryFilterDto): string => {
     where: conditions.join(' AND '),
     order_by: 'date_start ASC',
     limit: String(query.limit ?? 20),
-    'geofilter.distance': `${query.lat},${query.lng},${query.radius * 1000}`,
   });
 
   return `${BASE_URL}?${params.toString()}`;

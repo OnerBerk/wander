@@ -179,7 +179,7 @@ describe('ParisEventsService', () => {
         lat: 48.8566,
         lng: 2.3522,
         radius: 5,
-        tag: 'Concert',
+        tags: 'Concert',
         limit: 5,
       });
       await service.getEvents(dtoWithFilter);
@@ -195,7 +195,7 @@ describe('ParisEventsService', () => {
         lat: 48.8566,
         lng: 2.3522,
         radius: 5,
-        tag: 'Concert',
+        tags: 'Concert',
         price: 'free',
         limit: 5,
       });
@@ -212,13 +212,40 @@ describe('ParisEventsService', () => {
         lat: 48.8566,
         lng: 2.3522,
         radius: 5,
-        tag: 'Concert',
+        tags: 'Concert',
         price: 'paid',
         limit: 5,
       });
       await service.getEvents(dtoWithFilter);
 
       expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('payant'));
+    });
+  });
+
+  describe('canHandle', () => {
+    it('returns true when no tags are provided', () => {
+      const dto = plainToInstance(QueryFilterDto, {lat: 48.8566, lng: 2.3522, radius: 5});
+      expect(service.canHandle(dto)).toBe(true);
+    });
+
+    it('returns true when at least one tag is supported', () => {
+      const dto = plainToInstance(QueryFilterDto, {
+        lat: 48.8566,
+        lng: 2.3522,
+        radius: 5,
+        tags: ['Concert'],
+      });
+      expect(service.canHandle(dto)).toBe(true);
+    });
+
+    it('returns false when no tag is supported', () => {
+      const dto = plainToInstance(QueryFilterDto, {
+        lat: 48.8566,
+        lng: 2.3522,
+        radius: 5,
+        tags: ['Vélib'],
+      });
+      expect(service.canHandle(dto)).toBe(false);
     });
   });
 

@@ -42,8 +42,6 @@ export class WeatherService {
   async getWeather(): Promise<WeatherData> {
     try {
       const cached = await this.redisService.get<WeatherData>(CACHE_KEY);
-      this.logger.log('data', cached);
-
       if (cached) {
         this.logger.log('🎯 Weather cache hit');
         return cached;

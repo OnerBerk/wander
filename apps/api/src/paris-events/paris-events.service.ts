@@ -1,12 +1,26 @@
 import {Injectable, Logger, InternalServerErrorException} from '@nestjs/common';
 import {RedisService} from '../redis/redis.service';
 import {HttpClientService} from '../http-client/http-client.service';
-import {EventData, PriceType, Coordinates} from '@wander/types';
+import {EventData, PriceType, Coordinates, EventTag} from '@wander/types';
 import {QueryFilterDto} from '../filters/dtos/query-filter.dto';
 import {buildParisEventUrl} from './utils/build-paris-event-url';
 import {ParisEventRaw, ParisEventsApiResponse} from './local-types/paris-events.types';
 
 const CACHE_TTL = 21600;
+const ALLOWED_TAGS: EventTag[] = [
+  'Art contemporain',
+  'Conférence',
+  'Concert',
+  'Enfants',
+  'Expo',
+  'Festival',
+  'Gourmand',
+  'Histoire',
+  'Loisirs',
+  'Nature',
+  'Spectacle musical',
+  'Théâtre',
+];
 
 @Injectable()
 export class ParisEventsService {
@@ -17,6 +31,10 @@ export class ParisEventsService {
     private readonly httpClient: HttpClientService
   ) {}
 
+  canHandle(query: QueryFilterDto): boolean {
+    if (!query.tags?.length) return true;
+    return query.tags.some((t) => ALLOWED_TAGS.includes(t as EventTag));
+  }
   async getEvents(query: QueryFilterDto): Promise<{total: number; events: EventData[]}> {
     const cacheKey = `paris-events:${JSON.stringify(query)}`;
 
@@ -68,7 +86,7 @@ export class ParisEventsService {
       coverAlt: raw.cover_alt,
       priceType,
       priceDetail: raw.price_detail,
-      tags: raw.qfap_tags ? raw.qfap_tags.split(';') : [],
+      tags: raw.qfap_tags ? (raw.qfap_tags.split(';') as EventTag[]) : [],
       url: raw.url,
       addressName: raw.address_name,
       addressStreet: raw.address_street,

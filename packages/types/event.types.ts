@@ -1,6 +1,20 @@
 import {Coordinates} from './coordinates.types';
 import {PriceType} from './price.types';
 
+export type EventTag =
+  | 'Art contemporain'
+  | 'Conférence'
+  | 'Concert'
+  | 'Enfants'
+  | 'Expo'
+  | 'Festival'
+  | 'Gourmand'
+  | 'Histoire'
+  | 'Loisirs'
+  | 'Nature'
+  | 'Spectacle musical'
+  | 'Théâtre';
+
 export interface EventData {
   id: string;
   title: string;
@@ -13,7 +27,7 @@ export interface EventData {
   coverAlt: string | null;
   priceType: PriceType | null;
   priceDetail: string | null;
-  tags: string[];
+  tags: EventTag[];
   url: string;
   addressName: string;
   addressStreet: string;

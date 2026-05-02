@@ -9,14 +9,16 @@ const Header = () => {
   console.log(isDay);
 
   return (
-    <header className={`h-auto sm:h-25 p-2 ${isDay ? 'header-day' : 'header-night'}`}>
+    <header
+      className={`h-20 shrink-0 p-2 ${isDay ? 'header-day' : 'header-night'}`}
+    >
       <div className='font-alternate flex justify-between'>
         <div className='flex items-center gap-3'>
-          <img className={`h-15 md:h-20`} src='/wander-logo.png' alt='Wander' />
+          <img className={`h-15`} src='/wander-logo.png' alt='Wander' />
           <h1 className='text-wander-orange text-3xl md:text-5xl font-semibold'>Wander</h1>
         </div>
         <div className='flex items-center justify-between gap-2'>
-          {icon && <img className='h-15 md:h-20' src={icon} alt={icon} />}
+          {icon && <img className='h-15' src={icon} alt={icon} />}
           <p className={`text-2xl md:text-3xl font-semibold`}>{`${weather?.temperature}°C`}</p>
         </div>
       </div>

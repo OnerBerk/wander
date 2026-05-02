@@ -162,3 +162,4 @@ docker exec -it wander-redis redis-cli ping  # vérifie que Redis répond
 2. Tout appel API externe passe par le cache Redis
 3. TypeScript strict — aucune exception
 4. Un seul sujet à la fois, validation avant de passer à l'étape suivante
+5. Ne jamais faire plus que ce qui est explicitement demandé par l'utilisateur

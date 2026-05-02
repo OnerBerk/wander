@@ -1,12 +1,29 @@
-import {IsOptional, IsString, IsInt, Min, Max, IsIn} from 'class-validator';
-import {Type} from 'class-transformer';
+import {IsOptional, IsArray, IsInt, Min, Max, IsIn} from 'class-validator';
+import {Type, Transform} from 'class-transformer';
 import {GeoDto} from '../../common-dtos/geo.dto';
-import {PriceType} from '@wander/types';
+import {PriceType, EventTag} from '@wander/types';
+
+const ALLOWED_TAGS: EventTag[] = [
+  'Art contemporain',
+  'Conférence',
+  'Concert',
+  'Enfants',
+  'Expo',
+  'Festival',
+  'Gourmand',
+  'Histoire',
+  'Loisirs',
+  'Nature',
+  'Spectacle musical',
+  'Théâtre',
+];
 
 export class QueryFilterDto extends GeoDto {
   @IsOptional()
-  @IsString({message: 'tag must be a string'})
-  tag?: string;
+  @Transform(({value}) => (typeof value === 'string' ? value.split(',') : value))
+  @IsArray()
+  @IsIn(ALLOWED_TAGS, {each: true, message: 'invalid tag'})
+  tags?: EventTag[];
 
   @IsOptional()
   @IsIn(['free', 'paid'], {message: 'price must be free or paid'})
