@@ -8,6 +8,7 @@ export const useEvents = () => {
 
   return useQuery<EventData[]>({
     queryKey: ['events', mapView.lat, mapView.lng, mapView.radius],
+    staleTime: 30_000,
     queryFn: async () => {
       const {data} = await apiClient.get<EventData[]>('/events', {
         params: {
