@@ -1,14 +1,18 @@
 import maplibregl from 'maplibre-gl';
-import defaultMarkerImageUrl from '@/assets/markers/default/marker-default.png';
-import musicMarkerImageUrl from '@/assets/markers/music/music-marker.png';
-import treeMarkerImageUrl from '@/assets/markers/tree/marker-tree.png';
+import defaultMarkerImageUrl from '@/assets/markers/marker-default.png';
+import musicMarkerImageUrl from '@/assets/markers/music-marker.png';
+import treeMarkerImageUrl from '@/assets/markers/marker-tree.png';
+import bookMarkerImageUrl from '@/assets/markers/marker-book.png';
 import {
   EVENT_CLUSTER_COUNT_LAYER_ID,
+  EVENT_CLUSTER_RADIUS,
   EVENT_CLUSTERS_LAYER_ID,
-  EVENT_MARKER_ICON_SIZE,
+  EVENT_MARKER_ICON_SIZE_DESKTOP,
+  EVENT_MARKER_ICON_SIZE_MOBILE,
   EVENT_MARKER_PIXEL_RATIO,
   EVENT_POINTS_LAYER_ID,
   EVENTS_SOURCE_ID,
+  MAP_MOBILE_BREAKPOINT_PX,
 } from '@/constants/map-constants';
 import {buildEventsGeoJson, EVENT_MARKER_IMAGE_IDS} from '@/components/map/events-geojson';
 
@@ -32,6 +36,7 @@ export const addEventMarkerImages = async (targetMap: maplibregl.Map): Promise<v
     {id: EVENT_MARKER_IMAGE_IDS.default, src: defaultMarkerImageUrl},
     {id: EVENT_MARKER_IMAGE_IDS.music, src: musicMarkerImageUrl},
     {id: EVENT_MARKER_IMAGE_IDS.tree, src: treeMarkerImageUrl},
+    {id: EVENT_MARKER_IMAGE_IDS.book, src: bookMarkerImageUrl},
   ];
 
   await Promise.all(
@@ -54,7 +59,7 @@ export const addEventLayers = (targetMap: maplibregl.Map): void => {
       data: buildEventsGeoJson([]),
       cluster: true,
       clusterMaxZoom: 14,
-      clusterRadius: 50,
+      clusterRadius: EVENT_CLUSTER_RADIUS,
     });
   }
 
@@ -96,12 +101,20 @@ export const addEventLayers = (targetMap: maplibregl.Map): void => {
       filter: ['!', ['has', 'point_count']],
       layout: {
         'icon-image': ['get', 'markerIcon'],
-        'icon-size': EVENT_MARKER_ICON_SIZE,
+        'icon-size': EVENT_MARKER_ICON_SIZE_DESKTOP,
         'icon-allow-overlap': true,
         'icon-anchor': 'bottom',
       },
     });
-  } else {
-    targetMap.setLayoutProperty(EVENT_POINTS_LAYER_ID, 'icon-size', EVENT_MARKER_ICON_SIZE);
   }
+};
+
+export const getEventMarkerIconSize = (viewportWidth: number): number => {
+  return viewportWidth < MAP_MOBILE_BREAKPOINT_PX ? EVENT_MARKER_ICON_SIZE_MOBILE : EVENT_MARKER_ICON_SIZE_DESKTOP;
+};
+
+export const syncEventMarkerIconSize = (targetMap: maplibregl.Map, viewportWidth: number): void => {
+  if (!targetMap.getLayer(EVENT_POINTS_LAYER_ID)) return;
+
+  targetMap.setLayoutProperty(EVENT_POINTS_LAYER_ID, 'icon-size', getEventMarkerIconSize(viewportWidth));
 };

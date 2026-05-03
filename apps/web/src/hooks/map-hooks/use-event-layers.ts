@@ -3,11 +3,7 @@ import maplibregl from 'maplibre-gl';
 import {EventData} from '@wander/types';
 import {buildEventsGeoJson} from '@/components/map/events-geojson';
 import {LayerClickEvent} from '@/components/map/event-layers';
-import {
-  EVENT_CLUSTERS_LAYER_ID,
-  EVENT_POINTS_LAYER_ID,
-  EVENTS_SOURCE_ID,
-} from '@/constants/map-constants';
+import {EVENT_CLUSTERS_LAYER_ID, EVENT_POINTS_LAYER_ID, EVENTS_SOURCE_ID} from '@/constants/map-constants';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
 
 interface UseEventLayersParams {
@@ -31,9 +27,7 @@ export const useEventLayers = ({map, events, areLayersReady}: UseEventLayersPara
   useEffect(() => {
     if (!map.current || !areLayersReady) return;
 
-    const eventsSource = map.current.getSource(EVENTS_SOURCE_ID) as
-      | maplibregl.GeoJSONSource
-      | undefined;
+    const eventsSource = map.current.getSource(EVENTS_SOURCE_ID) as maplibregl.GeoJSONSource | undefined;
 
     eventsSource?.setData(buildEventsGeoJson(events));
   }, [areLayersReady, events, map]);

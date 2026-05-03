@@ -5,7 +5,7 @@ export const createBikeMarkerElement = (): HTMLElement => {
 
   image.src = bikeMarkerImageUrl;
   image.alt = '';
-  image.className = 'h-9 w-9 object-contain';
+  image.className = 'h-7 w-7 object-contain md:h-9 md:w-9';
 
   return image;
 };

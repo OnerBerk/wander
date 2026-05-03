@@ -1,2 +1,2 @@
 export const markerModalBaseClassName =
-  'absolute left-[15px] top-[15px] z-1 flex min-h-[450px] flex-col gap-3 rounded-[20px] border-2 border-white/30 bg-white/25 p-4 backdrop-blur-md';
+  'absolute left-3 top-12 z-1 flex min-h-[280px] flex-col gap-2 rounded-2xl border border-white/30 bg-white/25 p-3 backdrop-blur-md md:left-[15px] md:top-[55px] md:min-h-[450px] md:gap-3 md:border-2 md:p-4';

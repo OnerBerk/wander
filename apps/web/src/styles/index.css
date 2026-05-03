@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-default: 'Montserrat', sans-serif;
+  --font-default: 'Montserrat Alternates', sans-serif;
   --font-alternate: 'Montserrat Alternates', sans-serif;
   --color-wander-orange: #cc4b10;
 }

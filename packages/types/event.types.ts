@@ -10,6 +10,7 @@ export type EventTag =
   | 'Festival'
   | 'Gourmand'
   | 'Histoire'
+  | 'Littérature'
   | 'Loisirs'
   | 'Nature'
   | 'Spectacle musical'

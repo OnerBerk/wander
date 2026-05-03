@@ -74,6 +74,7 @@ wander/
 - Composants fonctionnels uniquement
 - Props typées explicitement (pas d'inférence implicite)
 - Pas de logique métier dans les composants — extraire dans des hooks custom
+- Éviter `useEffect` par défaut : privilégier le calcul dérivé (`useMemo`), les handlers explicites et React Query ; utiliser `useEffect` uniquement quand il n'existe pas d'alternative claire (sync externe, subscriptions, lifecycle impératif)
 - Tests composants avec Vitest
 
 ### Types partagés (@wander/types)

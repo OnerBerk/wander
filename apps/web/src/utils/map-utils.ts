@@ -1,19 +1,19 @@
 import {createBikeMarkerElement} from '@/assets/markers/bike/bike-marker';
 
 export const calculateRadius = (zoom: number) => {
-  return Math.max(0.5, 50 / Math.pow(2, zoom - 10));
+  return Math.max(0.1, 50 / Math.pow(2, zoom - 10));
 };
 
 export const getVelibMarkerElement = (bikesAvailable: number): HTMLElement => {
   const container = document.createElement('div');
-  container.className = 'relative h-11 w-11';
+  container.className = 'relative h-9 w-9 md:h-11 md:w-11';
 
   const marker = createBikeMarkerElement();
   container.appendChild(marker);
 
   const availabilityBadge = document.createElement('span');
   availabilityBadge.className =
-    'absolute -right-1 -top-1 rounded-full bg-white px-1.5 py-0.5 text-xs font-semibold text-slate-900 shadow';
+    'absolute -right-1 -top-1 rounded-full bg-white px-1 py-0.5 text-[10px] font-semibold text-slate-900 shadow md:px-1.5 md:text-xs';
   availabilityBadge.textContent = String(bikesAvailable);
   container.appendChild(availabilityBadge);
 

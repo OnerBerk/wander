@@ -5,9 +5,15 @@ import {
   DEFAULT_ZOOM,
   EVENT_CLUSTERS_LAYER_ID,
   EVENT_POINTS_LAYER_ID,
+  METRO_STATIONS_LAYER_ID,
   PARIS_CENTER,
 } from '@/constants/map-constants';
-import {addEventLayers, addEventMarkerImages} from '@/components/map/event-layers';
+import {
+  addEventLayers,
+  addEventMarkerImages,
+  syncEventMarkerIconSize,
+} from '@/components/map/event-layers';
+import {addMetroLayers, addMetroMarkerImage, syncMetroMarkerIconSize} from '@/components/map/metro-layers';
 import useMapStore from '@/store/zustand/useMapStore';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
 
@@ -38,17 +44,32 @@ export const useMapInstance = (
 
     map.current.addControl(new maplibregl.NavigationControl());
     map.current.on('load', () => {
-      void addEventMarkerImages(map.current!).then(() => {
+      void Promise.all([addEventMarkerImages(map.current!), addMetroMarkerImage(map.current!)]).then(() => {
         if (!map.current) return;
 
         addEventLayers(map.current);
+        addMetroLayers(map.current);
+        syncEventMarkerIconSize(map.current, window.innerWidth);
+        syncMetroMarkerIconSize(map.current, window.innerWidth);
         setAreEventLayersReady(true);
       });
     });
+    const handleResize = () => {
+      if (!map.current) return;
+      syncEventMarkerIconSize(map.current, window.innerWidth);
+      syncMetroMarkerIconSize(map.current, window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
     map.current.on('click', (mapEvent) => {
-      if (map.current?.getLayer(EVENT_POINTS_LAYER_ID) || map.current?.getLayer(EVENT_CLUSTERS_LAYER_ID)) {
-        const features = map.current.queryRenderedFeatures(mapEvent.point, {
-          layers: [EVENT_POINTS_LAYER_ID, EVENT_CLUSTERS_LAYER_ID],
+      const currentMap = map.current;
+      if (!currentMap) return;
+
+      const interactiveLayers = [EVENT_POINTS_LAYER_ID, EVENT_CLUSTERS_LAYER_ID, METRO_STATIONS_LAYER_ID]
+        .filter((layerId) => Boolean(currentMap.getLayer(layerId)));
+
+      if (interactiveLayers.length > 0) {
+        const features = currentMap.queryRenderedFeatures(mapEvent.point, {
+          layers: interactiveLayers,
         });
 
         if (features.length > 0) return;
@@ -67,6 +88,7 @@ export const useMapInstance = (
     });
 
     return () => {
+      window.removeEventListener('resize', handleResize);
       map.current?.remove();
       map.current = null;
     };
