@@ -74,6 +74,7 @@ wander/
 - Composants fonctionnels uniquement
 - Props typées explicitement (pas d'inférence implicite)
 - Pas de logique métier dans les composants — extraire dans des hooks custom
+- Éviter `useEffect` par défaut : privilégier le calcul dérivé (`useMemo`), les handlers explicites et React Query ; utiliser `useEffect` uniquement quand il n'existe pas d'alternative claire (sync externe, subscriptions, lifecycle impératif)
 - Tests composants avec Vitest
 
 ### Types partagés (@wander/types)
@@ -162,3 +163,4 @@ docker exec -it wander-redis redis-cli ping  # vérifie que Redis répond
 2. Tout appel API externe passe par le cache Redis
 3. TypeScript strict — aucune exception
 4. Un seul sujet à la fois, validation avant de passer à l'étape suivante
+5. Ne jamais faire plus que ce qui est explicitement demandé par l'utilisateur

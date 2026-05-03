@@ -1,6 +1,6 @@
 // src/test-utils/setup-api.ts
 import {Test, TestingModule} from '@nestjs/testing';
-import {INestApplication} from '@nestjs/common';
+import {INestApplication, ValidationPipe} from '@nestjs/common';
 import {AppModule} from '../app.module';
 
 export async function setupApi(): Promise<{
@@ -12,6 +12,7 @@ export async function setupApi(): Promise<{
   }).compile();
 
   const app = module.createNestApplication();
+  app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
   app.useLogger(false);
   await app.init();
 

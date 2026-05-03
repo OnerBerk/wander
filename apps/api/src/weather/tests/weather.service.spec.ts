@@ -11,6 +11,8 @@ const mockWeatherData: WeatherData = {
   weatherCode: 2,
   windSpeed: 6.9,
   time: '2026-04-16T16:15',
+  sunrise: '2026-04-16T06:30',
+  sunset: '2026-04-16T20:45',
 };
 
 const mockOpenMeteoResponse = {
@@ -20,6 +22,10 @@ const mockOpenMeteoResponse = {
     weathercode: 2,
     windspeed_10m: 6.9,
     time: '2026-04-16T16:15',
+  },
+  daily: {
+    sunrise: ['2026-04-16T06:30'],
+    sunset: ['2026-04-16T20:45'],
   },
 };
 
