@@ -35,7 +35,6 @@ const LineIconList: React.FC<{lines: string[]; iconMap: Record<string, string>}>
 };
 
 const MetroStationModal: React.FC<MetroStationModalProps> = ({station}) => {
-  console.log(station);
   return (
     <div className={`${markerModalBaseClassName} w-[min(85vw,300px)] md:w-[300px]`}>
       <h2 className='text-xl font-semibold md:text-3xl'>{station.name}</h2>
