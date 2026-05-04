@@ -53,4 +53,20 @@ describe('buildParisEventUrl', () => {
     const url = buildParisEventUrl(baseDto());
     expect(url).not.toContain('price_type');
   });
+
+  it('adds week period condition by default frontend value', () => {
+    const url = buildParisEventUrl(baseDto({period: 'week'}));
+    expect(url).toContain('date_start%3E%3Dnow%28%29');
+    expect(url).toContain('now%28days%3D7%29');
+  });
+
+  it('adds today period condition when period is today', () => {
+    const url = buildParisEventUrl(baseDto({period: 'today'}));
+    expect(url).toContain('now%28days%3D1%29');
+  });
+
+  it('adds month period condition when period is month', () => {
+    const url = buildParisEventUrl(baseDto({period: 'month'}));
+    expect(url).toContain('now%28months%3D1%29');
+  });
 });

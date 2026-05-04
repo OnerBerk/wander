@@ -1,7 +1,7 @@
 import {IsOptional, IsArray, IsInt, Min, Max, IsIn} from 'class-validator';
 import {Type, Transform} from 'class-transformer';
 import {GeoDto} from '../../common-dtos/geo.dto';
-import {PriceType, EventTag} from '@wander/types';
+import {PriceType, EventTag, EventPeriod} from '@wander/types';
 
 const ALLOWED_TAGS: EventTag[] = [
   'Art contemporain',
@@ -28,6 +28,10 @@ export class QueryFilterDto extends GeoDto {
   @IsOptional()
   @IsIn(['free', 'paid'], {message: 'price must be free or paid'})
   price?: PriceType;
+
+  @IsOptional()
+  @IsIn(['today', 'week', 'month', 'all'], {message: 'period must be today, week, month or all'})
+  period?: EventPeriod;
 
   @IsOptional()
   @Type(() => Number)

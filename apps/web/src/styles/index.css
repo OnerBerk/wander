@@ -4,6 +4,7 @@
   --font-default: 'Montserrat Alternates', sans-serif;
   --font-alternate: 'Montserrat Alternates', sans-serif;
   --color-wander-orange: #cc4b10;
+  --color-wander-text: #032553;
 }
 
 html,
@@ -11,6 +12,7 @@ body {
   height: 100%;
   margin: 0;
   font-family: var(--font-default);
+  color: var(--color-wander-text);
   -webkit-font-smoothing: antialiased;
 }
 

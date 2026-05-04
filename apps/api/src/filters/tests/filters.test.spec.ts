@@ -25,6 +25,18 @@ describe('QueryFilterDto', () => {
     expect(errors.length).toBeGreaterThan(0);
   });
 
+  it('accepts valid period', async () => {
+    const dto = toDto({...validGeo, period: 'week'});
+    const errors = await validate(dto);
+    expect(errors).toHaveLength(0);
+  });
+
+  it('rejects invalid period', async () => {
+    const dto = toDto({...validGeo, period: 'year'});
+    const errors = await validate(dto);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
   it('rejects missing geo fields', async () => {
     const dto = toDto({limit: 20, tag: 'Concert'});
     const errors = await validate(dto);

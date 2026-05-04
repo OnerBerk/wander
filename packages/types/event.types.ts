@@ -17,6 +17,8 @@ export type EventTag =
   | 'Théâtre'
   | 'Balade urbaine';
 
+export type EventPeriod = 'today' | 'week' | 'month' | 'all';
+
 export interface EventData {
   id: string;
   title: string;
