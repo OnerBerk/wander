@@ -1,9 +1,10 @@
 import {QueryFilterDto} from '../../filters/dtos/query-filter.dto';
+import {getPeriodCondition} from '../../events/utils';
 
 const BASE_URL = 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records';
 
 export const buildParisEventUrl = (query: QueryFilterDto): string => {
-  const conditions: string[] = ['date_start>=now()'];
+  const conditions: string[] = [getPeriodCondition(query.period)];
 
   conditions.push(`within_distance(lat_lon, geom'POINT(${query.lng} ${query.lat})', ${query.radius}km)`);
 
