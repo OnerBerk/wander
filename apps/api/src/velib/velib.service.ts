@@ -41,7 +41,7 @@ export class VelibService {
 
       return stations;
     } catch (error) {
-      this.logger.error('❌ Failed to fetch velib stations', error);
+      this.logger.error('VelibService.getStations failed');
       throw new InternalServerErrorException('Failed to fetch velib stations');
     }
   }

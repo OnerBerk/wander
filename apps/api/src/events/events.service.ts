@@ -20,7 +20,8 @@ export class EventsService {
       if (r.status === 'fulfilled') {
         acc.push(...r.value.events);
       } else {
-        this.logger.error(`❌ Source ${i} failed`, r.reason);
+        const sourceName = eligibleSources[i]?.constructor?.name ?? `Source${i}`;
+        this.logger.error(`${sourceName}.getEvents failed`);
       }
       return acc;
     }, []);
