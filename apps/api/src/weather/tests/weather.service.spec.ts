@@ -1,4 +1,4 @@
-import {InternalServerErrorException} from '@nestjs/common';
+import {InternalServerErrorException, ServiceUnavailableException} from '@nestjs/common';
 import {WeatherService} from '../weather.service';
 import {RedisService} from '../../redis/redis.service';
 import {HttpClientService} from '../../http-client/http-client.service';
@@ -74,12 +74,61 @@ describe('WeatherService', () => {
       expect(result).toEqual(mockWeatherData);
       expect(mockHttpClient.get).toHaveBeenCalledTimes(1);
       expect(mockRedisService.set).toHaveBeenCalledWith('weather:paris', mockWeatherData, 900);
+      expect(mockRedisService.set).toHaveBeenCalledWith('weather:paris:stale', mockWeatherData, 3600);
     });
   });
 
   describe('erreur', () => {
+    it('active un cooldown si Open-Meteo renvoie 429', async () => {
+      mockRedisService.get
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(null);
+      mockHttpClient.get.mockRejectedValue(new Error('External API error: Request failed with status code 429'));
+
+      await expect(service.getWeather()).rejects.toThrow(InternalServerErrorException);
+
+      expect(mockRedisService.set).toHaveBeenCalledWith('weather:paris:cooldown', true, 60);
+    });
+
+    it('retourne stale sans appeler Open-Meteo si cooldown actif', async () => {
+      mockRedisService.get
+        .mockResolvedValueOnce(mockWeatherData)
+        .mockResolvedValueOnce(true);
+
+      const result = await service.getWeather();
+
+      expect(result).toEqual(mockWeatherData);
+      expect(mockHttpClient.get).not.toHaveBeenCalled();
+    });
+
+    it('lance ServiceUnavailableException si cooldown actif sans stale', async () => {
+      mockRedisService.get
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(true);
+
+      await expect(service.getWeather()).rejects.toThrow(ServiceUnavailableException);
+      expect(mockHttpClient.get).not.toHaveBeenCalled();
+    });
+
+    it('retourne le cache stale si Open-Meteo échoue', async () => {
+      mockRedisService.get
+        .mockResolvedValueOnce(mockWeatherData)
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(null);
+      mockHttpClient.get.mockRejectedValue(new Error('429 Too Many Requests'));
+
+      const result = await service.getWeather();
+
+      expect(result).toEqual(mockWeatherData);
+      expect(mockHttpClient.get).toHaveBeenCalledTimes(1);
+    });
+
     it('lance InternalServerErrorException si Open-Meteo échoue', async () => {
-      mockRedisService.get.mockResolvedValue(null);
+      mockRedisService.get
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(null);
       mockHttpClient.get.mockRejectedValue(new Error('Network error'));
 
       await expect(service.getWeather()).rejects.toThrow(InternalServerErrorException);
