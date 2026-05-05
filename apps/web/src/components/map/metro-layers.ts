@@ -1,6 +1,7 @@
 import maplibregl from 'maplibre-gl';
 import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
 import type {MetroGeoJsonFeatureCollection} from '@/components/map/metro-geojson';
+import {applyMarkerEntranceBounce} from '@/utils/map-utils';
 import {
   MAP_MOBILE_BREAKPOINT_PX,
   METRO_MARKER_ICON_SIZE_DESKTOP,
@@ -68,4 +69,15 @@ export const syncMetroMarkerIconSize = (targetMap: maplibregl.Map, viewportWidth
   if (!targetMap.getLayer(METRO_STATIONS_LAYER_ID)) return;
 
   targetMap.setLayoutProperty(METRO_STATIONS_LAYER_ID, 'icon-size', getMetroMarkerIconSize(viewportWidth));
+};
+
+export const createMetroMarkerElement = (delayMs = 0): HTMLElement => {
+  const image = document.createElement('img');
+  image.src = subwayMarkerImageUrl;
+  image.alt = '';
+  image.className = 'h-7 w-7 object-contain md:h-9 md:w-9';
+
+  const marker = applyMarkerEntranceBounce(image, delayMs);
+  marker.classList.add('cursor-pointer');
+  return marker;
 };

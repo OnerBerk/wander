@@ -3,6 +3,7 @@ import defaultMarkerImageUrl from '@/assets/markers/marker-default.png';
 import musicMarkerImageUrl from '@/assets/markers/music-marker.png';
 import treeMarkerImageUrl from '@/assets/markers/marker-tree.png';
 import bookMarkerImageUrl from '@/assets/markers/marker-book.png';
+import {applyMarkerEntranceBounce} from '@/utils/map-utils';
 import {
   EVENT_CLUSTER_COUNT_LAYER_ID,
   EVENT_CLUSTER_RADIUS,
@@ -14,7 +15,7 @@ import {
   EVENTS_SOURCE_ID,
   MAP_MOBILE_BREAKPOINT_PX,
 } from '@/constants/map-constants';
-import {buildEventsGeoJson, EVENT_MARKER_IMAGE_IDS} from '@/components/map/events-geojson';
+import {buildEventsGeoJson, EVENT_MARKER_IMAGE_IDS, EventMarkerImageId} from '@/components/map/events-geojson';
 
 export type LayerClickEvent = maplibregl.MapMouseEvent & {
   features?: Array<{
@@ -57,6 +58,7 @@ export const addEventLayers = (targetMap: maplibregl.Map): void => {
     targetMap.addSource(EVENTS_SOURCE_ID, {
       type: 'geojson',
       data: buildEventsGeoJson([]),
+      promoteId: 'eventId',
       cluster: true,
       clusterMaxZoom: 14,
       clusterRadius: EVENT_CLUSTER_RADIUS,
@@ -105,6 +107,19 @@ export const addEventLayers = (targetMap: maplibregl.Map): void => {
         'icon-allow-overlap': true,
         'icon-anchor': 'bottom',
       },
+      paint: {
+        'icon-opacity': [
+          'interpolate',
+          ['linear'],
+          ['coalesce', ['feature-state', 'enterProgress'], 1],
+          0,
+          0,
+          0.15,
+          1,
+          1,
+          1,
+        ],
+      },
     });
   }
 };
@@ -117,4 +132,22 @@ export const syncEventMarkerIconSize = (targetMap: maplibregl.Map, viewportWidth
   if (!targetMap.getLayer(EVENT_POINTS_LAYER_ID)) return;
 
   targetMap.setLayoutProperty(EVENT_POINTS_LAYER_ID, 'icon-size', getEventMarkerIconSize(viewportWidth));
+};
+
+const EVENT_MARKER_IMAGE_URL_BY_ID: Record<EventMarkerImageId, string> = {
+  [EVENT_MARKER_IMAGE_IDS.default]: defaultMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.music]: musicMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.tree]: treeMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.book]: bookMarkerImageUrl,
+};
+
+export const createEventMarkerElement = (markerIcon: EventMarkerImageId, delayMs = 0): HTMLElement => {
+  const image = document.createElement('img');
+  image.src = EVENT_MARKER_IMAGE_URL_BY_ID[markerIcon];
+  image.alt = '';
+  image.className = 'h-8 w-8 object-contain md:h-10 md:w-10';
+
+  const marker = applyMarkerEntranceBounce(image, delayMs);
+  marker.classList.add('cursor-pointer');
+  return marker;
 };

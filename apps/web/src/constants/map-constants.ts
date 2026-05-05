@@ -10,10 +10,10 @@ export const METRO_STATIONS_LAYER_ID = 'metro-stations-points';
 export const METRO_MARKER_IMAGE_ID = 'metro-marker';
 
 export const MAP_MOBILE_BREAKPOINT_PX = 768;
-export const EVENT_MARKER_ICON_SIZE_DESKTOP = 1;
-export const EVENT_MARKER_ICON_SIZE_MOBILE = 0.8;
+export const EVENT_MARKER_ICON_SIZE_DESKTOP = 0.7;
+export const EVENT_MARKER_ICON_SIZE_MOBILE = 0.6;
 export const EVENT_MARKER_PIXEL_RATIO = 9;
 export const EVENT_CLUSTER_RADIUS = 6;
-export const METRO_MARKER_ICON_SIZE_DESKTOP = 0.6;
-export const METRO_MARKER_ICON_SIZE_MOBILE = 0.5;
+export const METRO_MARKER_ICON_SIZE_DESKTOP = 0.5;
+export const METRO_MARKER_ICON_SIZE_MOBILE = 0.4;
 export const METRO_MARKER_PIXEL_RATIO = 9;

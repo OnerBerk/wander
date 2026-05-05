@@ -10,10 +10,10 @@ export const EVENT_MARKER_IMAGE_IDS = {
 export type EventMarkerImageId = (typeof EVENT_MARKER_IMAGE_IDS)[keyof typeof EVENT_MARKER_IMAGE_IDS];
 
 const COORDINATE_GROUP_PRECISION = 6;
-const DUPLICATE_MARKER_OFFSET_METERS = 8;
-const MAX_OFFSET_GROUP_SIZE = 8;
+const DUPLICATE_MARKER_OFFSET_METERS = 3;
+const MAX_OFFSET_RADIUS_METERS = 28;
 const METERS_PER_DEGREE_LAT = 111_320;
-const ANGLE_BUCKETS = 36;
+const GOLDEN_ANGLE_RADIANS = 2.399963229728653;
 
 const hashString = (value: string): number => {
   let hash = 0;
@@ -82,18 +82,19 @@ export const buildEventsGeoJson = (events: EventData[]): EventsGeoJsonFeatureCol
       continue;
     }
 
-    if (groupedEvents.length > MAX_OFFSET_GROUP_SIZE) {
-      for (const event of groupedEvents) {
-        offsetCoordinatesByEventId.set(event.id, [event.location.lng, event.location.lat]);
-      }
-      continue;
-    }
+    const sortedGroupedEvents = [...groupedEvents].sort((left, right) => {
+      if (left.id < right.id) return -1;
+      if (left.id > right.id) return 1;
+      return 0;
+    });
 
-    for (const event of groupedEvents) {
-      const hash = hashString(event.id);
-      const angle = ((hash % ANGLE_BUCKETS) / ANGLE_BUCKETS) * 2 * Math.PI;
-      const ring = (Math.floor(hash / ANGLE_BUCKETS) % 2) + 1;
-      const offsetRadiusMeters = DUPLICATE_MARKER_OFFSET_METERS * ring;
+    sortedGroupedEvents.forEach((event, index) => {
+      const spiralIndex = index + 1;
+      const angle = spiralIndex * GOLDEN_ANGLE_RADIANS + (hashString(event.id) % 11) * 0.005;
+      const offsetRadiusMeters = Math.min(
+        DUPLICATE_MARKER_OFFSET_METERS * Math.sqrt(spiralIndex),
+        MAX_OFFSET_RADIUS_METERS
+      );
       const latitudeInRadians = (event.location.lat * Math.PI) / 180;
 
       const latOffset = (offsetRadiusMeters * Math.sin(angle)) / METERS_PER_DEGREE_LAT;
@@ -101,7 +102,7 @@ export const buildEventsGeoJson = (events: EventData[]): EventsGeoJsonFeatureCol
         (offsetRadiusMeters * Math.cos(angle)) / (METERS_PER_DEGREE_LAT * Math.max(Math.cos(latitudeInRadians), 0.2));
 
       offsetCoordinatesByEventId.set(event.id, [event.location.lng + lngOffset, event.location.lat + latOffset]);
-    }
+    });
   }
 
   return {

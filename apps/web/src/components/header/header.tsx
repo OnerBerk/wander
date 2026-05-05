@@ -14,8 +14,8 @@ const Header = () => {
         <div className='flex items-center gap-3'>
           <img className={`h-15`} src='/wander-logo.png' alt='Wander' />
           <div className='flex flex-col'>
-            <h1 className='text-wander-orange text-3xl md:text-5xl font-semibold'>Wander city</h1>
-            <p className='text-wander-orange text-sm md:text-base'>Explore your differently</p>
+            <h1 className='text-wander-orange text-3xl md:text-5xl font-semibold'>Wander</h1>
+            <p className='font-medium text-sm md:text-base'>Explorer votre ville autrement</p>
           </div>
         </div>
         <div className='flex items-center justify-between gap-2'>
