@@ -8,11 +8,7 @@ import {
   METRO_STATIONS_LAYER_ID,
   PARIS_CENTER,
 } from '@/constants/map-constants';
-import {
-  addEventLayers,
-  addEventMarkerImages,
-  syncEventMarkerIconSize,
-} from '@/components/map/event-layers';
+import {addEventLayers, addEventMarkerImages, syncEventMarkerIconSize} from '@/components/map/event-layers';
 import {addMetroLayers, addMetroMarkerImage, syncMetroMarkerIconSize} from '@/components/map/metro-layers';
 import useMapStore from '@/store/zustand/useMapStore';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
@@ -22,9 +18,7 @@ interface UseMapInstanceResult {
   areEventLayersReady: boolean;
 }
 
-export const useMapInstance = (
-  mapContainer: RefObject<HTMLDivElement | null>
-): UseMapInstanceResult => {
+export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): UseMapInstanceResult => {
   const map = useRef<maplibregl.Map | null>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [areEventLayersReady, setAreEventLayersReady] = useState(false);
@@ -37,7 +31,7 @@ export const useMapInstance = (
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      style: `https://api.maptiler.com/maps/aquarelle-v4/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`,
+      style: `https://api.maptiler.com/maps/topo-v4/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`,
       center: PARIS_CENTER,
       zoom: DEFAULT_ZOOM,
     });
@@ -64,8 +58,9 @@ export const useMapInstance = (
       const currentMap = map.current;
       if (!currentMap) return;
 
-      const interactiveLayers = [EVENT_POINTS_LAYER_ID, EVENT_CLUSTERS_LAYER_ID, METRO_STATIONS_LAYER_ID]
-        .filter((layerId) => Boolean(currentMap.getLayer(layerId)));
+      const interactiveLayers = [EVENT_POINTS_LAYER_ID, EVENT_CLUSTERS_LAYER_ID, METRO_STATIONS_LAYER_ID].filter(
+        (layerId) => Boolean(currentMap.getLayer(layerId))
+      );
 
       if (interactiveLayers.length > 0) {
         const features = currentMap.queryRenderedFeatures(mapEvent.point, {

@@ -120,6 +120,47 @@ describe('ParisEventsService', () => {
       expect(mockRedisService.set).toHaveBeenCalledTimes(1);
     });
 
+    it('geocodes fallback when source returns Paris default point', async () => {
+      mockRedisService.get.mockResolvedValueOnce(null).mockResolvedValueOnce(null);
+      mockHttpClient.get
+        .mockResolvedValueOnce({
+          total_count: 1,
+          results: [{...mockRawEvent, lat_lon: {lat: 48.856578, lon: 2.351828}}],
+        })
+        .mockResolvedValueOnce({
+          features: [{geometry: {coordinates: [2.295, 48.8738]}}],
+        });
+
+      const result = await service.getEvents(dto);
+
+      expect(result.events).toHaveLength(1);
+      expect(result.events[0]?.location).toEqual({lat: 48.8738, lng: 2.295});
+      expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('api-adresse.data.gouv.fr'));
+    });
+
+    it('filters out geocoded events outside requested radius', async () => {
+      const strictDto = plainToInstance(QueryFilterDto, {
+        lat: 48.8566,
+        lng: 2.3522,
+        radius: 0.1,
+        limit: 5,
+      });
+
+      mockRedisService.get.mockResolvedValueOnce(null).mockResolvedValueOnce(null);
+      mockHttpClient.get
+        .mockResolvedValueOnce({
+          total_count: 1,
+          results: [{...mockRawEvent, lat_lon: {lat: 48.856578, lon: 2.351828}}],
+        })
+        .mockResolvedValueOnce({
+          features: [{geometry: {coordinates: [2.305204, 48.971934]}}],
+        });
+
+      const result = await service.getEvents(strictDto);
+
+      expect(result.events).toHaveLength(0);
+    });
+
     it('filters out events with null coordinates', async () => {
       mockRedisService.get.mockResolvedValue(null);
       mockHttpClient.get.mockResolvedValue({
@@ -142,6 +183,29 @@ describe('ParisEventsService', () => {
       const result = await service.getEvents(dto);
 
       expect(result.events).toHaveLength(1);
+    });
+
+    it('filters out default-coordinate events when address is missing', async () => {
+      mockRedisService.get.mockResolvedValue(null);
+      mockHttpClient.get.mockResolvedValue({
+        total_count: 2,
+        results: [
+          mockRawEvent,
+          {
+            ...mockRawEvent,
+            lat_lon: {lat: 48.856578, lon: 2.351828},
+            address_name: null,
+            address_street: null,
+            address_zipcode: null,
+            address_city: null,
+          },
+        ],
+      });
+
+      const result = await service.getEvents(dto);
+
+      expect(result.events).toHaveLength(1);
+      expect(result.events[0]?.id).toBe(mockRawEvent.id);
     });
 
     it('maps paid event correctly', async () => {
@@ -184,7 +248,7 @@ describe('ParisEventsService', () => {
       });
       await service.getEvents(dtoWithFilter);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('Concert'));
+      expect(mockHttpClient.get.mock.calls[0]?.[0]).toContain('Concert');
     });
 
     it('calls API with free price filter', async () => {
@@ -201,7 +265,7 @@ describe('ParisEventsService', () => {
       });
       await service.getEvents(dtoWithFilter);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('gratuit'));
+      expect(mockHttpClient.get.mock.calls[0]?.[0]).toContain('gratuit');
     });
 
     it('calls API with paid price filter', async () => {
@@ -218,7 +282,7 @@ describe('ParisEventsService', () => {
       });
       await service.getEvents(dtoWithFilter);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(expect.stringContaining('payant'));
+      expect(mockHttpClient.get.mock.calls[0]?.[0]).toContain('payant');
     });
   });
 

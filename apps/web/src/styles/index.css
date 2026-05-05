@@ -21,6 +21,36 @@ body {
 }
 
 @layer utilities {
+  @keyframes marker-bounce-in-twice {
+    0% {
+      transform: translateY(-10px) scale(0.96);
+      opacity: 0;
+    }
+    30% {
+      transform: translateY(0) scale(1.02);
+      opacity: 1;
+    }
+    48% {
+      transform: translateY(-4px) scale(0.99);
+    }
+    66% {
+      transform: translateY(0) scale(1.01);
+    }
+    82% {
+      transform: translateY(-2px) scale(0.998);
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .marker-bounce-in-twice {
+    animation: marker-bounce-in-twice 520ms ease-out 1 both;
+    transform-origin: bottom center;
+    will-change: transform, opacity;
+  }
+
   .logo-bg-day {
     background: radial-gradient(circle, white 60%, #000e38 80%, transparent 100%);
     mask-image:
