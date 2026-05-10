@@ -1,10 +1,12 @@
-import {EventPeriod} from '@wander/types';
+import {EventPeriod, EventTag} from '@wander/types';
 import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 
 interface FilterStore {
   eventPeriod: EventPeriod;
   setEventPeriod: (period: EventPeriod) => void;
+  eventCategory: EventTag[] | undefined;
+  setEventCategory: (categories: EventTag[] | undefined) => void;
 }
 
 const useFilterStore = create<FilterStore>()(
@@ -12,6 +14,8 @@ const useFilterStore = create<FilterStore>()(
     (set) => ({
       eventPeriod: 'week',
       setEventPeriod: (period) => set({eventPeriod: period}),
+      eventCategory: undefined,
+      setEventCategory: (categories) => set({eventCategory: categories}),
     }),
     {name: 'wander-filters'}
   )

@@ -12,6 +12,7 @@ import {addEventLayers, addEventMarkerImages, syncEventMarkerIconSize} from '@/c
 import {addMetroLayers, addMetroMarkerImage, syncMetroMarkerIconSize} from '@/components/map/metro-layers';
 import useMapStore from '@/store/zustand/useMapStore';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
+import usePanelStore from '@/store/zustand/usePanelStore';
 
 interface UseMapInstanceResult {
   map: RefObject<maplibregl.Map | null>;
@@ -22,7 +23,6 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
   const map = useRef<maplibregl.Map | null>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [areEventLayersReady, setAreEventLayersReady] = useState(false);
-
   const closeDetailModal = useMarkerStore((state) => state.closeDetailModal);
   const setMapView = useMapStore((state) => state.setMapView);
 
@@ -57,6 +57,10 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
     map.current.on('click', (mapEvent) => {
       const currentMap = map.current;
       if (!currentMap) return;
+
+      if (usePanelStore.getState().isPanelOpen) {
+        usePanelStore.getState().togglePanel();
+      }
 
       const interactiveLayers = [EVENT_POINTS_LAYER_ID, EVENT_CLUSTERS_LAYER_ID, METRO_STATIONS_LAYER_ID].filter(
         (layerId) => Boolean(currentMap.getLayer(layerId))
