@@ -36,7 +36,7 @@ export class SpaceInvadersService {
       await this.redisService.set(CACHE_KEY, data.elements, CACHE_TTL);
       return data.elements;
     } catch (error) {
-      this.logger.error('SpaceInvadersService.getSpaceInvaders failed', error);
+      this.logger.error('SpaceInvadersService.getSpaceInvaders failed');
       throw new InternalServerErrorException('Failed to fetch Space Invaders data');
     }
   }

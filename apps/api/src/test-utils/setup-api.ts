@@ -1,4 +1,3 @@
-// src/test-utils/setup-api.ts
 import {Test, TestingModule} from '@nestjs/testing';
 import {INestApplication, ValidationPipe} from '@nestjs/common';
 import {AppModule} from '../app.module';
