@@ -6,12 +6,14 @@ import {EventData} from '@wander/types';
 
 export const useEvents = () => {
   const {mapView} = useMapStore();
+  const eventsEnabled = useFilterStore((state) => state.eventsEnabled);
   const eventPeriod = useFilterStore((state) => state.eventPeriod);
   const eventCategory = useFilterStore((state) => state.eventCategory);
   const serializedTags = eventCategory?.length ? eventCategory.join(',') : undefined;
 
   return useQuery<EventData[]>({
-    queryKey: ['events', mapView.lat, mapView.lng, mapView.radius, eventPeriod, serializedTags],
+    queryKey: ['events', mapView.lat, mapView.lng, mapView.radius, eventPeriod, serializedTags, eventsEnabled],
+    enabled: eventsEnabled,
     staleTime: 30_000,
     queryFn: async () => {
       const {data} = await apiClient.get<EventData[]>('/events', {

@@ -5,7 +5,7 @@ import {InvadersOverpassElement} from '@wander/types';
 const CACHE_KEY = 'space-invaders';
 const CACHE_TTL = 86400;
 const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
-const OVERPASS_QUERY = '[out:json];node["artwork_type"="mosaic"]["artist_name"="Invader"](48.1,1.4,49.2,3.6);out tags;';
+const OVERPASS_QUERY = '[out:json];node["artwork_type"="mosaic"]["artist_name"="Invader"](48.1,1.4,49.2,3.6);out;';
 
 @Injectable()
 export class SpaceInvadersService {
@@ -22,7 +22,7 @@ export class SpaceInvadersService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': '*/*',
+          Accept: '*/*',
           'User-Agent': 'curl/7.88.1',
         },
         body: OVERPASS_QUERY,
