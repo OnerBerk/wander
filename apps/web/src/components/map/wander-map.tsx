@@ -2,25 +2,27 @@ import {useRef} from 'react';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import {EventData, VelibStation} from '@wander/types';
+import {EventData, InvadersOverpassElement, VelibStation} from '@wander/types';
 import {useEventLayers} from '@/hooks/map-hooks/use-event-layers';
 import {useMapInstance} from '@/hooks/map-hooks/use-map-instance';
 import {useMetroLayers} from '@/hooks/map-hooks/use-metro-layers';
 import {useVelibMarkers} from '@/hooks/map-hooks/use-velib-markers';
+import {useSpaceInvadersMarkers} from '@/hooks/map-hooks/use-space-invaders-markers';
 
 interface WanderMapProps {
   events: EventData[];
   velibStations: VelibStation[];
+  spaceInvaders: InvadersOverpassElement[];
 }
 
-const WanderMap: React.FC<WanderMapProps> = ({events, velibStations}) => {
+const WanderMap: React.FC<WanderMapProps> = ({events, velibStations, spaceInvaders}) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const {map, areEventLayersReady} = useMapInstance(mapContainer);
 
   useEventLayers({map, events, areLayersReady: areEventLayersReady});
   useMetroLayers({map, areLayersReady: areEventLayersReady});
   useVelibMarkers({map, velibStations});
-
+  useSpaceInvadersMarkers({map, areLayersReady: areEventLayersReady, spaceInvaders});
   return <div ref={mapContainer} className='h-full w-full' />;
 };
 

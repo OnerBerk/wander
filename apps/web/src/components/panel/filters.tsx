@@ -27,32 +27,51 @@ interface FiltersProps {
 }
 
 const Filters: React.FC<FiltersProps> = ({onSubmit}) => {
-  const {eventPeriod, eventCategory, setEventPeriod, setEventCategory} = useFilterStore();
+  const {eventPeriod, eventCategory, eventsEnabled, setEventPeriod, setEventCategory, setEventsEnabled} =
+    useFilterStore();
 
   const [period, setPeriod] = useState<EventPeriod>(eventPeriod);
-  const [tags, setTags] = useState<EventTag[]>(eventCategory ?? []);
-  const [all, setAll] = useState(!eventCategory?.length);
+  const [tags, setTags] = useState<EventTag[]>(() => (eventsEnabled ? (eventCategory ?? []) : []));
+  const [all, setAll] = useState(() => eventsEnabled && eventCategory === undefined);
+  const [none, setNone] = useState(() => !eventsEnabled);
   const [error, setError] = useState(false);
 
   const toggleTag = (tag: EventTag) => {
     setError(false);
     setAll(false);
+    setNone(false);
     setTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
   };
 
   const handleAll = () => {
     setAll(true);
+    setNone(false);
+    setTags([]);
+    setError(false);
+  };
+
+  const handleNone = () => {
+    setNone(true);
+    setAll(false);
     setTags([]);
     setError(false);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (none) {
+      setEventPeriod(period);
+      setEventsEnabled(false);
+      setEventCategory(undefined);
+      onSubmit?.();
+      return;
+    }
     if (!all && tags.length === 0) {
       setError(true);
       return;
     }
     setEventPeriod(period);
+    setEventsEnabled(true);
     setEventCategory(all ? undefined : tags);
     onSubmit?.();
   };
@@ -62,18 +81,24 @@ const Filters: React.FC<FiltersProps> = ({onSubmit}) => {
       <select
         value={period}
         onChange={(e) => setPeriod(e.target.value as EventPeriod)}
-        className='md:text-sm text-xs rounded-md border border-white/30 bg-white/40 px-3 py-1.5 text-sm focus:outline-none'>
+        className='rounded-md border border-white/30 bg-white/40 px-3 py-1.5 text-xs focus:outline-none md:text-sm'>
         <option value='today'>Aujourd'hui</option>
         <option value='week'>Cette semaine</option>
         <option value='month'>Ce mois-ci</option>
         <option value='all'>Tout</option>
       </select>
 
-      <div className='md:text-sm text-xs rounded-md border border-white/30 bg-white/20 p-3'>
-        <label className='mb-3 flex cursor-pointer items-center gap-2 text-sm font-medium'>
-          <input type='checkbox' checked={all} onChange={handleAll} className='h-4 w-4 accent-slate-700' />
-          Tout
-        </label>
+      <div className='rounded-md border border-white/30 bg-white/20 p-3 text-xs md:text-sm'>
+        <div className='flex flex-row justify-between gap-2 border-b border-white/30 pb-2'>
+          <label className='mb-3 flex cursor-pointer items-center gap-2 text-sm font-medium'>
+            <input type='checkbox' checked={all} onChange={handleAll} className='h-4 w-4 accent-slate-700' />
+            Tout
+          </label>
+          <label className='mb-3 flex cursor-pointer items-center gap-2 text-sm font-medium'>
+            <input type='checkbox' checked={none} onChange={handleNone} className='h-4 w-4 accent-slate-700' />
+            Aucun
+          </label>
+        </div>
 
         <div className='grid grid-cols-2 gap-2 md:flex md:flex-col md:gap-2'>
           {CATEGORY_OPTIONS.map(({value, accent, icon}) => (
@@ -93,7 +118,9 @@ const Filters: React.FC<FiltersProps> = ({onSubmit}) => {
         </div>
       </div>
 
-      {error && <p className='text-xs text-red-500'>Sélectionne au moins une catégorie ou coche "Tout".</p>}
+      {error && (
+        <p className='text-xs text-red-500'>Sélectionne au moins une catégorie, coche « Tout » ou « Aucun ».</p>
+      )}
 
       <button type='submit' className='cursor-pointer rounded-full bg-wander-orange px-4 py-1.5 text-sm text-white'>
         Appliquer
