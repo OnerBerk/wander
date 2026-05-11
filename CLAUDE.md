@@ -25,7 +25,7 @@ wander/
 
 | Couche          | Technologie                          |
 | --------------- | ------------------------------------ |
-| Frontend        | React 18, TypeScript, Vite, Leaflet  |
+| Frontend        | React 18, TypeScript, MapLibre GL    |
 | Backend         | NestJS, TypeScript                   |
 | Cache           | Redis (via Upstash en prod)          |
 | Types partagés  | @wander/types (workspace pnpm)       |

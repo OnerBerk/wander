@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import useFilterStore from '@/store/zustand/useFilterStore';
+import useEventsMapStore from '@/store/zustand/useEventsMapStore';
 import {EventPeriod, EventTag} from '@wander/types';
 import markerDefault from '@/assets/markers/marker-default.png';
 import markerBook from '@/assets/markers/marker-book.png';
@@ -29,6 +30,7 @@ interface FiltersProps {
 const Filters: React.FC<FiltersProps> = ({onSubmit}) => {
   const {eventPeriod, eventCategory, eventsEnabled, setEventPeriod, setEventCategory, setEventsEnabled} =
     useFilterStore();
+  const resetAccumulatedEvents = useEventsMapStore((state) => state.resetEvents);
 
   const [period, setPeriod] = useState<EventPeriod>(eventPeriod);
   const [tags, setTags] = useState<EventTag[]>(() => (eventsEnabled ? (eventCategory ?? []) : []));
@@ -60,6 +62,7 @@ const Filters: React.FC<FiltersProps> = ({onSubmit}) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (none) {
+      resetAccumulatedEvents();
       setEventPeriod(period);
       setEventsEnabled(false);
       setEventCategory(undefined);
@@ -70,6 +73,7 @@ const Filters: React.FC<FiltersProps> = ({onSubmit}) => {
       setError(true);
       return;
     }
+    resetAccumulatedEvents();
     setEventPeriod(period);
     setEventsEnabled(true);
     setEventCategory(all ? undefined : tags);
