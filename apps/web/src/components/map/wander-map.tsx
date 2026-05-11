@@ -3,11 +3,11 @@ import {useRef} from 'react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 import {EventData, InvadersOverpassElement, VelibStation} from '@wander/types';
-import {useEventLayers} from '@/hooks/map-hooks/use-event-layers';
-import {useMapInstance} from '@/hooks/map-hooks/use-map-instance';
-import {useMetroLayers} from '@/hooks/map-hooks/use-metro-layers';
-import {useVelibMarkers} from '@/hooks/map-hooks/use-velib-markers';
-import {useSpaceInvadersMarkers} from '@/hooks/map-hooks/use-space-invaders-markers';
+import {useEventLayers} from '@/hooks/map/use-event-layers';
+import {useMapInstance} from '@/hooks/map/use-map-instance';
+import {useMetroLayers} from '@/hooks/map/use-metro-layers';
+import {useVelibMarkers} from '@/hooks/map/use-velib-markers';
+import {useSpaceInvadersMarkers} from '@/hooks/map/use-space-invaders-markers';
 
 interface WanderMapProps {
   events: EventData[];

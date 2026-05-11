@@ -1,5 +1,7 @@
+import {useEffect} from 'react';
 import {apiClient} from '@/api/client';
 import useFilterStore from '@/store/zustand/useFilterStore';
+import useEventsMapStore from '@/store/zustand/useEventsMapStore';
 import useMapStore from '@/store/zustand/useMapStore';
 import {useQuery} from '@tanstack/react-query';
 import {EventData} from '@wander/types';
@@ -10,11 +12,13 @@ export const useEvents = () => {
   const eventPeriod = useFilterStore((state) => state.eventPeriod);
   const eventCategory = useFilterStore((state) => state.eventCategory);
   const serializedTags = eventCategory?.length ? eventCategory.join(',') : undefined;
+  const eventsAccumulatorEpoch = useEventsMapStore((state) => state.eventsAccumulatorEpoch);
 
-  return useQuery<EventData[]>({
+  const queryResult = useQuery<EventData[]>({
     queryKey: ['events', mapView.lat, mapView.lng, mapView.radius, eventPeriod, serializedTags, eventsEnabled],
     enabled: eventsEnabled,
     staleTime: 30_000,
+    placeholderData: (previousData) => previousData,
     queryFn: async () => {
       const {data} = await apiClient.get<EventData[]>('/events', {
         params: {
@@ -29,4 +33,13 @@ export const useEvents = () => {
       return data;
     },
   });
+
+  const {data} = queryResult;
+
+  useEffect(() => {
+    if (!eventsEnabled || data === undefined) return;
+    useEventsMapStore.getState().mergeEvents(data);
+  }, [eventsEnabled, data, eventsAccumulatorEpoch]);
+
+  return queryResult;
 };

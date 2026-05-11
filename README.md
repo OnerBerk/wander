@@ -1,6 +1,6 @@
-# 🗺️ Wander
+# Wander
 
-> Carte interactive de Paris avec donnees temps reel et suggestions de parcours assistees par IA.
+> Carte interactive de Paris avec données temps réel et suggestions de parcours assistées par IA.
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue?logo=typescript)
 ![NestJS](https://img.shields.io/badge/API-NestJS-ea2845?logo=nestjs)
@@ -12,107 +12,134 @@
 
 ---
 
-## ✨ Vision
+## Vision
 
-Wander agrege plusieurs APIs publiques pour afficher des infos utiles en direct (mobilite, evenements, meteo, etc.) sur une carte de Paris, puis genere des idees de parcours personnalisees.
-
-Le projet est pense comme un portfolio **propre, type strict, et production-ready**.
+Wander regroupe plusieurs sources publiques pour afficher sur une même carte de Paris des infos utiles en direct (mobilité, événements, météo, etc.). Tu te déplaces, tu filtres : les données suivent la zone et les réglages choisis. Le projet est typé strictement, et déployé.
 
 ---
 
-## 🏗️ Architecture
+## Ce que tu y trouves (côté produit)
+
+- Une **carte** (MapLibre) pour naviguer dans Paris.
+- Des **marqueurs** et panneaux selon les couches activées : événements, Vélib, Space Invaders, métro/RER, météo, etc.
+- Des **filtres** (période, catégories d’événements, activation ou non des événements sur la carte).
+- Des **modales** de détail au clic sur un marqueur.
+
+---
+
+## Architecture du dépôt
 
 ```txt
 wander/
 ├── apps/
 │   ├── api/          # Backend NestJS
 │   └── web/          # Frontend React + Vite
-└── packages/
-    └── types/        # Types TypeScript partages (@wander/types)
+├── packages/
+│   └── types/        # Types TypeScript partagés (@wander/types)
+├── learn.md          # Guide technique détaillé (tout le projet)
+├── CLAUDE.md         # Règles et conventions pour les contributeurs / agents
+└── README.md         # Ce fichier
 ```
 
 ---
 
-## 🧰 Stack
+## Stack
 
-| Couche         | Technologie                      |
-| -------------- | -------------------------------- |
-| Frontend       | React, TypeScript, Vite, Leaflet |
-| Backend        | NestJS, TypeScript               |
-| Cache          | Redis                            |
-| Types partages | `@wander/types` (workspace pnpm) |
-| Conteneurs     | Docker + Docker Compose          |
-| CI/CD          | GitHub Actions                   |
-| Deploiement    | Vercel (web), Render (api)       |
-| IA             | Claude API                       |
-
----
-
-## 🌍 APIs externes (prevues / integrees)
-
-- 🚲 Velib API
-- 🎭 Que Faire a Paris
-- 🗓️ OpenAgenda IDF
-- 🏛️ Paris Musees
-- 🏋️ Equipements sportifs IDF
-- 🚴 Pistes cyclables Paris
-- 🍽️ DATAtourisme
-- 🌤️ Open-Meteo
+| Couche         | Technologie                                     |
+| -------------- | ----------------------------------------------- |
+| Frontend       | React, TypeScript, Vite, **MapLibre GL**        |
+| Backend        | NestJS, TypeScript                              |
+| Cache          | Redis (local Docker ; Upstash possible en prod) |
+| Types partagés | `@wander/types` (workspace pnpm)                |
+| Conteneurs     | Docker + Compose (dev)                          |
+| CI/CD          | GitHub Actions                                  |
+| Déploiement    | Vercel (web), Render (api)                      |
+| IA             | Claude API (parcours / suggestions côté API)    |
 
 ---
 
-## ⚙️ Variables d'environnement
+## APIs externes (intégrées ou prévues)
 
-### `apps/api/.env`
-
-```env
-REDIS_URL=redis://localhost:6379
-CLAUDE_API_KEY=
-PORT=3000
-```
-
-### `apps/web/.env`
-
-```env
-VITE_API_URL=http://localhost:3000
-```
+| Source            | Données                | TTL cache Redis (cible) |
+| ----------------- | ---------------------- | ----------------------- |
+| Vélib API         | Disponibilité stations | 60 s                    |
+| Que Faire à Paris | Événements temps réel  | 300 s                   |
+| Open-Meteo        | Météo (sans clé API)   | 900 s                   |
 
 ---
 
-## 🚀 Commandes utiles
+## Variables d’environnement
+
+Copier les exemples puis ajuster si besoin :
 
 ```bash
-# A la racine
-pnpm install
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env
+```
+
+---
+
+## Lancer l’application en local
+
+Prérequis : **Node.js**, **pnpm**, **Docker** (pour Redis).
+
+1. Installer les dépendances à la racine du monorepo :
+
+   ```bash
+   pnpm install
+   ```
+
+2. Démarrer **Redis** (depuis la racine, fichier `docker-compose.yml`) :
+
+   ```bash
+   docker compose up -d
+   ```
+
+   Pour arrêter : `docker compose down`.  
+   Service : image `redis:7-alpine`, conteneur local `wander-redis`, port `6379`, volume persistant `redis_data`.  
+   L’API doit avoir `REDIS_URL=redis://localhost:6379`.
+
+3. Créer les fichiers `.env` (voir la section **Variables d’environnement** plus haut dans ce fichier).
+
+4. **Terminal 1 — API** :
+
+   ```bash
+   cd apps/api && pnpm start:dev
+   ```
+
+5. **Terminal 2 — Web** :
+
+   ```bash
+   cd apps/web && pnpm dev
+   ```
+
+6. Ouvrir l’URL affichée par Vite (souvent `http://localhost:5173`).
+
+### Autres commandes utiles
+
+```bash
+# Racine
 pnpm lint
 pnpm format
 
-# API
-cd apps/api
-pnpm start:dev
+# API (depuis apps/api)
 pnpm test
+pnpm run build
 
-# Web
-cd apps/web
-pnpm dev
+# Web (depuis apps/web)
 pnpm test
+pnpm build
 ```
 
 ---
 
-## 🐳 Docker (dev)
+## Git et qualité
 
-```bash
-docker-compose up -d
-docker-compose down
-```
-
-### Redis dockerise (local dev)
-
-- Service lance via `docker-compose.yml` avec l'image `redis:7-alpine`
-- Container local: `wander-redis`
-- Port expose: `6379:6379`
-- Donnees persistantes via le volume Docker `redis_data`
-- Variable API: `REDIS_URL=redis://localhost:6379`
+- Branche `main` protégée ; travail sur `dev` ou branches `feat/…` avec PR.
+- Husky / lint en pre-push selon la config du dépôt (voir `.husky/` et `CLAUDE.md`).
 
 ---
+
+## Licence
+
+Les licences des dépendances suivent chaque package ; le dépôt Wander précise sa licence dans les fichiers habituels du projet (`LICENSE` si présent).
