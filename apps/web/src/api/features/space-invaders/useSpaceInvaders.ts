@@ -9,6 +9,6 @@ export const useSpaceInvaders = () => {
       const {data} = await apiClient.get<InvadersOverpassElement[]>('/space-invaders');
       return data;
     },
-    staleTime: 1000 * 60 * 60 * 24,
+    staleTime: 1000 * 60 * 60 * 24 * 2,
   });
 };

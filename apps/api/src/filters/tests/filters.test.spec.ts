@@ -8,7 +8,13 @@ describe('QueryFilterDto', () => {
   const validGeo = {lat: 48.8566, lng: 2.3522, radius: 5};
 
   it('accepts valid query with tag and price', async () => {
-    const dto = toDto({...validGeo, tag: 'Concert', price: 'free', limit: 20});
+    const dto = toDto({...validGeo, tags: ['Concert'], price: 'free', limit: 20});
+    const errors = await validate(dto);
+    expect(errors).toHaveLength(0);
+  });
+
+  it('accepts literature tag with accent', async () => {
+    const dto = toDto({...validGeo, tags: ['Littérature']});
     const errors = await validate(dto);
     expect(errors).toHaveLength(0);
   });
