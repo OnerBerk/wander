@@ -34,12 +34,12 @@ export const useEvents = () => {
     },
   });
 
-  const {data} = queryResult;
+  const {data, isPlaceholderData} = queryResult;
 
   useEffect(() => {
-    if (!eventsEnabled || data === undefined) return;
+    if (!eventsEnabled || data === undefined || isPlaceholderData) return;
     useEventsMapStore.getState().mergeEvents(data);
-  }, [eventsEnabled, data, eventsAccumulatorEpoch]);
+  }, [eventsEnabled, data, isPlaceholderData, eventsAccumulatorEpoch]);
 
   return queryResult;
 };

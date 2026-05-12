@@ -3,9 +3,10 @@ import {RedisService} from '../redis/redis.service';
 import {InvadersOverpassElement} from '@wander/types';
 
 const CACHE_KEY = 'space-invaders';
-const CACHE_TTL = 86400;
+const CACHE_TTL = 172800;
 const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
-const OVERPASS_QUERY = '[out:json];node["artwork_type"="mosaic"]["artist_name"="Invader"](48.1,1.4,49.2,3.6);out;';
+const OVERPASS_QUERY =
+  '[out:json];node["artwork_type"="mosaic"]["artist_name"="Invader"](48.1,1.4,49.2,3.6);out center;';
 
 @Injectable()
 export class SpaceInvadersService {
@@ -22,8 +23,9 @@ export class SpaceInvadersService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Accept: '*/*',
-          'User-Agent': 'curl/7.88.1',
+          Accept: 'application/json,text/plain,*/*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'User-Agent': 'Wander/1.0',
         },
         body: OVERPASS_QUERY,
       });
@@ -36,7 +38,7 @@ export class SpaceInvadersService {
       await this.redisService.set(CACHE_KEY, data.elements, CACHE_TTL);
       return data.elements;
     } catch (error) {
-      this.logger.error('SpaceInvadersService.getSpaceInvaders failed');
+      this.logger.error('SpaceInvadersService.getSpaceInvaders failed', error);
       throw new InternalServerErrorException('Failed to fetch Space Invaders data');
     }
   }

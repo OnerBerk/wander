@@ -5,6 +5,8 @@ export const EVENT_MARKER_IMAGE_IDS = {
   music: 'event-marker-music',
   tree: 'event-marker-tree',
   book: 'event-marker-book',
+  kids: 'event-marker-kids',
+  theatre: 'event-marker-theatre',
 } as const;
 
 export type EventMarkerImageId = (typeof EVENT_MARKER_IMAGE_IDS)[keyof typeof EVENT_MARKER_IMAGE_IDS];
@@ -53,6 +55,10 @@ export const getEventMarkerImageId = (tags: EventTag[]): EventMarkerImageId => {
         return EVENT_MARKER_IMAGE_IDS.tree;
       case 'Littérature':
         return EVENT_MARKER_IMAGE_IDS.book;
+      case 'Enfants':
+        return EVENT_MARKER_IMAGE_IDS.kids;
+      case 'Théâtre':
+        return EVENT_MARKER_IMAGE_IDS.theatre;
       default:
         break;
     }

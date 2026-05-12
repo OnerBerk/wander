@@ -60,7 +60,7 @@ describe('SpaceInvadersService', () => {
       const result = await service.getSpaceInvaders();
 
       expect(result).toEqual([mockElement]);
-      expect(mockRedisService.set).toHaveBeenCalledWith('space-invaders', [mockElement], 86400);
+      expect(mockRedisService.set).toHaveBeenCalledWith('space-invaders', [mockElement], 172800);
     });
 
     it('throws InternalServerErrorException when Overpass responds with non-ok status', async () => {

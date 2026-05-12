@@ -20,6 +20,7 @@ const ALLOWED_TAGS: EventTag[] = [
   'Festival',
   'Gourmand',
   'Histoire',
+  'Littérature',
   'Loisirs',
   'Nature',
   'Spectacle musical',

@@ -6,12 +6,14 @@ import markerDefault from '@/assets/markers/marker-default.png';
 import markerBook from '@/assets/markers/marker-book.png';
 import markerMusic from '@/assets/markers/music-marker.png';
 import markerTree from '@/assets/markers/marker-tree.png';
+import markerKids from '@/assets/markers/marker-kids.png';
+import markerTheatre from '@/assets/markers/marker-theatre.png';
 
 const CATEGORY_OPTIONS: Array<{value: EventTag; accent: string; icon: string}> = [
   {value: 'Art contemporain', accent: 'accent-rose-400', icon: markerDefault},
   {value: 'Conférence', accent: 'accent-sky-400', icon: markerDefault},
   {value: 'Concert', accent: 'accent-violet-400', icon: markerMusic},
-  {value: 'Enfants', accent: 'accent-amber-400', icon: markerDefault},
+  {value: 'Enfants', accent: 'accent-amber-400', icon: markerKids},
   {value: 'Expo', accent: 'accent-cyan-500', icon: markerDefault},
   {value: 'Festival', accent: 'accent-fuchsia-400', icon: markerMusic},
   {value: 'Gourmand', accent: 'accent-orange-400', icon: markerDefault},
@@ -19,8 +21,8 @@ const CATEGORY_OPTIONS: Array<{value: EventTag; accent: string; icon: string}> =
   {value: 'Littérature', accent: 'accent-yellow-600', icon: markerBook},
   {value: 'Loisirs', accent: 'accent-blue-400', icon: markerDefault},
   {value: 'Nature', accent: 'accent-green-400', icon: markerTree},
-  {value: 'Spectacle musical', accent: 'accent-pink-400', icon: markerDefault},
-  {value: 'Théâtre', accent: 'accent-red-400', icon: markerDefault},
+  {value: 'Spectacle musical', accent: 'accent-pink-400', icon: markerMusic},
+  {value: 'Théâtre', accent: 'accent-red-400', icon: markerTheatre},
 ];
 
 interface FiltersProps {
