@@ -24,7 +24,7 @@ const Header = () => {
           </div>
         </div>
         <div className="flex items-center justify-between gap-2">
-          {icon && <img className="h-15 w-auto md:h-15" src={icon} alt={icon} />}
+          {icon && <img className="h-23 w-auto" src={icon} alt={icon} />}
           <div className="flex flex-col">
             <p className={`text-2xl font-semibold`}>{weather ? `${weather?.temperature}°C` : ''}</p>
             <p className="text-sm md:text-base">{weather ? `${weather?.windSpeed} km/h` : ''}</p>
