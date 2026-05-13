@@ -1,4 +1,4 @@
-export interface InvadersOverpassElement {
+export type InvadersOverpassElement = {
   type: 'node';
   id: number;
   lat: number;
@@ -23,4 +23,4 @@ export interface InvadersOverpassElement {
     'contact:postcode'?: string;
     'contact:city'?: string;
   };
-}
+};

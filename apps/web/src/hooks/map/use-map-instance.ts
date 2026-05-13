@@ -34,6 +34,7 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
       style: `https://api.maptiler.com/maps/topo-v4/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`,
       center: PARIS_CENTER,
       zoom: DEFAULT_ZOOM,
+      attributionControl: false,
     });
 
     map.current.addControl(new maplibregl.NavigationControl());

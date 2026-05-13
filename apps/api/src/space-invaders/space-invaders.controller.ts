@@ -8,6 +8,7 @@ export class SpaceInvadersController {
 
   @Get()
   async getSpaceInvaders(): Promise<InvadersOverpassElement[]> {
+    console.log('getSpaceInvaders');
     return this.spaceInvadersService.getSpaceInvaders();
   }
 }

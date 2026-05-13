@@ -5,7 +5,7 @@ import treeMarkerImageUrl from '@/assets/markers/marker-tree.png';
 import bookMarkerImageUrl from '@/assets/markers/marker-book.png';
 import kidsMarkerImageUrl from '@/assets/markers/marker-kids.png';
 import theatreMarkerImageUrl from '@/assets/markers/marker-theatre.png';
-import {applyMarkerEntranceBounce} from '@/utils/map-utils';
+import { applyMarkerEntranceBounce } from '@/utils/map-utils';
 import {
   EVENT_CLUSTER_COUNT_LAYER_ID,
   EVENT_CLUSTER_RADIUS,
@@ -17,7 +17,7 @@ import {
   EVENTS_SOURCE_ID,
   MAP_MOBILE_BREAKPOINT_PX,
 } from '@/constants/map-constants';
-import {buildEventsGeoJson, EVENT_MARKER_IMAGE_IDS, EventMarkerImageId} from '@/components/map/events-geojson';
+import { buildEventsGeoJson, EVENT_MARKER_IMAGE_IDS, EventMarkerImageId } from '@/components/map/events-geojson';
 
 export type LayerClickEvent = maplibregl.MapMouseEvent & {
   features?: Array<{
@@ -36,24 +36,24 @@ const loadImageElement = (src: string): Promise<HTMLImageElement> => {
 
 export const addEventMarkerImages = async (targetMap: maplibregl.Map): Promise<void> => {
   const markerImages = [
-    {id: EVENT_MARKER_IMAGE_IDS.default, src: defaultMarkerImageUrl},
-    {id: EVENT_MARKER_IMAGE_IDS.music, src: musicMarkerImageUrl},
-    {id: EVENT_MARKER_IMAGE_IDS.tree, src: treeMarkerImageUrl},
-    {id: EVENT_MARKER_IMAGE_IDS.book, src: bookMarkerImageUrl},
-    {id: EVENT_MARKER_IMAGE_IDS.kids, src: kidsMarkerImageUrl},
-    {id: EVENT_MARKER_IMAGE_IDS.theatre, src: theatreMarkerImageUrl},
+    { id: EVENT_MARKER_IMAGE_IDS.default, src: defaultMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.music, src: musicMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.tree, src: treeMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.book, src: bookMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.kids, src: kidsMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.theatre, src: theatreMarkerImageUrl },
   ];
 
   await Promise.all(
-    markerImages.map(async ({id, src}) => {
+    markerImages.map(async ({ id, src }) => {
       const image = await loadImageElement(src);
 
       if (targetMap.hasImage(id)) {
         targetMap.removeImage(id);
       }
 
-      targetMap.addImage(id, image, {pixelRatio: EVENT_MARKER_PIXEL_RATIO});
-    })
+      targetMap.addImage(id, image, { pixelRatio: EVENT_MARKER_PIXEL_RATIO });
+    }),
   );
 };
 
