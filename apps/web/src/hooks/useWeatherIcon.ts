@@ -14,6 +14,10 @@ import stormyDayImg from '@/assets/weather/weather-stormy-day.png';
 import stormyNightImg from '@/assets/weather/weather-stormy-night.png';
 
 type WeatherCondition = 'full' | 'cloudy' | 'rainy' | 'snow' | 'stormy';
+interface WeatherIcon {
+  src: string;
+  alt: string;
+}
 
 const DAY_ICONS: Record<WeatherCondition, string> = {
   full: fullDayImg,
@@ -29,6 +33,14 @@ const NIGHT_ICONS: Record<WeatherCondition, string> = {
   rainy: rainyNightImg,
   snow: snowNightImg,
   stormy: stormyNightImg,
+};
+
+const CONDITION_LABELS: Record<WeatherCondition, string> = {
+  full: 'beau temps',
+  cloudy: 'temps nuageux',
+  rainy: 'pluie',
+  snow: 'neige',
+  stormy: 'orage',
 };
 
 const CODE_TO_CONDITION: Record<number, WeatherCondition> = {
@@ -62,7 +74,7 @@ const CODE_TO_CONDITION: Record<number, WeatherCondition> = {
   99: 'stormy',
 };
 
-export const useWeatherIcon = () => {
+export const useWeatherIcon = (): WeatherIcon | null => {
   const { data: weather } = useWeather();
   const isDay = useIsDay();
 
@@ -70,6 +82,9 @@ export const useWeatherIcon = () => {
     if (!weather) return null;
     const condition = CODE_TO_CONDITION[weather.weatherCode];
     if (!condition) return null;
-    return isDay ? DAY_ICONS[condition] : NIGHT_ICONS[condition];
+    return {
+      src: isDay ? DAY_ICONS[condition] : NIGHT_ICONS[condition],
+      alt: `Météo actuelle : ${CONDITION_LABELS[condition]}`,
+    };
   }, [weather, isDay]);
 };

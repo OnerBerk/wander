@@ -1,8 +1,9 @@
-import {QueryClientProvider} from '@tanstack/react-query';
-import {queryClient} from '@/store/query-client';
-import {BrowserRouter} from 'react-router-dom';
-import {createRoot} from 'react-dom/client';
-import {StrictMode} from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@/store/query-client';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { createRoot } from 'react-dom/client';
+import { StrictMode } from 'react';
 
 import App from '@/App';
 import '@/styles/index.css';
@@ -10,11 +11,13 @@ import '@/styles/index.css';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <div className='h-full'>
-          <App />
-        </div>
-      </QueryClientProvider>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <div className="h-full">
+            <App />
+          </div>
+        </QueryClientProvider>
+      </HelmetProvider>
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 );

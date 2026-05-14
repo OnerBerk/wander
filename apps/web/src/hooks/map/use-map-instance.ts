@@ -1,6 +1,6 @@
-import {RefObject, useEffect, useRef, useState} from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
-import {calculateRadius} from '@/utils/map-utils';
+import { calculateRadius } from '@/utils/map-utils';
 import {
   DEFAULT_ZOOM,
   EVENT_CLUSTERS_LAYER_ID,
@@ -8,8 +8,8 @@ import {
   METRO_STATIONS_LAYER_ID,
   PARIS_CENTER,
 } from '@/constants/map-constants';
-import {addEventLayers, addEventMarkerImages, syncEventMarkerIconSize} from '@/components/map/event-layers';
-import {addMetroLayers, addMetroMarkerImage, syncMetroMarkerIconSize} from '@/components/map/metro-layers';
+import { addEventLayers, addEventMarkerImages, syncEventMarkerIconSize } from '@/components/map/event-layers';
+import { addMetroLayers, addMetroMarkerImage, syncMetroMarkerIconSize } from '@/components/map/metro-layers';
 import useMapStore from '@/store/zustand/useMapStore';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
 import usePanelStore from '@/store/zustand/usePanelStore';
@@ -68,7 +68,7 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
       }
 
       const interactiveLayers = [EVENT_POINTS_LAYER_ID, EVENT_CLUSTERS_LAYER_ID, METRO_STATIONS_LAYER_ID].filter(
-        (layerId) => Boolean(currentMap.getLayer(layerId))
+        (layerId) => Boolean(currentMap.getLayer(layerId)),
       );
 
       if (interactiveLayers.length > 0) {
@@ -87,7 +87,7 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
         const center = map.current!.getCenter();
         const zoom = map.current!.getZoom();
         const radius = calculateRadius(zoom);
-        setMapView({lat: center.lat, lng: center.lng, radius});
+        setMapView({ lat: center.lat, lng: center.lng, radius });
       }, 800);
     });
 
@@ -98,5 +98,5 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
     };
   }, [closeDetailModal, mapContainer, setMapView]);
 
-  return {map, areEventLayersReady};
+  return { map, areEventLayersReady };
 };
