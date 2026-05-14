@@ -23,14 +23,14 @@ const Header = () => {
             <p className="text-xs font-medium md:text-base">Explorer votre ville autrement</p>
           </div>
         </div>
-        <div className="flex items-center justify-between gap-2">
-          {icon && <img className="h-23 w-auto" src={icon} alt={icon} />}
-          <div className="flex flex-col">
+        <div className="flex h-16 items-start justify-between gap-2">
+          {icon && <img className="h-40 w-auto shrink-0" src={icon} alt={icon} />}
+          <div className="flex h-full flex-col justify-center">
             <p className={`text-2xl font-semibold`}>{weather ? `${weather?.temperature}°C` : ''}</p>
             <p className="text-sm md:text-base">{weather ? `${weather?.windSpeed} km/h` : ''}</p>
           </div>
-          <LucideEllipsisVertical />
-          <SlidersHorizontal className="h-8 w-auto cursor-pointer" onClick={togglePanel} />
+          <LucideEllipsisVertical className="mt-4" />
+          <SlidersHorizontal className="mt-4 h-8 w-auto cursor-pointer" onClick={togglePanel} />
         </div>
       </div>
     </header>
