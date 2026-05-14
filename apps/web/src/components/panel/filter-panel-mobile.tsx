@@ -77,7 +77,6 @@ const FilterPanelMobile = () => {
           position: 'fixed',
           ...panelStyle,
           WebkitBackdropFilter: panelStyle.backdropFilter,
-          border: '1px solid rgba(249, 115, 22, 0.25)',
           pointerEvents: phase === 'expanded' ? 'auto' : 'none',
           transition: 'all 600ms cubic-bezier(0.34, 1.4, 0.64, 1)',
           transformOrigin: 'bottom left',

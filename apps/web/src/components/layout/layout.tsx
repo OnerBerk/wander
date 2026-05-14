@@ -6,6 +6,7 @@ import VelibModal from '@/components/modals/velib-modal';
 import MetroStationModal from '@/components/modals/metro-station-modal';
 import FilterPanel from '../panel/filter-panel';
 import FilterPanelMobile from '../panel/filter-panel-mobile';
+import WeatherMobile from '../weather/weather-mobile';
 
 const Layout = () => {
   const detailModal = useMarkerStore((state) => state.detailModal);
@@ -19,6 +20,7 @@ const Layout = () => {
         {detailModal.type === 'metro' && <MetroStationModal station={detailModal.data} />}
         <FilterPanel />
         <Outlet />
+        <WeatherMobile />
         <FilterPanelMobile />
       </main>
     </div>

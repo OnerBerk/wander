@@ -60,7 +60,11 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
       if (!currentMap) return;
 
       if (usePanelStore.getState().isPanelOpen) {
-        usePanelStore.getState().togglePanel();
+        usePanelStore.getState().closePanel();
+      }
+
+      if (usePanelStore.getState().isWeatherPanelOpen) {
+        usePanelStore.getState().closeWeatherPanel();
       }
 
       const interactiveLayers = [EVENT_POINTS_LAYER_ID, EVENT_CLUSTERS_LAYER_ID, METRO_STATIONS_LAYER_ID].filter(
