@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import usePanelStore from '@/store/zustand/usePanelStore';
 import { SlidersHorizontal, X } from 'lucide-react';
 import UIIconButton from '../ui/ui-icon-button';
+import UIClosePanelButton from '@/components/ui/ui-close-panel-button';
 import useMapLayersStore from '@/store/zustand/useMapLayersStore';
 import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
 import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
@@ -9,8 +10,10 @@ import spaceInvaderMarkerImageUrl from '@/assets/markers/marker-space-invaders.p
 import Filters from './filters';
 
 const FilterPanelMobile = () => {
+  const titleId = useId();
   const togglePanel = usePanelStore((state) => state.togglePanel);
   const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
+  const closePanel = usePanelStore((state) => state.closePanel);
 
   const isVelibMarkersVisible = useMapLayersStore((state) => state.isVelibMarkersVisible);
   const isMetroMarkersVisible = useMapLayersStore((state) => state.isMetroMarkersVisible);
@@ -70,7 +73,12 @@ const FilterPanelMobile = () => {
   }[phase];
 
   return (
-    <div className="md:hidden">
+    <div
+      role={isPanelOpen ? 'dialog' : undefined}
+      aria-modal={isPanelOpen ? 'true' : undefined}
+      aria-labelledby={isPanelOpen ? titleId : undefined}
+      className="md:hidden"
+    >
       <div
         style={{
           zIndex: 95,
@@ -107,6 +115,10 @@ const FilterPanelMobile = () => {
           }}
           className="p-6"
         >
+          <UIClosePanelButton ariaLabel="Fermer les filtres" onClose={closePanel} />
+          <h2 id={titleId} className="sr-only">
+            Filtres
+          </h2>
           <div className="flex w-full items-center justify-center gap-2 border-b border-white/20 pb-4">
             <UIIconButton
               isVisible={isMetroMarkersVisible}
@@ -136,7 +148,7 @@ const FilterPanelMobile = () => {
         aria-label={isPanelOpen ? 'Fermer les filtres' : 'Ouvrir les filtres'}
         onClick={togglePanel}
         style={{ zIndex: 100 }}
-        className="bg-wander-orange/40 fixed bottom-4 left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-white/20 shadow-lg backdrop-blur-md"
+        className="bg-wander-orange/40 focus-visible:ring-wander-orange fixed bottom-4 left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-white/20 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         {isPanelOpen ? (
           <X className="h-6 w-6" aria-hidden="true" />

@@ -12,7 +12,7 @@ const UIIconButton: React.FC<UIIconButtonProps> = ({ isVisible, onToggle, icon, 
       aria-pressed={isVisible}
       aria-label={isVisible ? `Masquer ${label}` : `Afficher ${label}`}
       onClick={onToggle}
-      className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/20 md:h-12 md:w-12"
+      className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/20 focus-visible:ring-2 focus-visible:ring-wander-orange focus-visible:ring-offset-2 focus-visible:outline-none md:h-12 md:w-12"
     >
       <img
         src={icon}
