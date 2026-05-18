@@ -3,7 +3,7 @@ import usePanelStore from '@/store/zustand/usePanelStore';
 import wanderLogoPaper from '@/assets/logo/wander-logo-paper.png';
 import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
 import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
-import spaceInvaderMarkerImageUrl from '@/assets/markers/marker-space-invaders.png';
+import spaceInvaderMarkerImageUrl from '@/assets/markers/invaders/marker-invaders.png';
 import Filters from './filters';
 import UIIconButton from '../ui/ui-icon-button';
 import { useId } from 'react';

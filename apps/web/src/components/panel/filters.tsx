@@ -8,9 +8,10 @@ import markerMusic from '@/assets/markers/music-marker.png';
 import markerTree from '@/assets/markers/marker-tree.png';
 import markerKids from '@/assets/markers/marker-kids.png';
 import markerTheatre from '@/assets/markers/marker-theatre.png';
+import markerArt from '@/assets/markers/marker-art.png';
 
 const CATEGORY_OPTIONS: Array<{ value: EventTag; accent: string; icon: string }> = [
-  { value: 'Art contemporain', accent: 'accent-rose-400', icon: markerDefault },
+  { value: 'Art contemporain', accent: 'accent-rose-400', icon: markerArt },
   { value: 'Conférence', accent: 'accent-sky-400', icon: markerDefault },
   { value: 'Concert', accent: 'accent-violet-400', icon: markerMusic },
   { value: 'Enfants', accent: 'accent-amber-400', icon: markerKids },

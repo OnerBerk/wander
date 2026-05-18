@@ -19,7 +19,7 @@ export const applyMarkerEntranceBounce = (markerContent: HTMLElement, delayMs = 
 
 export const getVelibMarkerElement = (bikesAvailable: number, delayMs = 0): HTMLElement => {
   const container = document.createElement('div');
-  container.className = 'relative h-9 w-9 md:h-11 md:w-11';
+  container.className = 'relative h-8 w-8 md:h-10 md:w-10';
 
   const marker = createBikeMarkerElement();
   container.appendChild(marker);
