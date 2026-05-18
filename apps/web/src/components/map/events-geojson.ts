@@ -1,4 +1,4 @@
-import {EventData, EventTag} from '@wander/types';
+import { EventData, EventTag } from '@wander/types';
 
 export const EVENT_MARKER_IMAGE_IDS = {
   default: 'event-marker-default',
@@ -7,6 +7,7 @@ export const EVENT_MARKER_IMAGE_IDS = {
   book: 'event-marker-book',
   kids: 'event-marker-kids',
   theatre: 'event-marker-theatre',
+  art: 'event-marker-art',
 } as const;
 
 export type EventMarkerImageId = (typeof EVENT_MARKER_IMAGE_IDS)[keyof typeof EVENT_MARKER_IMAGE_IDS];
@@ -59,6 +60,8 @@ export const getEventMarkerImageId = (tags: EventTag[]): EventMarkerImageId => {
         return EVENT_MARKER_IMAGE_IDS.kids;
       case 'Théâtre':
         return EVENT_MARKER_IMAGE_IDS.theatre;
+      case 'Art contemporain':
+        return EVENT_MARKER_IMAGE_IDS.art;
       default:
         break;
     }
@@ -99,7 +102,7 @@ export const buildEventsGeoJson = (events: EventData[]): EventsGeoJsonFeatureCol
       const angle = spiralIndex * GOLDEN_ANGLE_RADIANS + (hashString(event.id) % 11) * 0.005;
       const offsetRadiusMeters = Math.min(
         DUPLICATE_MARKER_OFFSET_METERS * Math.sqrt(spiralIndex),
-        MAX_OFFSET_RADIUS_METERS
+        MAX_OFFSET_RADIUS_METERS,
       );
       const latitudeInRadians = (event.location.lat * Math.PI) / 180;
 

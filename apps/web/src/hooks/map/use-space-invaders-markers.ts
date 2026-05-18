@@ -1,17 +1,8 @@
-import {RefObject, useEffect, useRef} from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
-import {InvadersOverpassElement} from '@wander/types';
-import {applyMarkerEntranceBounce} from '@/utils/map-utils';
-import markerSpaceInvadersUrl from '@/assets/markers/marker-space-invaders.png';
+import { InvadersOverpassElement } from '@wander/types';
+import { createSpaceInvaderMarkerElement } from '@/assets/markers/invaders/invaders-marker';
 import useMapLayersStore from '@/store/zustand/useMapLayersStore';
-
-const createSpaceInvaderMarkerElement = (delayMs = 0): HTMLElement => {
-  const img = document.createElement('img');
-  img.src = markerSpaceInvadersUrl;
-  img.alt = '';
-  img.className = 'h-8 w-8 object-contain md:h-10 md:w-10';
-  return applyMarkerEntranceBounce(img, delayMs);
-};
 
 interface UseSpaceInvadersMarkersParams {
   map: RefObject<maplibregl.Map | null>;
@@ -19,7 +10,11 @@ interface UseSpaceInvadersMarkersParams {
   spaceInvaders: InvadersOverpassElement[];
 }
 
-export const useSpaceInvadersMarkers = ({map, areLayersReady, spaceInvaders}: UseSpaceInvadersMarkersParams): void => {
+export const useSpaceInvadersMarkers = ({
+  map,
+  areLayersReady,
+  spaceInvaders,
+}: UseSpaceInvadersMarkersParams): void => {
   const markers = useRef<maplibregl.Marker[]>([]);
   const isSpaceInvadersVisible = useMapLayersStore((state) => state.isSpaceInvadersVisible);
 
@@ -45,8 +40,8 @@ export const useSpaceInvadersMarkers = ({map, areLayersReady, spaceInvaders}: Us
 
     markers.current = sorted.map((invader, index) => {
       const delayMs = Math.min(index * staggerMs, maxDelayMs);
-      const element = createSpaceInvaderMarkerElement(delayMs);
-      return new maplibregl.Marker({element}).setLngLat([invader.lon, invader.lat]).addTo(currentMap);
+      const element = createSpaceInvaderMarkerElement(invader.id, delayMs);
+      return new maplibregl.Marker({ element }).setLngLat([invader.lon, invader.lat]).addTo(currentMap);
     });
 
     return () => {

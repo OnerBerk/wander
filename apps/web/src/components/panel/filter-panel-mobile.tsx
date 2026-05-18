@@ -6,7 +6,7 @@ import UIClosePanelButton from '@/components/ui/ui-close-panel-button';
 import useMapLayersStore from '@/store/zustand/useMapLayersStore';
 import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
 import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
-import spaceInvaderMarkerImageUrl from '@/assets/markers/marker-space-invaders.png';
+import spaceInvaderMarkerImageUrl from '@/assets/markers/invaders/marker-invaders.png';
 import Filters from './filters';
 
 const FilterPanelMobile = () => {

@@ -1,7 +1,7 @@
 import maplibregl from 'maplibre-gl';
 import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
-import type {MetroGeoJsonFeatureCollection} from '@/components/map/metro-geojson';
-import {applyMarkerEntranceBounce} from '@/utils/map-utils';
+import type { MetroGeoJsonFeatureCollection } from '@/components/map/metro-geojson';
+import { applyMarkerEntranceBounce } from '@/utils/map-utils';
 import {
   MAP_MOBILE_BREAKPOINT_PX,
   METRO_MARKER_ICON_SIZE_DESKTOP,
@@ -33,7 +33,7 @@ export const addMetroMarkerImage = async (targetMap: maplibregl.Map): Promise<vo
     targetMap.removeImage(METRO_MARKER_IMAGE_ID);
   }
 
-  targetMap.addImage(METRO_MARKER_IMAGE_ID, image, {pixelRatio: METRO_MARKER_PIXEL_RATIO});
+  targetMap.addImage(METRO_MARKER_IMAGE_ID, image, { pixelRatio: METRO_MARKER_PIXEL_RATIO });
 };
 
 export const addMetroLayers = (targetMap: maplibregl.Map): void => {
@@ -60,9 +60,7 @@ export const addMetroLayers = (targetMap: maplibregl.Map): void => {
 };
 
 export const getMetroMarkerIconSize = (viewportWidth: number): number => {
-  return viewportWidth < MAP_MOBILE_BREAKPOINT_PX
-    ? METRO_MARKER_ICON_SIZE_MOBILE
-    : METRO_MARKER_ICON_SIZE_DESKTOP;
+  return viewportWidth < MAP_MOBILE_BREAKPOINT_PX ? METRO_MARKER_ICON_SIZE_MOBILE : METRO_MARKER_ICON_SIZE_DESKTOP;
 };
 
 export const syncMetroMarkerIconSize = (targetMap: maplibregl.Map, viewportWidth: number): void => {
