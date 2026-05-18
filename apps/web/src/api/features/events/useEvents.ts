@@ -1,13 +1,13 @@
-import {useEffect} from 'react';
-import {apiClient} from '@/api/client';
+import { useEffect } from 'react';
+import { apiClient } from '@/api/client';
 import useFilterStore from '@/store/zustand/useFilterStore';
 import useEventsMapStore from '@/store/zustand/useEventsMapStore';
 import useMapStore from '@/store/zustand/useMapStore';
-import {useQuery} from '@tanstack/react-query';
-import {EventData} from '@wander/types';
+import { useQuery } from '@tanstack/react-query';
+import { EventData } from '@wander/types';
 
 export const useEvents = () => {
-  const {mapView} = useMapStore();
+  const { mapView } = useMapStore();
   const eventsEnabled = useFilterStore((state) => state.eventsEnabled);
   const eventPeriod = useFilterStore((state) => state.eventPeriod);
   const eventCategory = useFilterStore((state) => state.eventCategory);
@@ -20,7 +20,7 @@ export const useEvents = () => {
     staleTime: 30_000,
     placeholderData: (previousData) => previousData,
     queryFn: async () => {
-      const {data} = await apiClient.get<EventData[]>('/events', {
+      const { data } = await apiClient.get<EventData[]>('/events', {
         params: {
           lat: mapView.lat,
           lng: mapView.lng,
@@ -34,7 +34,7 @@ export const useEvents = () => {
     },
   });
 
-  const {data, isPlaceholderData} = queryResult;
+  const { data, isPlaceholderData } = queryResult;
 
   useEffect(() => {
     if (!eventsEnabled || data === undefined || isPlaceholderData) return;

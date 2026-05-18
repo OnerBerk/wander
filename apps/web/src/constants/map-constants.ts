@@ -1,4 +1,6 @@
-export const PARIS_CENTER: [number, number] = [2.3522, 48.8566];
+import { Coordinates } from '@wander/types';
+
+export const PARIS_CENTER: Coordinates = { lat: 48.8566, lng: 2.3522 };
 export const DEFAULT_ZOOM = 12;
 
 export const EVENTS_SOURCE_ID = 'events';

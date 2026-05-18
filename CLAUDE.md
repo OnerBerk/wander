@@ -60,6 +60,7 @@ wander/
 - Pas de `any` — utiliser `unknown` si le type est indéterminé
 - Imports absolus uniquement (pas de `../../`)
 - Nommage : camelCase pour les variables/fonctions, PascalCase pour les types/classes
+- **Privilégier les solutions natives** : avant d'implémenter du code custom (hook, composant, utilitaire), vérifier si la librairie ou le framework du projet expose déjà une API officielle qui couvre le besoin. Exemples : contrôles MapLibre (`GeolocateControl`, `NavigationControl`), React Query pour le fetch/cache, décorateurs et pipes NestJS. Ne pas réinventer la roue si une solution native existe et suffit.
 
 ### Backend (NestJS)
 
@@ -164,3 +165,4 @@ docker exec -it wander-redis redis-cli ping  # vérifie que Redis répond
 3. TypeScript strict — aucune exception
 4. Un seul sujet à la fois, validation avant de passer à l'étape suivante
 5. Ne jamais faire plus que ce qui est explicitement demandé par l'utilisateur
+6. Toujours chercher une solution native (lib, framework, API du projet) avant d'écrire du code custom

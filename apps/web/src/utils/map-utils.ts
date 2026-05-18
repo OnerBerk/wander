@@ -1,4 +1,4 @@
-import {createBikeMarkerElement} from '@/assets/markers/bike/bike-marker';
+import { createBikeMarkerElement } from '@/assets/markers/bike/bike-marker';
 import maplibregl from 'maplibre-gl';
 
 const MARKER_BOUNCE_IN_CLASS = 'marker-bounce-in-twice';
@@ -55,7 +55,7 @@ export const animateFeatureStateEntrance = ({
 
   featureIds.forEach((featureId, index) => {
     try {
-      targetMap.setFeatureState({source: sourceId, id: featureId}, {enterProgress: 0});
+      targetMap.setFeatureState({ source: sourceId, id: featureId }, { enterProgress: 0 });
     } catch {
       return;
     }
@@ -66,7 +66,7 @@ export const animateFeatureStateEntrance = ({
       const tick = (now: number): void => {
         const progress = Math.min((now - startedAt) / durationMs, 1);
         try {
-          targetMap.setFeatureState({source: sourceId, id: featureId}, {enterProgress: progress});
+          targetMap.setFeatureState({ source: sourceId, id: featureId }, { enterProgress: progress });
         } catch {
           return;
         }
