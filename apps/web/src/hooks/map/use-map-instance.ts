@@ -32,13 +32,23 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: `https://api.maptiler.com/maps/topo-v4/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`,
-      center: PARIS_CENTER,
+      center: [PARIS_CENTER.lng, PARIS_CENTER.lat],
       zoom: DEFAULT_ZOOM,
       attributionControl: false,
     });
 
     map.current.addControl(new maplibregl.NavigationControl());
+
+    const geolocateControl = new maplibregl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: true,
+      showUserLocation: true,
+    });
+    map.current.addControl(geolocateControl);
+
     map.current.on('load', () => {
+      geolocateControl.trigger();
+
       void Promise.all([addEventMarkerImages(map.current!), addMetroMarkerImage(map.current!)]).then(() => {
         if (!map.current) return;
 
