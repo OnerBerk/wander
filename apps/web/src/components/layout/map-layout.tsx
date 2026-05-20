@@ -8,8 +8,8 @@ const MapLayout = () => {
   return (
     <main className="relative min-h-0 flex-1 overflow-hidden">
       <FilterPanel />
-      <WebGenericDescriptionModal />
       <Outlet />
+      <WebGenericDescriptionModal />
       <WeatherMobile />
       <FilterPanelMobile />
     </main>

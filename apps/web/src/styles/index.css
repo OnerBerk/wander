@@ -6,9 +6,34 @@
   --color-wander-orange: #cc4b10;
   --color-wander-text: #032553;
 
+  --animate-event-modal-slide-down: event-modal-slide-down 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-event-modal-slide-left: event-modal-slide-left 1.5s cubic-bezier(0.22, 1, 0.36, 1) 400ms both;
+  --animate-event-modal-slide-right-m: event-modal-slide-right 1.5s cubic-bezier(0.22, 1, 0.36, 1) 800ms both;
   --animate-event-modal-slide-up: event-modal-slide-up 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-event-modal-slide-right-1st: event-modal-slide-right 1.5s cubic-bezier(0.22, 1, 0.36, 1) 400ms both;
   --animate-event-modal-slide-right-2nd: event-modal-slide-right 1.5s cubic-bezier(0.22, 1, 0.36, 1) 1100ms both;
+
+  @keyframes event-modal-slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes event-modal-slide-left {
+    from {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 
   @keyframes event-modal-slide-up {
     from {

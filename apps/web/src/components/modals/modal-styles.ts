@@ -1,5 +1,4 @@
 export const markerModalBaseClassName =
-  'fixed left-1/2 top-1/2 z-1 w-[90vw] h-[90vh] -translate-x-1/2 -translate-y-1/2' +
-  ' flex flex-col gap-2 overflow-y-auto md:overflow-visible' +
-  ' p-2' +
-  ' md:gap-3  md:p-2 md:w-[90vw] md:h-[50vh] md:max-w-[1200px] md:max-h-[800px]';
+  'fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[min(90vw,1200px)] -translate-x-1/2 -translate-y-1/2' +
+  ' flex flex-col overflow-hidden rounded-2xl bg-white/10 p-2 shadow-lg backdrop-blur' +
+  ' md:max-h-[800px] md:p-3';

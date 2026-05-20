@@ -6,10 +6,13 @@ import useMarkerStore from '@/store/zustand/useMarkerStore';
 
 const WebGenericDescriptionModal: React.FC = () => {
   const detailModal = useMarkerStore((state) => state.detailModal);
+  const closeDetailModal = useMarkerStore((state) => state.closeDetailModal);
 
   if (detailModal.type === undefined) {
     return null;
   }
+
+  const isEventModal = detailModal.type === 'event';
 
   return (
     <div
@@ -17,10 +20,16 @@ const WebGenericDescriptionModal: React.FC = () => {
       aria-modal="true"
       aria-labelledby="web-generic-description-modal"
       className={markerModalBaseClassName}
+      onClick={closeDetailModal}
     >
-      {detailModal.type === 'event' && <EventModal event={detailModal.data} />}
-      {detailModal.type === 'bike' && <VelibModal station={detailModal.data} />}
-      {detailModal.type === 'metro' && <MetroStationModal station={detailModal.data} />}
+      <div
+        className={isEventModal ? 'h-[85vh] min-h-0 md:h-[50vh]' : 'h-auto'}
+        onClick={(event) => event.stopPropagation()}
+      >
+        {detailModal.type === 'event' && <EventModal event={detailModal.data} />}
+        {detailModal.type === 'bike' && <VelibModal station={detailModal.data} />}
+        {detailModal.type === 'metro' && <MetroStationModal station={detailModal.data} />}
+      </div>
     </div>
   );
 };
