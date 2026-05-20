@@ -1,14 +1,14 @@
-import {Injectable, Logger, InternalServerErrorException} from '@nestjs/common';
-import {RedisService} from '../redis/redis.service';
-import {HttpClientService} from '../http-client/http-client.service';
-import {EventData, PriceType, Coordinates, EventTag} from '@wander/types';
-import {QueryFilterDto} from '../filters/dtos/query-filter.dto';
-import {buildParisEventUrl} from './utils/build-paris-event-url';
-import {ParisEventRaw, ParisEventsApiResponse} from './local-types/paris-events.types';
+import { Injectable, Logger, InternalServerErrorException } from '@nestjs/common';
+import { RedisService } from '../redis/redis.service';
+import { HttpClientService } from '../http-client/http-client.service';
+import { EventData, PriceType, Coordinates, EventTag } from '@wander/types';
+import { QueryFilterDto } from '../filters/dtos/query-filter.dto';
+import { buildParisEventUrl } from './utils/build-paris-event-url';
+import { ParisEventRaw, ParisEventsApiResponse } from './local-types/paris-events.types';
 
 const CACHE_TTL = 21600;
 const GEOCODE_CACHE_TTL = 86400;
-const PARIS_DEFAULT_COORDINATES: Coordinates = {lat: 48.856578, lng: 2.351828};
+const PARIS_DEFAULT_COORDINATES: Coordinates = { lat: 48.856578, lng: 2.351828 };
 const DEFAULT_COORDINATE_EPSILON = 0.00001;
 const EARTH_RADIUS_KM = 6371;
 const ALLOWED_TAGS: EventTag[] = [
@@ -33,18 +33,18 @@ export class ParisEventsService {
 
   constructor(
     private readonly redisService: RedisService,
-    private readonly httpClient: HttpClientService
+    private readonly httpClient: HttpClientService,
   ) {}
 
   canHandle(query: QueryFilterDto): boolean {
     if (!query.tags?.length) return true;
     return query.tags.some((t) => ALLOWED_TAGS.includes(t as EventTag));
   }
-  async getEvents(query: QueryFilterDto): Promise<{total: number; events: EventData[]}> {
+  async getEvents(query: QueryFilterDto): Promise<{ total: number; events: EventData[] }> {
     const cacheKey = `paris-events:${JSON.stringify(query)}`;
 
     try {
-      const cached = await this.redisService.get<{total: number; events: EventData[]}>(cacheKey);
+      const cached = await this.redisService.get<{ total: number; events: EventData[] }>(cacheKey);
       if (cached) {
         this.logger.log('🎯 Paris events cache hit');
         return cached;
@@ -56,11 +56,10 @@ export class ParisEventsService {
       const mappedEvents = await Promise.all(data.results.map((raw) => this.mapEvent(raw)));
       const events = mappedEvents.filter(
         (event): event is EventData =>
-          event !== null &&
-          this.getDistanceInKm({lat: query.lat, lng: query.lng}, event.location) <= query.radius
+          event !== null && this.getDistanceInKm({ lat: query.lat, lng: query.lng }, event.location) <= query.radius,
       );
 
-      const result = {total: data.total_count, events};
+      const result = { total: data.total_count, events };
 
       await this.redisService.set(cacheKey, result, CACHE_TTL);
       this.logger.log(`💾 Paris events cached — ${result.events.length} events`);
@@ -82,6 +81,7 @@ export class ParisEventsService {
       id: raw.id,
       title: raw.title,
       leadText: raw.lead_text,
+      description: raw.description,
       dateStart: raw.date_start ?? '',
       dateEnd: raw.date_end ?? '',
       occurrences: raw.occurrences,
@@ -109,7 +109,7 @@ export class ParisEventsService {
   private async resolveLocation(raw: ParisEventRaw): Promise<Coordinates | null> {
     if (!raw.lat_lon || raw.lat_lon.lat === 0 || raw.lat_lon.lon === 0) return null;
 
-    const sourceCoordinates: Coordinates = {lat: raw.lat_lon.lat, lng: raw.lat_lon.lon};
+    const sourceCoordinates: Coordinates = { lat: raw.lat_lon.lat, lng: raw.lat_lon.lon };
     if (!this.isDefaultSourceCoordinate(sourceCoordinates)) {
       return sourceCoordinates;
     }
@@ -145,7 +145,7 @@ export class ParisEventsService {
     try {
       const geocodeUrl = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(address)}&limit=1`;
       const response = await this.httpClient.get<{
-        features?: Array<{geometry?: {coordinates?: [number, number]}}>;
+        features?: Array<{ geometry?: { coordinates?: [number, number] } }>;
       }>(geocodeUrl);
 
       const coordinates = response.features?.[0]?.geometry?.coordinates;
@@ -154,7 +154,7 @@ export class ParisEventsService {
       const [lng, lat] = coordinates;
       if (typeof lat !== 'number' || typeof lng !== 'number') return null;
 
-      const location: Coordinates = {lat, lng};
+      const location: Coordinates = { lat, lng };
       await this.redisService.set(cacheKey, location, GEOCODE_CACHE_TTL);
       return location;
     } catch (error) {
@@ -172,10 +172,7 @@ export class ParisEventsService {
 
     const a =
       Math.sin(latDelta / 2) * Math.sin(latDelta / 2) +
-      Math.cos(fromLatRadians) *
-        Math.cos(toLatRadians) *
-        Math.sin(lngDelta / 2) *
-        Math.sin(lngDelta / 2);
+      Math.cos(fromLatRadians) * Math.cos(toLatRadians) * Math.sin(lngDelta / 2) * Math.sin(lngDelta / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return EARTH_RADIUS_KM * c;

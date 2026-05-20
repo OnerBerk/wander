@@ -5,9 +5,9 @@ import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
 import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
 import spaceInvaderMarkerImageUrl from '@/assets/markers/invaders/marker-invaders.png';
 import Filters from './filters';
-import UIIconButton from '../ui/ui-icon-button';
+import UIIconButton from '../../ui-components/ui-icon-button';
 import { useId } from 'react';
-import UIClosePanelButton from '@/components/ui/ui-close-panel-button';
+import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
 
 const FilterPanel = () => {
   const titleId = useId();

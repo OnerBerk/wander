@@ -23,6 +23,7 @@ export interface EventData {
   id: string;
   title: string;
   leadText: string;
+  description: string | null;
   dateStart: string;
   dateEnd: string;
   occurrences: string | null;

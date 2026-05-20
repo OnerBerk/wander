@@ -1,15 +1,14 @@
-import { markerModalBaseClassName } from '@/components/modals/modal-styles';
 import { MetroStation } from '@/types/metro-station';
 import { metroIconByLine, rerIconByLine } from '@/components/modals/utils';
 import { useId } from 'react';
-import UIClosePanelButton from '@/components/ui/ui-close-panel-button';
+import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
 
 interface MetroStationModalProps {
   station: MetroStation;
 }
 
-const LineIconList: React.FC<{ lines: string[]; iconMap: Record<string, string> }> = ({ lines, iconMap }) => {
+const renderLineIcons = (lines: string[], iconMap: Record<string, string>) => {
   if (lines.length === 0) {
     return <p className="text-xs md:text-sm">Aucune ligne</p>;
   }
@@ -43,24 +42,19 @@ const MetroStationModal: React.FC<MetroStationModalProps> = ({ station }) => {
   const closeDetailModal = useMarkerStore((state) => state.closeDetailModal);
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      className={`${markerModalBaseClassName} w-[min(85vw,300px)] md:w-[300px]`}
-    >
+    <div className="relative w-full p-2">
       <UIClosePanelButton ariaLabel="Fermer le détail de la station métro" onClose={closeDetailModal} />
-      <h2 id={titleId} className="text-xl font-semibold md:text-3xl">
+      <h2 id={titleId} className="pr-10 text-xl font-semibold md:text-3xl">
         {station.name}
       </h2>
       <div className="mt-2 flex flex-col gap-3 text-xs md:gap-5 md:text-sm">
         <div className="flex flex-col gap-1.5 md:gap-2">
           <p className="text-lg font-semibold md:text-2xl">Metro</p>
-          <LineIconList lines={station.metroLines} iconMap={metroIconByLine} />
+          {renderLineIcons(station.metroLines, metroIconByLine)}
         </div>
         <div className="flex flex-col gap-1.5 md:gap-2">
           <p className="text-lg font-semibold md:text-2xl">RER</p>
-          <LineIconList lines={station.rerLines} iconMap={rerIconByLine} />
+          {renderLineIcons(station.rerLines, rerIconByLine)}
         </div>
       </div>
     </div>

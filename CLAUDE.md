@@ -72,6 +72,7 @@ wander/
 
 ### Frontend (React)
 
+- **Un composant React par fichier** : un seul composant exporté (souvent `export default`). Helpers en fonction nommée (`renderXxx`), pas en second composant. Exceptions : découpage impossible sans nuire à la lisibilité — documenter brièvement pourquoi. ESLint : `react-refresh/only-export-components` (déjà dans le projet).
 - Composants fonctionnels uniquement
 - Props typées explicitement (pas d'inférence implicite)
 - Pas de logique métier dans les composants — extraire dans des hooks custom

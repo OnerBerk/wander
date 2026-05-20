@@ -10,6 +10,7 @@ const mockEvent: EventData = {
   id: '1',
   title: 'Test',
   leadText: '',
+  description: null,
   dateStart: '',
   dateEnd: '',
   occurrences: null,
