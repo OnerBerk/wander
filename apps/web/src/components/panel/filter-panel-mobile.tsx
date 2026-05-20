@@ -1,8 +1,8 @@
 import { useEffect, useId, useState } from 'react';
 import usePanelStore from '@/store/zustand/usePanelStore';
 import { SlidersHorizontal, X } from 'lucide-react';
-import UIIconButton from '../ui/ui-icon-button';
-import UIClosePanelButton from '@/components/ui/ui-close-panel-button';
+import UIIconButton from '../../ui-components/ui-icon-button';
+import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
 import useMapLayersStore from '@/store/zustand/useMapLayersStore';
 import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
 import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';

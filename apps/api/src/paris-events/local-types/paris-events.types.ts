@@ -3,6 +3,7 @@ export interface ParisEventRaw {
   url: string;
   title: string;
   lead_text: string;
+  description: string | null;
   date_start: string | null;
   date_end: string | null;
   occurrences: string | null;

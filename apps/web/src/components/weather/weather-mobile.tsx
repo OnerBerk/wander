@@ -4,7 +4,7 @@ import { useIsDay } from '@/hooks/useIsDay';
 import { useWeatherIcon } from '@/hooks/useWeatherIcon';
 import { useWeather } from '@/api/features/weather/queries/use-weather';
 import usePanelStore from '@/store/zustand/usePanelStore';
-import UIClosePanelButton from '@/components/ui/ui-close-panel-button';
+import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
 
 const WeatherMobile = () => {
   const titleId = useId();

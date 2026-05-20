@@ -2,29 +2,7 @@ import { useState } from 'react';
 import useFilterStore from '@/store/zustand/useFilterStore';
 import useEventsMapStore from '@/store/zustand/useEventsMapStore';
 import { EventPeriod, EventTag } from '@wander/types';
-import markerDefault from '@/assets/markers/marker-default.png';
-import markerBook from '@/assets/markers/marker-book.png';
-import markerMusic from '@/assets/markers/music-marker.png';
-import markerTree from '@/assets/markers/marker-tree.png';
-import markerKids from '@/assets/markers/marker-kids.png';
-import markerTheatre from '@/assets/markers/marker-theatre.png';
-import markerArt from '@/assets/markers/marker-art.png';
-
-const CATEGORY_OPTIONS: Array<{ value: EventTag; accent: string; icon: string }> = [
-  { value: 'Art contemporain', accent: 'accent-rose-400', icon: markerArt },
-  { value: 'Conférence', accent: 'accent-sky-400', icon: markerDefault },
-  { value: 'Concert', accent: 'accent-violet-400', icon: markerMusic },
-  { value: 'Enfants', accent: 'accent-amber-400', icon: markerKids },
-  { value: 'Expo', accent: 'accent-cyan-500', icon: markerDefault },
-  { value: 'Festival', accent: 'accent-fuchsia-400', icon: markerMusic },
-  { value: 'Gourmand', accent: 'accent-orange-400', icon: markerDefault },
-  { value: 'Histoire', accent: 'accent-lime-500', icon: markerDefault },
-  { value: 'Littérature', accent: 'accent-yellow-600', icon: markerBook },
-  { value: 'Loisirs', accent: 'accent-blue-400', icon: markerDefault },
-  { value: 'Nature', accent: 'accent-green-400', icon: markerTree },
-  { value: 'Spectacle musical', accent: 'accent-pink-400', icon: markerMusic },
-  { value: 'Théâtre', accent: 'accent-red-400', icon: markerTheatre },
-];
+import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
 
 interface FiltersProps {
   onSubmit?: () => void;
@@ -109,7 +87,7 @@ const Filters: React.FC<FiltersProps> = ({ onSubmit }) => {
         </div>
 
         <div className="grid grid-cols-2 md:flex md:flex-col md:gap-2">
-          {CATEGORY_OPTIONS.map(({ value, accent, icon }) => (
+          {EVENT_TAG_OPTIONS.map(({ value, accent, icon }) => (
             <label key={value} className="flex cursor-pointer items-center gap-2 text-sm">
               <input
                 type="checkbox"

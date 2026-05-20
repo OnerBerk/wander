@@ -1,7 +1,7 @@
 import { VelibStation } from '@wander/types';
 import { markerModalBaseClassName } from '@/components/modals/modal-styles';
 import { useId } from 'react';
-import UIClosePanelButton from '@/components/ui/ui-close-panel-button';
+import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
 
 interface VelibModalProps {
