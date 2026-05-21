@@ -54,7 +54,10 @@ describe('WeatherService', () => {
 
   describe('cache hit', () => {
     it('retourne les données du cache sans appeler Open-Meteo', async () => {
-      mockRedisService.get.mockResolvedValue(mockWeatherData);
+      mockRedisService.get
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(mockWeatherData);
 
       const result = await service.getWeather();
 
