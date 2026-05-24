@@ -22,6 +22,7 @@ const MapTourPage = () => {
         title="Wander | Explorez Paris autrement"
         description="Wander est une carte interactive de Paris en temps réel : Vélib, événements, musées, météo, pistes cyclables et suggestions de parcours par IA. Sans inscription, sans pub."
         canonicalPath="/map-tour"
+        noIndex={true}
       />
       <div className="flex h-full w-full flex-col items-center justify-center gap-8 p-2 text-center">
         <div className="relative flex h-full w-full flex-col items-center justify-center gap-8 rounded-lg px-4 text-center md:px-30">
