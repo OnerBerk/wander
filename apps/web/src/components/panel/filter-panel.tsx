@@ -40,7 +40,7 @@ const FilterPanel = () => {
       </div>
       <div className="flex flex-col justify-center gap-2 p-2">
         <div className="text-xl font-bold">Metro et Vélib et Space Invaders</div>
-        <div className="flex gap-2">
+        <div className="filter-panel flex gap-2">
           <UIIconButton
             isVisible={isMetroMarkersVisible}
             onToggle={toggleMetroMarkers}
@@ -62,7 +62,7 @@ const FilterPanel = () => {
         </div>
       </div>
       <div className="text-xl font-bold">Filtrer vos événements</div>
-      <div className="flex gap-2">
+      <div className="tag-filters flex gap-2">
         <Filters onSubmit={togglePanel} />
       </div>
       <p className="mt-auto px-2 pb-1 text-[10px] text-slate-600">

@@ -5,6 +5,7 @@
   --font-alternate: 'Montserrat Alternates', sans-serif;
   --color-wander-orange: #cc4b10;
   --color-wander-text: #032553;
+  --color-wander-text-white: #f5f5f5;
 
   --animate-event-modal-slide-down: event-modal-slide-down 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-event-modal-slide-left: event-modal-slide-left 1.5s cubic-bezier(0.22, 1, 0.36, 1) 400ms both;

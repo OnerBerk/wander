@@ -1,7 +1,7 @@
-import {RefObject, useEffect, useRef} from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
-import {VelibStation} from '@wander/types';
-import {getVelibMarkerElement} from '@/utils/map-utils';
+import { VelibStation } from '@wander/types';
+import { getVelibMarkerElement } from '@/utils/map-utils';
 import useMapLayersStore from '@/store/zustand/useMapLayersStore';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
 
@@ -10,7 +10,7 @@ interface UseVelibMarkersParams {
   velibStations: VelibStation[];
 }
 
-export const useVelibMarkers = ({map, velibStations}: UseVelibMarkersParams): void => {
+export const useVelibMarkers = ({ map, velibStations }: UseVelibMarkersParams): void => {
   const velibMarkers = useRef<maplibregl.Marker[]>([]);
   const isVelibMarkersVisible = useMapLayersStore((state) => state.isVelibMarkersVisible);
   const openBikeDetail = useMarkerStore((state) => state.openBikeDetail);
@@ -27,10 +27,8 @@ export const useVelibMarkers = ({map, velibStations}: UseVelibMarkersParams): vo
     const staggerMs = 28;
     const mapCenter = map.current.getCenter();
     const sortedStations = [...velibStations].sort((left, right) => {
-      const leftDistance =
-        Math.abs(left.location.lat - mapCenter.lat) + Math.abs(left.location.lng - mapCenter.lng);
-      const rightDistance =
-        Math.abs(right.location.lat - mapCenter.lat) + Math.abs(right.location.lng - mapCenter.lng);
+      const leftDistance = Math.abs(left.location.lat - mapCenter.lat) + Math.abs(left.location.lng - mapCenter.lng);
+      const rightDistance = Math.abs(right.location.lat - mapCenter.lat) + Math.abs(right.location.lng - mapCenter.lng);
       return leftDistance - rightDistance;
     });
     const maxDelayMs = staggerMs * Math.min(Math.max(sortedStations.length - 1, 0), 60);
@@ -44,7 +42,7 @@ export const useVelibMarkers = ({map, velibStations}: UseVelibMarkersParams): vo
         openBikeDetail(station);
       });
 
-      return new maplibregl.Marker({element})
+      return new maplibregl.Marker({ element })
         .setLngLat([station.location.lng, station.location.lat])
         .addTo(map.current!);
     });

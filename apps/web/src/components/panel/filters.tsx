@@ -66,7 +66,7 @@ const Filters: React.FC<FiltersProps> = ({ onSubmit }) => {
       <select
         value={period}
         onChange={(e) => setPeriod(e.target.value as EventPeriod)}
-        className="rounded-md border border-white/30 bg-white/40 px-3 py-1.5 text-xs focus:outline-none md:text-sm"
+        className="period-filters rounded-md border border-white/30 bg-white/40 px-3 py-1.5 text-xs focus:outline-none md:text-sm"
       >
         <option value="today">Aujourd'hui</option>
         <option value="week">Cette semaine</option>
@@ -74,7 +74,7 @@ const Filters: React.FC<FiltersProps> = ({ onSubmit }) => {
         <option value="all">Tout</option>
       </select>
 
-      <div className="rounded-md border border-white/30 bg-white/20 p-3 text-xs md:text-sm">
+      <div className="tag-filters rounded-md border border-white/30 bg-white/20 p-3 text-xs md:text-sm">
         <div className="flex flex-row justify-between gap-2 border-b border-white/30 pb-2">
           <label className="mb-3 flex cursor-pointer items-center gap-2 text-xs font-medium md:text-sm">
             <input type="checkbox" checked={all} onChange={handleAll} className="h-4 w-4 accent-slate-700" />
@@ -110,7 +110,7 @@ const Filters: React.FC<FiltersProps> = ({ onSubmit }) => {
 
       <button
         type="submit"
-        className="bg-wander-orange cursor-pointer rounded-full px-4 py-1.5 text-xs text-white md:text-sm"
+        className="apply-filters bg-wander-orange cursor-pointer rounded-full px-4 py-1.5 text-xs text-white md:text-sm"
       >
         Appliquer
       </button>

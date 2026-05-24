@@ -25,8 +25,8 @@ const Header = () => {
           </div>
         </div>
         <div className="flex h-16 items-start justify-between gap-2">
-          {icon && <img className="h-40 w-auto shrink-0" src={icon.src} alt={icon.alt} />}
-          <div className="flex h-full flex-col justify-center">
+          {icon && <img className="weather-icon h-40 w-auto shrink-0" src={icon.src} alt={icon.alt} />}
+          <div className="weather-info flex h-full flex-col justify-center">
             <p className={`text-2xl font-semibold`}>{weather ? `${weather?.temperature}°C` : ''}</p>
             <p className="text-sm md:text-base">{weather ? `${weather?.windSpeed} km/h` : ''}</p>
           </div>
@@ -35,7 +35,7 @@ const Header = () => {
             type="button"
             aria-label="Ouvrir les filtres"
             onClick={togglePanel}
-            className="focus-visible:ring-wander-orange mt-4 rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="toggle-filter-panel focus-visible:ring-wander-orange mt-4 cursor-pointer rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <SlidersHorizontal className="h-8 w-auto" aria-hidden="true" />
           </button>

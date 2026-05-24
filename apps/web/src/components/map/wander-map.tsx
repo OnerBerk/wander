@@ -23,7 +23,7 @@ const WanderMap: React.FC<WanderMapProps> = ({events, velibStations, spaceInvade
   useMetroLayers({map, areLayersReady: areEventLayersReady});
   useVelibMarkers({map, velibStations});
   useSpaceInvadersMarkers({map, areLayersReady: areEventLayersReady, spaceInvaders});
-  return <div ref={mapContainer} className='h-full w-full' />;
+  return <div ref={mapContainer} className='wander-map h-full w-full' />;
 };
 
 export default WanderMap;
