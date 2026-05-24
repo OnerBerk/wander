@@ -15,7 +15,7 @@ const Header = () => {
   const togglePanel = usePanelStore((state) => state.togglePanel);
 
   return (
-    <header className={`relative z-10 hidden h-20 shrink-0 p-2 md:block ${isDay ? 'header-day' : 'header-night'}`}>
+    <header className={`relative z-60 hidden h-20 shrink-0 p-2 md:block ${isDay ? 'header-day' : 'header-night'}`}>
       <div className="font-alternate flex h-16 justify-between">
         <div className="flex items-center gap-3">
           <img className="h-20" src={wanderLogoPaper} alt="Wander" />

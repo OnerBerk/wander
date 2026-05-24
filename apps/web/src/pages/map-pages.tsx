@@ -4,6 +4,7 @@ import { useSpaceInvaders } from '@/api/features/space-invaders/useSpaceInvaders
 import { useVelib } from '@/api/features/velib/useVelib';
 import WanderMap from '@/components/map/wander-map';
 import SeoMetadata from '@/components/seo/seo-metadata';
+import WanderWelcomeOverlay from '@/components/wander-app-tour/wander-welcome-overlay';
 import useFilterStore from '@/store/zustand/useFilterStore';
 import useEventsMapStore, { sortAccumulatedEventsById } from '@/store/zustand/useEventsMapStore';
 
@@ -17,7 +18,7 @@ const MapPage = () => {
   useEvents();
 
   return (
-    <div className="h-full w-full">
+    <div className="relative h-full w-full">
       <h1 className="sr-only">Wander - carte interactive de Paris</h1>
       <SeoMetadata
         title="Wander | Interactive Paris Map"
@@ -28,6 +29,7 @@ const MapPage = () => {
         events={eventsEnabled ? accumulatedEvents : []}
         spaceInvaders={spaceInvaders ?? []}
       />
+      <WanderWelcomeOverlay />
     </div>
   );
 };
