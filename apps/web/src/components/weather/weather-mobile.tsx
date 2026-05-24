@@ -115,11 +115,21 @@ const WeatherMobile = () => {
           <h2 id={titleId} className="sr-only">
             Météo actuelle
           </h2>
-          <div className="flex flex-col items-center justify-center">
-            <p className="text-5xl font-medium text-slate-700">{weather ? `${weather?.temperature}°C` : ''}</p>
-            <p className="text-xl font-medium text-slate-700">{weather ? `${weather?.windSpeed} km/h` : ''}</p>
+          <div className="weather-mobile-panel-info flex flex-col items-center justify-center">
+            <p className={`text-5xl font-medium ${isDay ? 'text-slate-700' : 'text-wander-text-white'}`}>
+              {weather ? `${weather?.temperature}°C` : ''}
+            </p>
+            <p className={`text-xl font-medium ${isDay ? 'text-slate-700' : 'text-wander-text-white'}`}>
+              {weather ? `${weather?.windSpeed} km/h` : ''}
+            </p>
           </div>
-          {icon && <img src={icon.src} alt={icon.alt} className="row-span-5 h-full w-full object-contain" />}
+          {icon && (
+            <img
+              src={icon.src}
+              alt={icon.alt}
+              className="weather-mobile-panel-icon row-span-5 h-full w-full object-contain"
+            />
+          )}
         </div>
       </div>
 
@@ -128,7 +138,7 @@ const WeatherMobile = () => {
         aria-label={isOpen ? 'Fermer la météo' : 'Ouvrir la météo'}
         onClick={toggleWeatherPanel}
         style={{ zIndex: 100 }}
-        className="fixed top-4 left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-sky-100/60 bg-sky-200/60 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="weather-mobile-toggle fixed top-4 left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-sky-100/60 bg-sky-200/60 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         {isOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <CloudSun className="h-6 w-6" aria-hidden="true" />}
       </button>

@@ -119,7 +119,7 @@ const FilterPanelMobile = () => {
           <h2 id={titleId} className="sr-only">
             Filtres
           </h2>
-          <div className="flex w-full items-center justify-center gap-2 border-b border-white/20 pb-4">
+          <div className="filter-panel-mobile flex w-full items-center justify-center gap-2 border-b border-white/20 pb-4">
             <UIIconButton
               isVisible={isMetroMarkersVisible}
               onToggle={toggleMetroMarkers}
@@ -139,7 +139,9 @@ const FilterPanelMobile = () => {
               label="Space Invaders"
             />
           </div>
-          <Filters onSubmit={togglePanel} />
+          <div className="mobile-filters">
+            <Filters onSubmit={togglePanel} />
+          </div>
         </div>
       </div>
 
@@ -148,7 +150,7 @@ const FilterPanelMobile = () => {
         aria-label={isPanelOpen ? 'Fermer les filtres' : 'Ouvrir les filtres'}
         onClick={togglePanel}
         style={{ zIndex: 100 }}
-        className="bg-wander-orange/40 focus-visible:ring-wander-orange fixed bottom-4 left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-white/20 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="toggle-filter-panel-mobile bg-wander-orange/40 focus-visible:ring-wander-orange fixed bottom-4 left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-white/20 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         {isPanelOpen ? (
           <X className="h-6 w-6" aria-hidden="true" />
