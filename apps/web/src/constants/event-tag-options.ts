@@ -15,7 +15,8 @@ export type EventTagOption = {
 };
 
 export const EVENT_TAG_OPTIONS: EventTagOption[] = [
-  { value: 'Art contemporain', label: 'Art contemporain', accent: 'accent-rose-400', icon: markerArt },
+  { value: 'Art contemporain', label: 'Art', accent: 'accent-rose-400', icon: markerArt },
+  { value: 'Théâtre', label: 'Théâtre', accent: 'accent-red-400', icon: markerTheatre },
   { value: 'Conférence', label: 'Conférence', accent: 'accent-sky-400', icon: markerDefault },
   { value: 'Concert', label: 'Concert', accent: 'accent-violet-400', icon: markerMusic },
   { value: 'Enfants', label: 'Enfants', accent: 'accent-amber-400', icon: markerKids },
@@ -26,8 +27,7 @@ export const EVENT_TAG_OPTIONS: EventTagOption[] = [
   { value: 'Littérature', label: 'Littérature', accent: 'accent-yellow-600', icon: markerBook },
   { value: 'Loisirs', label: 'Loisirs', accent: 'accent-blue-400', icon: markerDefault },
   { value: 'Nature', label: 'Nature', accent: 'accent-green-400', icon: markerTree },
-  { value: 'Spectacle musical', label: 'Spectacle musical', accent: 'accent-pink-400', icon: markerMusic },
-  { value: 'Théâtre', label: 'Théâtre', accent: 'accent-red-400', icon: markerTheatre },
+  { value: 'Spectacle musical', label: 'Musique', accent: 'accent-pink-400', icon: markerMusic },
 ];
 
 export const ICON_BY_TAG = new Map(EVENT_TAG_OPTIONS.map(({ value, icon }) => [value, icon]));

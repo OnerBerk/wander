@@ -6,7 +6,6 @@ import {
   EVENT_CLUSTERS_LAYER_ID,
   EVENT_POINTS_LAYER_ID,
   METRO_STATIONS_LAYER_ID,
-  PARIS_CENTER,
 } from '@/constants/map-constants';
 import { addEventLayers, addEventMarkerImages, syncEventMarkerIconSize } from '@/components/map/event-layers';
 import { addMetroLayers, addMetroMarkerImage, syncMetroMarkerIconSize } from '@/components/map/metro-layers';
@@ -29,10 +28,12 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
   useEffect(() => {
     if (map.current || !mapContainer.current) return;
 
+    const initialMapView = useMapStore.getState().mapView;
+
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: `https://api.maptiler.com/maps/topo-v4/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`,
-      center: [PARIS_CENTER.lng, PARIS_CENTER.lat],
+      center: [initialMapView.lng, initialMapView.lat],
       zoom: DEFAULT_ZOOM,
       attributionControl: false,
     });
@@ -41,10 +42,21 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
 
     const geolocateControl = new maplibregl.GeolocateControl({
       positionOptions: { enableHighAccuracy: true },
-      trackUserLocation: true,
+      trackUserLocation: false,
       showUserLocation: true,
     });
     map.current.addControl(geolocateControl);
+
+    const syncMapViewFromUserInteraction = () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
+        if (!map.current) return;
+        const center = map.current.getCenter();
+        const zoom = map.current.getZoom();
+        const radius = calculateRadius(zoom);
+        setMapView({ lat: center.lat, lng: center.lng, radius });
+      }, 800);
+    };
 
     map.current.on('load', () => {
       geolocateControl.trigger();
@@ -91,15 +103,8 @@ export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>): 
 
       closeDetailModal();
     });
-    map.current.on('moveend', () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => {
-        const center = map.current!.getCenter();
-        const zoom = map.current!.getZoom();
-        const radius = calculateRadius(zoom);
-        setMapView({ lat: center.lat, lng: center.lng, radius });
-      }, 800);
-    });
+    map.current.on('dragend', syncMapViewFromUserInteraction);
+    map.current.on('zoomend', syncMapViewFromUserInteraction);
 
     return () => {
       window.removeEventListener('resize', handleResize);
