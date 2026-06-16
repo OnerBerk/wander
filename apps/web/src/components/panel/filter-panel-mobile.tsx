@@ -2,7 +2,6 @@ import { useEffect, useId, useState } from 'react';
 import usePanelStore from '@/store/zustand/usePanelStore';
 import { SlidersHorizontal, X } from 'lucide-react';
 import HexagonBadge from '@/ui-components/hexagon-badge';
-import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
 import useMapLayersStore from '@/store/zustand/useMapLayersStore';
 import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
 import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
@@ -13,7 +12,6 @@ const FilterPanelMobile = () => {
   const titleId = useId();
   const togglePanel = usePanelStore((state) => state.togglePanel);
   const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
-  const closePanel = usePanelStore((state) => state.closePanel);
 
   const isVelibMarkersVisible = useMapLayersStore((state) => state.isVelibMarkersVisible);
   const isMetroMarkersVisible = useMapLayersStore((state) => state.isMetroMarkersVisible);
