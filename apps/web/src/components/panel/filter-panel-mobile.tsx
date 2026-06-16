@@ -1,7 +1,7 @@
 import { useEffect, useId, useState } from 'react';
 import usePanelStore from '@/store/zustand/usePanelStore';
 import { SlidersHorizontal, X } from 'lucide-react';
-import UIIconButton from '../../ui-components/ui-icon-button';
+import HexagonBadge from '@/ui-components/hexagon-badge';
 import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
 import useMapLayersStore from '@/store/zustand/useMapLayersStore';
 import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
@@ -61,9 +61,9 @@ const FilterPanelMobile = () => {
     },
     expanded: {
       left: '16px',
-      bottom: '80px',
+      bottom: '65px',
       width: 'calc(100vw - 32px)',
-      height: 'calc(100dvh - 160px)',
+      height: 'calc(100dvh - 125px)',
       borderRadius: '24px',
       opacity: 1,
       transform: 'translateX(0) scale(1)',
@@ -115,32 +115,37 @@ const FilterPanelMobile = () => {
           }}
           className="p-6"
         >
-          <UIClosePanelButton ariaLabel="Fermer les filtres" onClose={closePanel} />
           <h2 id={titleId} className="sr-only">
             Filtres
           </h2>
-          <div className="filter-panel-mobile flex w-full items-center justify-center gap-2 border-b border-white/20 pb-4">
-            <UIIconButton
-              isVisible={isMetroMarkersVisible}
-              onToggle={toggleMetroMarkers}
+          <div className="filter-panel-mobile grid w-full grid-cols-4 gap-2 border-b border-white/20 pb-4">
+            <HexagonBadge
+              label="Métro"
               icon={subwayMarkerImageUrl}
-              label="stations métro et RER"
+              selected={isMetroMarkersVisible}
+              onClick={toggleMetroMarkers}
+              ariaLabel="stations métro et RER"
+              className="max-w-24"
             />
-            <UIIconButton
-              isVisible={isVelibMarkersVisible}
-              onToggle={toggleVelibMarkers}
+            <HexagonBadge
+              label="Vélib"
               icon={velibMarkerImageUrl}
-              label="stations Vélib"
+              selected={isVelibMarkersVisible}
+              onClick={toggleVelibMarkers}
+              ariaLabel="stations Vélib"
+              className="max-w-24"
             />
-            <UIIconButton
-              isVisible={isSpaceInvadersVisible}
-              onToggle={toggleSpaceInvaders}
+            <HexagonBadge
+              label="Invaders"
               icon={spaceInvaderMarkerImageUrl}
-              label="Space Invaders"
+              selected={isSpaceInvadersVisible}
+              onClick={toggleSpaceInvaders}
+              ariaLabel="Space Invaders"
+              className="max-w-24"
             />
           </div>
           <div className="mobile-filters">
-            <Filters onSubmit={togglePanel} />
+            <Filters />
           </div>
         </div>
       </div>

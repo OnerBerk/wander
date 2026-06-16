@@ -47,14 +47,8 @@ const desktopSteps: Step[] = [
     skipBeacon: true,
   },
   {
-    content: "Expo, concert, festival, atelier — selon l'envie du jour.",
+    content: "Expo, concert, festival, atelier — la carte se met à jour toute seule.",
     target: '.tag-filters',
-    placement: 'left' as const,
-    skipBeacon: true,
-  },
-  {
-    content: 'Et hop, on applique. La carte se met à jour.',
-    target: '.apply-filters',
     placement: 'left' as const,
     skipBeacon: true,
     after: toggleFilterPanel,
@@ -109,14 +103,8 @@ const mobileSteps: Step[] = [
     skipBeacon: true,
   },
   {
-    content: "Expo, concert, festival, atelier — selon l'envie du jour.",
+    content: "Expo, concert, festival, atelier — la carte se met à jour toute seule.",
     target: '.mobile-filters .tag-filters',
-    placement: 'top' as const,
-    skipBeacon: true,
-  },
-  {
-    content: 'Et hop, on applique. La carte se met à jour.',
-    target: '.mobile-filters .apply-filters',
     placement: 'top' as const,
     skipBeacon: true,
     after: toggleFilterPanel,

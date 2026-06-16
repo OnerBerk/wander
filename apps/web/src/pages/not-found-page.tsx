@@ -1,15 +1,8 @@
-import SeoMetadata from '@/components/seo/seo-metadata';
 import { Link } from 'react-router-dom';
 
 const NotFoundPage = () => {
   return (
     <main className="flex min-h-0 flex-1 items-center justify-center bg-slate-950 px-6 text-white">
-      <SeoMetadata
-        title="Page introuvable | Wander"
-        description="Cette page Wander est introuvable."
-        canonicalPath="/404"
-        noIndex
-      />
       <section className="max-w-lg text-center">
         <p className="text-wander-orange text-sm font-semibold tracking-[0.35em] uppercase">Erreur 404</p>
         <h1 className="mt-4 text-4xl font-bold md:text-6xl">Page introuvable</h1>

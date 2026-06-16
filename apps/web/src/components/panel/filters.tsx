@@ -1,14 +1,13 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import useFilterStore from '@/store/zustand/useFilterStore';
 import useEventsMapStore from '@/store/zustand/useEventsMapStore';
 import { EventPeriod, EventTag } from '@wander/types';
 import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
+import HexagonBadge from '@/ui-components/hexagon-badge';
 
-interface FiltersProps {
-  onSubmit?: () => void;
-}
+const FILTER_DEBOUNCE_MS = 1_200;
 
-const Filters: React.FC<FiltersProps> = ({ onSubmit }) => {
+const Filters: React.FC = () => {
   const { eventPeriod, eventCategory, eventsEnabled, setEventPeriod, setEventCategory, setEventsEnabled } =
     useFilterStore();
   const resetAccumulatedEvents = useEventsMapStore((state) => state.resetEvents);
@@ -17,55 +16,61 @@ const Filters: React.FC<FiltersProps> = ({ onSubmit }) => {
   const [tags, setTags] = useState<EventTag[]>(() => (eventsEnabled ? (eventCategory ?? []) : []));
   const [all, setAll] = useState(() => eventsEnabled && eventCategory === undefined);
   const [none, setNone] = useState(() => !eventsEnabled);
-  const [error, setError] = useState(false);
+
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const applyFilters = (p: EventPeriod, t: EventTag[], a: boolean, n: boolean) => {
+    resetAccumulatedEvents();
+    setEventPeriod(p);
+
+    if (n) {
+      setEventsEnabled(false);
+      setEventCategory(undefined);
+      return;
+    }
+
+    const isAll = a || t.length === 0;
+    setEventsEnabled(true);
+    setEventCategory(isAll ? undefined : t);
+  };
+
+  const scheduleCategoryApply = (p: EventPeriod, t: EventTag[], a: boolean, n: boolean) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => applyFilters(p, t, a, n), FILTER_DEBOUNCE_MS);
+  };
+
+  const handlePeriodChange = (newPeriod: EventPeriod) => {
+    setPeriod(newPeriod);
+    applyFilters(newPeriod, tags, all, none);
+  };
 
   const toggleTag = (tag: EventTag) => {
-    setError(false);
+    const nextTags = tags.includes(tag) ? tags.filter((t) => t !== tag) : [...tags, tag];
     setAll(false);
     setNone(false);
-    setTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+    setTags(nextTags);
+    scheduleCategoryApply(period, nextTags, false, false);
   };
 
   const handleAll = () => {
     setAll(true);
     setNone(false);
     setTags([]);
-    setError(false);
+    scheduleCategoryApply(period, [], true, false);
   };
 
   const handleNone = () => {
     setNone(true);
     setAll(false);
     setTags([]);
-    setError(false);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (none) {
-      resetAccumulatedEvents();
-      setEventPeriod(period);
-      setEventsEnabled(false);
-      setEventCategory(undefined);
-      onSubmit?.();
-      return;
-    }
-    if (!all && tags.length === 0) {
-      setError(true);
-      return;
-    }
-    resetAccumulatedEvents();
-    setEventPeriod(period);
-    setEventsEnabled(true);
-    setEventCategory(all ? undefined : tags);
-    onSubmit?.();
+    scheduleCategoryApply(period, [], false, true);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-4">
       <select
         value={period}
-        onChange={(e) => setPeriod(e.target.value as EventPeriod)}
+        onChange={(e) => handlePeriodChange(e.target.value as EventPeriod)}
         className="period-filters rounded-md border border-white/30 bg-white/40 px-3 py-1.5 text-xs focus:outline-none md:text-sm"
       >
         <option value="today">Aujourd'hui</option>
@@ -74,47 +79,24 @@ const Filters: React.FC<FiltersProps> = ({ onSubmit }) => {
         <option value="all">Tout</option>
       </select>
 
-      <div className="tag-filters rounded-md border border-white/30 bg-white/20 p-3 text-xs md:text-sm">
-        <div className="flex flex-row justify-between gap-2 border-b border-white/30 pb-2">
-          <label className="mb-3 flex cursor-pointer items-center gap-2 text-xs font-medium md:text-sm">
-            <input type="checkbox" checked={all} onChange={handleAll} className="h-4 w-4 accent-slate-700" />
-            Tout
-          </label>
-          <label className="mb-3 flex cursor-pointer items-center gap-2 text-xs font-medium md:text-sm">
-            <input type="checkbox" checked={none} onChange={handleNone} className="h-4 w-4 accent-slate-700" />
-            Aucun
-          </label>
-        </div>
-
-        <div className="grid grid-cols-2 md:flex md:flex-col md:gap-2">
-          {EVENT_TAG_OPTIONS.map(({ value, accent, icon }) => (
-            <label key={value} className="flex cursor-pointer items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={tags.includes(value)}
-                onChange={() => toggleTag(value)}
-                className={`h-4 w-4 ${accent}`}
-              />
-              <div className="flex w-full items-center gap-1">
-                <span className="text-xs font-medium md:text-sm">{value}</span>
-                <img src={icon} alt="" className="h-7 w-7 object-contain md:h-9 md:w-9" />
-              </div>
-            </label>
+      <div className="tag-filters p-3 text-xs md:text-sm">
+        <div className="grid grid-cols-4 gap-2 md:grid-cols-3">
+          <HexagonBadge label="Tout" selected={all} onClick={handleAll} className="max-w-24" />
+          <HexagonBadge label="Aucun" selected={none} onClick={handleNone} className="max-w-24" />
+          <div className="col-span-4 md:col-span-3" />
+          {EVENT_TAG_OPTIONS.map(({ value, label, icon }) => (
+            <HexagonBadge
+              key={value}
+              className="max-w-24"
+              label={label}
+              icon={icon}
+              selected={tags.includes(value)}
+              onClick={() => toggleTag(value)}
+            />
           ))}
         </div>
       </div>
-
-      {error && (
-        <p className="text-xs text-red-500">Sélectionne au moins une catégorie, coche « Tout » ou « Aucun ».</p>
-      )}
-
-      <button
-        type="submit"
-        className="apply-filters bg-wander-orange cursor-pointer rounded-full px-4 py-1.5 text-xs text-white md:text-sm"
-      >
-        Appliquer
-      </button>
-    </form>
+    </div>
   );
 };
 
