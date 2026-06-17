@@ -1,11 +1,14 @@
 import maplibregl from 'maplibre-gl';
 import defaultMarkerImageUrl from '@/assets/markers/marker-default.png';
+import historyMarkerImageUrl from '@/assets/markers/marker-history.png';
 import musicMarkerImageUrl from '@/assets/markers/music-marker.png';
 import treeMarkerImageUrl from '@/assets/markers/marker-tree.png';
 import bookMarkerImageUrl from '@/assets/markers/marker-book.png';
 import kidsMarkerImageUrl from '@/assets/markers/marker-kids.png';
 import theatreMarkerImageUrl from '@/assets/markers/marker-theatre.png';
 import artMarkerImageUrl from '@/assets/markers/marker-art.png';
+import foodMarkerImageUrl from '@/assets/markers/marker-food.png';
+
 import { applyMarkerEntranceBounce } from '@/utils/map-utils';
 import {
   EVENT_CLUSTER_COUNT_LAYER_ID,
@@ -44,6 +47,7 @@ export const addEventMarkerImages = async (targetMap: maplibregl.Map): Promise<v
     { id: EVENT_MARKER_IMAGE_IDS.kids, src: kidsMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.theatre, src: theatreMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.art, src: artMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.history, src: historyMarkerImageUrl },
   ];
 
   await Promise.all(
@@ -148,6 +152,8 @@ const EVENT_MARKER_IMAGE_URL_BY_ID: Record<EventMarkerImageId, string> = {
   [EVENT_MARKER_IMAGE_IDS.kids]: kidsMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.theatre]: theatreMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.art]: artMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.history]: historyMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.food]: foodMarkerImageUrl,
 };
 
 export const createEventMarkerElement = (markerIcon: EventMarkerImageId, delayMs = 0): HTMLElement => {

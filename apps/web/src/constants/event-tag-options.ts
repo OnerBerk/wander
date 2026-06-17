@@ -6,6 +6,8 @@ import markerTree from '@/assets/markers/marker-tree.png';
 import markerKids from '@/assets/markers/marker-kids.png';
 import markerTheatre from '@/assets/markers/marker-theatre.png';
 import markerArt from '@/assets/markers/marker-art.png';
+import markerHistory from '@/assets/markers/marker-history.png';
+import markerFood from '@/assets/markers/marker-food.png';
 
 export type EventTagOption = {
   value: EventTag;
@@ -22,8 +24,8 @@ export const EVENT_TAG_OPTIONS: EventTagOption[] = [
   { value: 'Enfants', label: 'Enfants', accent: 'accent-amber-400', icon: markerKids },
   { value: 'Expo', label: 'Expo', accent: 'accent-cyan-500', icon: markerDefault },
   { value: 'Festival', label: 'Festival', accent: 'accent-fuchsia-400', icon: markerMusic },
-  { value: 'Gourmand', label: 'Gourmand', accent: 'accent-orange-400', icon: markerDefault },
-  { value: 'Histoire', label: 'Histoire', accent: 'accent-lime-500', icon: markerDefault },
+  { value: 'Gourmand', label: 'Gourmand', accent: 'accent-orange-400', icon: markerFood },
+  { value: 'Histoire', label: 'Histoire', accent: 'accent-lime-500', icon: markerHistory },
   { value: 'Littérature', label: 'Littérature', accent: 'accent-yellow-600', icon: markerBook },
   { value: 'Loisirs', label: 'Loisirs', accent: 'accent-blue-400', icon: markerDefault },
   { value: 'Nature', label: 'Nature', accent: 'accent-green-400', icon: markerTree },
