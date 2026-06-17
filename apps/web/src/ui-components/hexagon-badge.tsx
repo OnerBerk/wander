@@ -38,7 +38,7 @@ const HexagonBadge: React.FC<HexagonBadgeProps> = ({
     >
       <div
         style={{ clipPath: HEX_CLIP, filter: disabled ? 'grayscale(1) blur(1px)' : undefined }}
-        className="absolute inset-0 flex items-center justify-center"
+        className="absolute inset-0 flex items-center justify-center bg-slate-500/50"
       >
         {icon ? (
           <img src={icon} alt="" className={`h-[75%] w-auto object-contain ${dim ? 'brightness-[.6]' : ''}`} />
@@ -49,7 +49,7 @@ const HexagonBadge: React.FC<HexagonBadgeProps> = ({
 
       {icon && (
         <div
-          className={`absolute top-[54%] left-1/2 z-10 flex h-5 w-[104%] -translate-x-1/2 items-center justify-center rounded-md border border-white/25 bg-black/80 px-1 ${dim ? 'opacity-70' : ''}`}
+          className={`absolute top-[62%] left-1/2 z-10 flex h-5 w-[104%] -translate-x-1/2 items-center justify-center rounded-md border border-white/25 bg-black/80 px-1 ${dim ? 'opacity-70' : ''}`}
         >
           <span className="w-full truncate text-center text-[12px] leading-none font-semibold text-white">{label}</span>
         </div>

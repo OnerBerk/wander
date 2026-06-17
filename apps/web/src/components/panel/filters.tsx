@@ -3,6 +3,10 @@ import useFilterStore from '@/store/zustand/useFilterStore';
 import useEventsMapStore from '@/store/zustand/useEventsMapStore';
 import { EventPeriod, EventTag } from '@wander/types';
 import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
+
+import NoMarker from '@/assets/markers/no-marker.png';
+import AllMarker from '@/assets/markers/all-marker.png';
+
 import HexagonBadge from '@/ui-components/hexagon-badge';
 
 const FILTER_DEBOUNCE_MS = 1_200;
@@ -81,8 +85,8 @@ const Filters: React.FC = () => {
 
       <div className="tag-filters p-3 text-xs md:text-sm">
         <div className="grid grid-cols-4 gap-2 md:grid-cols-3">
-          <HexagonBadge label="Tout" selected={all} onClick={handleAll} className="max-w-24" />
-          <HexagonBadge label="Aucun" selected={none} onClick={handleNone} className="max-w-24" />
+          <HexagonBadge label="Tout" selected={all} onClick={handleAll} className="max-w-24" icon={AllMarker} />
+          <HexagonBadge label="Aucun" selected={none} onClick={handleNone} className="max-w-24" icon={NoMarker} />
           <div className="col-span-4 md:col-span-3" />
           {EVENT_TAG_OPTIONS.map(({ value, label, icon }) => (
             <HexagonBadge
