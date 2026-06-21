@@ -1,7 +1,7 @@
-import {Controller, Get, Query} from '@nestjs/common';
-import {EventsService} from './events.service';
-import {QueryFilterDto} from '../filters/dtos/query-filter.dto';
-import {EventData} from '@wander/types';
+import { Controller, Get, Query } from '@nestjs/common';
+import { EventsService } from './events.service';
+import { QueryFilterDto } from '../filters/dtos/query-filter.dto';
+import { EventData } from '@wander/types';
 
 @Controller('events')
 export class EventsController {
