@@ -1,7 +1,6 @@
-import {IsOptional, IsArray, IsInt, Min, Max, IsIn} from 'class-validator';
-import {Type, Transform} from 'class-transformer';
-import {GeoDto} from '../../common-dtos/geo.dto';
-import {PriceType, EventTag, EventPeriod} from '@wander/types';
+import { IsOptional, IsArray, IsInt, Min, Max, IsIn } from 'class-validator';
+import { Type, Transform } from 'class-transformer';
+import { PriceType, EventTag, EventPeriod } from '@wander/types';
 
 const ALLOWED_TAGS: EventTag[] = [
   'Art contemporain',
@@ -19,25 +18,25 @@ const ALLOWED_TAGS: EventTag[] = [
   'Théâtre',
 ];
 
-export class QueryFilterDto extends GeoDto {
+export class QueryFilterDto {
   @IsOptional()
-  @Transform(({value}) => (typeof value === 'string' ? value.split(',') : value))
+  @Transform(({ value }) => (typeof value === 'string' ? value.split(',') : value))
   @IsArray()
-  @IsIn(ALLOWED_TAGS, {each: true, message: 'invalid tag'})
+  @IsIn(ALLOWED_TAGS, { each: true, message: 'invalid tag' })
   tags?: EventTag[];
 
   @IsOptional()
-  @IsIn(['free', 'paid'], {message: 'price must be free or paid'})
+  @IsIn(['free', 'paid'], { message: 'price must be free or paid' })
   price?: PriceType;
 
   @IsOptional()
-  @IsIn(['today', 'week', 'month', 'all'], {message: 'period must be today, week, month or all'})
+  @IsIn(['today', 'week', 'month', 'all'], { message: 'period must be today, week, month or all' })
   period?: EventPeriod;
 
   @IsOptional()
   @Type(() => Number)
-  @IsInt({message: 'limit must be an integer'})
-  @Min(1, {message: 'limit must be at least 1'})
-  @Max(100, {message: 'limit cannot exceed 100'})
+  @IsInt({ message: 'limit must be an integer' })
+  @Min(1, { message: 'limit must be at least 1' })
+  @Max(100, { message: 'limit cannot exceed 100' })
   limit?: number;
 }

@@ -1,6 +1,6 @@
-import {Controller, Get} from '@nestjs/common';
-import {SpaceInvadersService} from './space-invaders.service';
-import {InvadersOverpassElement} from '@wander/types';
+import { Controller, Get } from '@nestjs/common';
+import { SpaceInvadersService } from './space-invaders.service';
+import { InvadersOverpassElement } from '@wander/types';
 
 @Controller('space-invaders')
 export class SpaceInvadersController {
@@ -8,7 +8,6 @@ export class SpaceInvadersController {
 
   @Get()
   async getSpaceInvaders(): Promise<InvadersOverpassElement[]> {
-    console.log('getSpaceInvaders');
     return this.spaceInvadersService.getSpaceInvaders();
   }
 }

@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import useFilterStore from '@/store/zustand/useFilterStore';
-import useEventsMapStore from '@/store/zustand/useEventsMapStore';
 import { EventPeriod, EventTag } from '@wander/types';
 import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
 
@@ -14,7 +13,6 @@ const FILTER_DEBOUNCE_MS = 1_200;
 const Filters: React.FC = () => {
   const { eventPeriod, eventCategory, eventsEnabled, setEventPeriod, setEventCategory, setEventsEnabled } =
     useFilterStore();
-  const resetAccumulatedEvents = useEventsMapStore((state) => state.resetEvents);
 
   const [period, setPeriod] = useState<EventPeriod>(eventPeriod);
   const [tags, setTags] = useState<EventTag[]>(() => (eventsEnabled ? (eventCategory ?? []) : []));
@@ -24,7 +22,6 @@ const Filters: React.FC = () => {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const applyFilters = (p: EventPeriod, t: EventTag[], a: boolean, n: boolean) => {
-    resetAccumulatedEvents();
     setEventPeriod(p);
 
     if (n) {

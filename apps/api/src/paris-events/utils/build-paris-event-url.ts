@@ -1,12 +1,13 @@
-import {QueryFilterDto} from '../../filters/dtos/query-filter.dto';
-import {getPeriodCondition} from '../../events/utils';
+import { QueryFilterDto } from '../../filters/dtos/query-filter.dto';
+import { getPeriodCondition } from '../../events/utils';
+import { GeoDto } from '../../common-dtos/geo.dto';
 
 const BASE_URL = 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records';
 
-export const buildParisEventUrl = (query: QueryFilterDto): string => {
+export const buildParisEventUrl = (geo: GeoDto, query: Partial<QueryFilterDto>): string => {
   const conditions: string[] = [getPeriodCondition(query.period)];
 
-  conditions.push(`within_distance(lat_lon, geom'POINT(${query.lng} ${query.lat})', ${query.radius}km)`);
+  conditions.push(`within_distance(lat_lon, geom'POINT(${geo.lng} ${geo.lat})', ${geo.radius}km)`);
 
   if (query.tags?.length) {
     const tagConditions = query.tags.map((t) => `qfap_tags like '%${t}%'`).join(' OR ');

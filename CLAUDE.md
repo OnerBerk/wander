@@ -167,3 +167,4 @@ docker exec -it wander-redis redis-cli ping  # vérifie que Redis répond
 4. Un seul sujet à la fois, validation avant de passer à l'étape suivante
 5. **Ne jamais faire plus que ce qui est explicitement demandé par l'utilisateur — aucune modification, suppression ou ajout non demandé**
 6. Toujours chercher une solution native (lib, framework, API du projet) avant d'écrire du code custom
+7. **JAMAIS de commande terminal sans explication et sans validation explicite de l'utilisateur** — avant toute commande (`git`, `pnpm`, `docker`, etc.) : expliquer ce qu'elle fait et pourquoi ; n'exécuter que si l'utilisateur demande clairement de le faire (ex. « exécute », « lance », « fais le commit »). « Je peux push » ou « c'est bon » ≠ autorisation d'exécuter.

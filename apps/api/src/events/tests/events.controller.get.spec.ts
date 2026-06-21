@@ -1,21 +1,15 @@
-import {INestApplication} from '@nestjs/common';
-import {setupApi} from '../../test-utils/setup-api';
-import {TestTool} from '../../test-utils/test-tools';
+import { INestApplication } from '@nestjs/common';
+import { setupApi } from '../../test-utils/setup-api';
+import { TestTool } from '../../test-utils/test-tools';
 
-const invalidRequests: [string, string][] = [
-  ['/events', 'missing lat lng radius'],
-  ['/events?lat=48.8566&lng=2.3522&radius=5&limit=999', 'limit too high'],
-  ['/events?lng=2.3522&radius=5', 'missing lat'],
-  ['/events?lat=48.8566&radius=5', 'missing lng'],
-  ['/events?lat=48.8566&lng=2.3522', 'missing radius'],
-];
+const invalidRequests: [string, string][] = [['/events?limit=999', 'limit too high']];
 
 describe('GET /events', () => {
   let app: INestApplication;
   let testTool: TestTool;
 
   beforeAll(async () => {
-    ({app} = await setupApi());
+    ({ app } = await setupApi());
     testTool = new TestTool(app);
   });
 
@@ -23,8 +17,14 @@ describe('GET /events', () => {
     await testTool.destroy();
   });
 
-  it('returns 200 with valid params', async () => {
-    const res = await testTool.get('/events?lat=48.8566&lng=2.3522&radius=5&limit=5');
+  it('returns 200 with no params', async () => {
+    const res = await testTool.get('/events');
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('returns 200 with optional filters', async () => {
+    const res = await testTool.get('/events?period=week&limit=5');
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });

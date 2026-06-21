@@ -1,4 +1,4 @@
-import {Injectable, Logger, OnModuleDestroy} from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import Redis from 'ioredis';
 
 @Injectable()
@@ -24,30 +24,15 @@ export class RedisService implements OnModuleDestroy {
 
     this.logger.log(`Redis client initialized (${this.getRedisTargetLabel()})`);
 
-    this.client.on('connect', () => {
-      this.logger.log('Redis socket connected');
-    });
-
+    this.client.on('connect', () => this.logger.log('Redis socket connected'));
     this.client.on('ready', () => {
       this.hasLoggedRuntimeFallback = false;
       this.logger.log('Redis ready to accept commands');
     });
-
-    this.client.on('reconnecting', (delayMs: number) => {
-      this.logger.warn(`Redis reconnecting in ${delayMs}ms`);
-    });
-
-    this.client.on('close', () => {
-      this.logger.warn('Redis connection closed');
-    });
-
-    this.client.on('end', () => {
-      this.logger.error('Redis connection ended');
-    });
-
-    this.client.on('error', (err) => {
-      this.logger.error(`Redis client error: ${err.message}`);
-    });
+    this.client.on('reconnecting', (delayMs: number) => this.logger.warn(`Redis reconnecting in ${delayMs}ms`));
+    this.client.on('close', () => this.logger.warn('Redis connection closed'));
+    this.client.on('end', () => this.logger.error('Redis connection ended'));
+    this.client.on('error', (err) => this.logger.error(`Redis client error: ${err.message}`));
   }
 
   onModuleDestroy() {
@@ -61,7 +46,6 @@ export class RedisService implements OnModuleDestroy {
     try {
       const data = await this.client.get(key);
       if (!data) return null;
-
       try {
         return JSON.parse(data) as T;
       } catch {
@@ -74,11 +58,32 @@ export class RedisService implements OnModuleDestroy {
     }
   }
 
+  /** Stocke une valeur avec TTL (cache court, ex: Vélib, météo) */
   async set(key: string, value: unknown, ttlSeconds: number): Promise<void> {
     try {
       await this.client.set(key, JSON.stringify(value), 'EX', ttlSeconds);
     } catch (error) {
       this.logRuntimeFallback('SET', key, error);
+    }
+  }
+
+  /** Stocke une valeur sans TTL (base de données, ex: events:actifs) */
+  async setPersist(key: string, value: unknown): Promise<void> {
+    try {
+      await this.client.set(key, JSON.stringify(value));
+    } catch (error) {
+      this.logRuntimeFallback('SET', key, error);
+    }
+  }
+
+  /** Renomme atomiquement une clé — utilisé pour le swap blue/green */
+  async rename(source: string, destination: string): Promise<void> {
+    try {
+      await this.client.rename(source, destination);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Redis RENAME "${source}" → "${destination}" failed: ${message}`);
+      throw error;
     }
   }
 
@@ -103,12 +108,9 @@ export class RedisService implements OnModuleDestroy {
     const message = error instanceof Error ? error.message : 'Unknown error';
     if (!this.hasLoggedRuntimeFallback) {
       this.hasLoggedRuntimeFallback = true;
-      this.logger.error(
-        `Redis unavailable during ${operation} "${key}" (${message}). Falling back to no-cache mode.`
-      );
+      this.logger.error(`Redis unavailable during ${operation} "${key}" (${message}). Falling back to no-cache mode.`);
       return;
     }
-
     this.logger.warn(`Redis ${operation} failed for "${key}" (${message})`);
   }
 }
