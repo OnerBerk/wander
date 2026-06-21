@@ -6,6 +6,7 @@ const mockRedisClient = {
   quit: jest.fn(),
   get: jest.fn(),
   set: jest.fn(),
+  rename: jest.fn(),
   del: jest.fn(),
 };
 
@@ -59,6 +60,30 @@ describe('RedisService', () => {
     it('serializes and stores with TTL', async () => {
       await service.set('key', {foo: 'bar'}, 60);
       expect(mockRedisClient.set).toHaveBeenCalledWith('key', JSON.stringify({foo: 'bar'}), 'EX', 60);
+    });
+  });
+
+  describe('setPersist', () => {
+    it('serializes and stores without TTL', async () => {
+      await service.setPersist('key', {foo: 'bar'});
+      expect(mockRedisClient.set).toHaveBeenCalledWith('key', JSON.stringify({foo: 'bar'}));
+    });
+
+    it('does not throw when setPersist fails', async () => {
+      mockRedisClient.set.mockRejectedValue(new Error('Connection is closed'));
+      await expect(service.setPersist('key', {foo: 'bar'})).resolves.toBeUndefined();
+    });
+  });
+
+  describe('rename', () => {
+    it('renames the key atomically', async () => {
+      await service.rename('staging', 'active');
+      expect(mockRedisClient.rename).toHaveBeenCalledWith('staging', 'active');
+    });
+
+    it('throws when rename fails', async () => {
+      mockRedisClient.rename.mockRejectedValue(new Error('rename failed'));
+      await expect(service.rename('staging', 'active')).rejects.toThrow('rename failed');
     });
   });
 
