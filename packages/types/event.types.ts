@@ -15,7 +15,14 @@ export type EventTag =
   | 'Nature'
   | 'Spectacle musical'
   | 'Théâtre'
-  | 'Balade urbaine';
+  | 'Balade urbaine'
+  | 'BD'
+  | 'Brocante'
+  | 'Photo'
+  | 'Santé'
+  | 'Sciences'
+  | 'Sport'
+  | 'Street-art';
 
 export type EventPeriod = 'today' | 'week' | 'month' | 'all';
 

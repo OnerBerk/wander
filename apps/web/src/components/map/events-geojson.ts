@@ -10,6 +10,10 @@ export const EVENT_MARKER_IMAGE_IDS = {
   art: 'event-marker-art',
   history: 'event-marker-history',
   food: 'event-marker-food',
+  streetArt: 'event-marker-street-art',
+  brocante: 'event-marker-brocante',
+  health: 'event-marker-health',
+  sport: 'event-marker-sport',
 } as const;
 
 export type EventMarkerImageId = (typeof EVENT_MARKER_IMAGE_IDS)[keyof typeof EVENT_MARKER_IMAGE_IDS];
@@ -63,7 +67,18 @@ export const getEventMarkerImageId = (tags: EventTag[]): EventMarkerImageId => {
       case 'Théâtre':
         return EVENT_MARKER_IMAGE_IDS.theatre;
       case 'Art contemporain':
+      case 'Photo':
         return EVENT_MARKER_IMAGE_IDS.art;
+      case 'Street-art':
+        return EVENT_MARKER_IMAGE_IDS.streetArt;
+      case 'Brocante':
+        return EVENT_MARKER_IMAGE_IDS.brocante;
+      case 'Santé':
+        return EVENT_MARKER_IMAGE_IDS.health;
+      case 'Sport':
+        return EVENT_MARKER_IMAGE_IDS.sport;
+      case 'BD':
+        return EVENT_MARKER_IMAGE_IDS.book;
       case 'Histoire':
         return EVENT_MARKER_IMAGE_IDS.history;
       case 'Gourmand':

@@ -27,6 +27,13 @@ const ALLOWED_TAGS: EventTag[] = [
   'Nature',
   'Spectacle musical',
   'Théâtre',
+  'BD',
+  'Brocante',
+  'Photo',
+  'Santé',
+  'Sciences',
+  'Sport',
+  'Street-art',
 ];
 
 @Injectable()

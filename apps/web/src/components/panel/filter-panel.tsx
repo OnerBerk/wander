@@ -25,22 +25,22 @@ const FilterPanel = () => {
       aria-modal="true"
       aria-labelledby={titleId}
       aria-hidden={!isPanelOpen}
-      className={`absolute top-0 right-0 z-100 hidden h-full w-100 flex-col gap-2 border-l-2 border-white/30 px-4 pt-8 backdrop-blur-sm transition-transform duration-500 ease-in-out md:flex ${
+      className={`absolute top-0 right-0 z-100 hidden h-full w-140 flex-col gap-2 border-l-2 border-white/30 px-4 pt-4 backdrop-blur-sm transition-transform duration-500 ease-in-out md:flex ${
         isPanelOpen ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
       <UIClosePanelButton ariaLabel="Fermer les filtres" onClose={closePanel} />
 
-      <div className="flex flex-col justify-center gap-2 p-2">
-        <div className="text-xl font-bold">Metro et Vélib et Space Invaders</div>
-        <div className="filter-panel grid grid-cols-3 gap-2">
+      <div className="flex flex-col justify-center gap-2">
+        <div className="text-xl font-bold">Metro Vélib Invaders</div>
+        <div className="filter-panel flex flex-wrap gap-5">
           <HexagonBadge
             label="Métro"
             icon={subwayMarkerImageUrl}
             selected={isMetroMarkersVisible}
             onClick={toggleMetroMarkers}
             ariaLabel="stations métro et RER"
-            className="max-w-24"
+            className="max-w-22"
           />
           <HexagonBadge
             label="Vélib"
@@ -48,7 +48,7 @@ const FilterPanel = () => {
             selected={isVelibMarkersVisible}
             onClick={toggleVelibMarkers}
             ariaLabel="stations Vélib"
-            className="max-w-24"
+            className="max-w-22"
           />
           <HexagonBadge
             label="Invaders"
@@ -56,7 +56,7 @@ const FilterPanel = () => {
             selected={isSpaceInvadersVisible}
             onClick={toggleSpaceInvaders}
             ariaLabel="Space Invaders"
-            className="max-w-24"
+            className="max-w-22"
           />
         </div>
       </div>

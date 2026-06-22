@@ -8,6 +8,10 @@ import kidsMarkerImageUrl from '@/assets/markers/marker-kids.png';
 import theatreMarkerImageUrl from '@/assets/markers/marker-theatre.png';
 import artMarkerImageUrl from '@/assets/markers/marker-art.png';
 import foodMarkerImageUrl from '@/assets/markers/marker-food.png';
+import streetArtMarkerImageUrl from '@/assets/markers/marker-street-art.png';
+import brocanteMarkerImageUrl from '@/assets/markers/marker-brocante.png';
+import healthMarkerImageUrl from '@/assets/markers/marker-health.png';
+import sportMarkerImageUrl from '@/assets/markers/marker-sport.png';
 
 import { applyMarkerEntranceBounce } from '@/utils/map-utils';
 import {
@@ -48,6 +52,11 @@ export const addEventMarkerImages = async (targetMap: maplibregl.Map): Promise<v
     { id: EVENT_MARKER_IMAGE_IDS.theatre, src: theatreMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.art, src: artMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.history, src: historyMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.food, src: foodMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.streetArt, src: streetArtMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.brocante, src: brocanteMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.health, src: healthMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.sport, src: sportMarkerImageUrl },
   ];
 
   await Promise.all(
@@ -154,6 +163,10 @@ const EVENT_MARKER_IMAGE_URL_BY_ID: Record<EventMarkerImageId, string> = {
   [EVENT_MARKER_IMAGE_IDS.art]: artMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.history]: historyMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.food]: foodMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.streetArt]: streetArtMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.brocante]: brocanteMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.health]: healthMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.sport]: sportMarkerImageUrl,
 };
 
 export const createEventMarkerElement = (markerIcon: EventMarkerImageId, delayMs = 0): HTMLElement => {
