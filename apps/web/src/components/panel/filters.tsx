@@ -81,14 +81,14 @@ const Filters: React.FC = () => {
       </select>
 
       <div className="tag-filters p-3 text-xs md:text-sm">
-        <div className="grid grid-cols-4 gap-2 md:grid-cols-3">
-          <HexagonBadge label="Tout" selected={all} onClick={handleAll} className="max-w-24" icon={AllMarker} />
-          <HexagonBadge label="Aucun" selected={none} onClick={handleNone} className="max-w-24" icon={NoMarker} />
-          <div className="col-span-4 md:col-span-3" />
+        <div className="grid grid-cols-4 gap-2">
+          <HexagonBadge label="Tout" selected={all} onClick={handleAll} className="max-w-22" icon={AllMarker} />
+          <HexagonBadge label="Aucun" selected={none} onClick={handleNone} className="max-w-22" icon={NoMarker} />
+          <div className="col-span-4" />
           {EVENT_TAG_OPTIONS.map(({ value, label, icon }) => (
             <HexagonBadge
               key={value}
-              className="max-w-24"
+              className="max-w-22"
               label={label}
               icon={icon}
               selected={tags.includes(value)}

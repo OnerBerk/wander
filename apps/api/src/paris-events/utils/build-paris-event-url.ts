@@ -19,7 +19,7 @@ export const buildParisEventUrl = (geo: GeoDto, query: Partial<QueryFilterDto>):
 
   const params = new URLSearchParams({
     where: conditions.join(' AND '),
-    order_by: 'date_start ASC',
+    order_by: `distance(lat_lon, geom'POINT(${geo.lng} ${geo.lat})') ASC`,
     limit: String(query.limit ?? 20),
   });
 
