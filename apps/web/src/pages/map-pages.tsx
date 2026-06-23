@@ -1,5 +1,4 @@
 import { useEvents } from '@/api/features/events/useEvents';
-import { useSpaceInvaders } from '@/api/features/space-invaders/useSpaceInvaders';
 import { useVelib } from '@/api/features/velib/useVelib';
 import WanderMap from '@/components/map/wander-map';
 import SeoMetadata from '@/components/seo/seo-metadata';
@@ -9,7 +8,6 @@ import useFilterStore from '@/store/zustand/useFilterStore';
 const MapPage = () => {
   const eventsEnabled = useFilterStore((state) => state.eventsEnabled);
   const { data: events } = useEvents();
-  const { data: spaceInvaders } = useSpaceInvaders();
   const { data: velibStations } = useVelib();
 
   return (
@@ -22,7 +20,6 @@ const MapPage = () => {
       <WanderMap
         velibStations={velibStations ?? []}
         events={eventsEnabled ? (events ?? []) : []}
-        spaceInvaders={spaceInvaders ?? []}
       />
       <WanderWelcomeOverlay />
     </div>

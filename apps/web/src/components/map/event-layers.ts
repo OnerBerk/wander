@@ -7,6 +7,7 @@ import bookMarkerImageUrl from '@/assets/markers/marker-book.png';
 import kidsMarkerImageUrl from '@/assets/markers/marker-kids.png';
 import theatreMarkerImageUrl from '@/assets/markers/marker-theatre.png';
 import artMarkerImageUrl from '@/assets/markers/marker-art.png';
+import photoMarkerImageUrl from '@/assets/markers/marker-photo.png';
 import foodMarkerImageUrl from '@/assets/markers/marker-food.png';
 import streetArtMarkerImageUrl from '@/assets/markers/marker-street-art.png';
 import brocanteMarkerImageUrl from '@/assets/markers/marker-brocante.png';
@@ -51,6 +52,7 @@ export const addEventMarkerImages = async (targetMap: maplibregl.Map): Promise<v
     { id: EVENT_MARKER_IMAGE_IDS.kids, src: kidsMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.theatre, src: theatreMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.art, src: artMarkerImageUrl },
+    { id: EVENT_MARKER_IMAGE_IDS.photo, src: photoMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.history, src: historyMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.food, src: foodMarkerImageUrl },
     { id: EVENT_MARKER_IMAGE_IDS.streetArt, src: streetArtMarkerImageUrl },
@@ -161,6 +163,7 @@ const EVENT_MARKER_IMAGE_URL_BY_ID: Record<EventMarkerImageId, string> = {
   [EVENT_MARKER_IMAGE_IDS.kids]: kidsMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.theatre]: theatreMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.art]: artMarkerImageUrl,
+  [EVENT_MARKER_IMAGE_IDS.photo]: photoMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.history]: historyMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.food]: foodMarkerImageUrl,
   [EVENT_MARKER_IMAGE_IDS.streetArt]: streetArtMarkerImageUrl,
