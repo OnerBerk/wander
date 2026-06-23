@@ -19,7 +19,11 @@ export class IngestionService {
     private readonly parisEventsService: ParisEventsService,
   ) {}
 
-  @Cron(CronExpression.EVERY_12_HOURS)
+  @Cron(CronExpression.EVERY_DAY_AT_2AM, {
+    name: 'ingestion',
+    timeZone: 'Europe/Paris',
+    disabled: process.env.NODE_ENV !== 'production',
+  })
   async runIngestion(): Promise<void> {
     this.logger.log('🚀 Ingestion démarrée');
 
