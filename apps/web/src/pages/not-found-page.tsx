@@ -13,7 +13,7 @@ const NotFoundPage = () => {
           to="/"
           className="bg-wander-orange focus-visible:ring-wander-orange mt-8 inline-flex rounded-full px-5 py-2.5 text-sm font-semibold text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:outline-none"
         >
-          Retour à la carte
+          Retour à l'accueil
         </Link>
       </section>
     </main>

@@ -4,6 +4,7 @@ import { type RouteObject } from 'react-router-dom';
 import AboutPage from './about-page';
 import MapPage from './map-pages';
 import NotFoundPage from './not-found-page';
+import HomePage from './home';
 
 export const routes: RouteObject[] = [
   {
@@ -11,6 +12,11 @@ export const routes: RouteObject[] = [
     element: <RootLayout />,
     children: [
       {
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: 'map',
         element: <MapLayout />,
         children: [
           {
