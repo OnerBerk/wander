@@ -81,6 +81,10 @@
     ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
+    "moduleNameMapper": {
+      "^ai$": "<rootDir>/test-utils/mocks/ai.mock.ts",
+      "^@ai-sdk/groq$": "<rootDir>/test-utils/mocks/ai-sdk-groq.mock.ts"
+    },
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },

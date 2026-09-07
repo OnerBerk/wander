@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { setupApi } from '../../test-utils/setup-api';
 import { TestTool } from '../../test-utils/test-tools';
+import { EventsModule } from '../events.module';
 
 const invalidRequests: [string, string][] = [['/events?limit=999', 'limit too high']];
 
@@ -9,7 +10,7 @@ describe('GET /events', () => {
   let testTool: TestTool;
 
   beforeAll(async () => {
-    ({ app } = await setupApi());
+    ({ app } = await setupApi(EventsModule));
     testTool = new TestTool(app);
   });
 

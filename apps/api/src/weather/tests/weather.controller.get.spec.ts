@@ -4,6 +4,7 @@ import {RedisService} from '../../redis/redis.service';
 import {HttpClientService} from '../../http-client/http-client.service';
 import {setupApi} from '../../test-utils/setup-api';
 import {TestTool} from '../../test-utils/test-tools';
+import {WeatherModule} from '../weather.module';
 
 const mockWeatherData: WeatherData = {
   temperature: 18.9,
@@ -43,7 +44,7 @@ describe('GET /weather', () => {
   let testTool: TestTool;
 
   beforeAll(async () => {
-    ({app} = await setupApi([
+    ({app} = await setupApi(WeatherModule, [
       {provide: RedisService, useValue: mockRedisService},
       {provide: HttpClientService, useValue: mockHttpClient},
     ]));

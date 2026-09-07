@@ -1,18 +1,17 @@
 import {Test, TestingModule} from '@nestjs/testing';
-import {INestApplication, InjectionToken, ValidationPipe} from '@nestjs/common';
-import {AppModule} from '../app.module';
+import {INestApplication, InjectionToken, Type, ValidationPipe} from '@nestjs/common';
 
 export type TestProviderOverride = {
   provide: InjectionToken;
   useValue: unknown;
 };
 
-export async function setupApi(overrides: TestProviderOverride[] = []): Promise<{
+export async function setupApi(moduleUnderTest: Type<unknown>, overrides: TestProviderOverride[] = []): Promise<{
   app: INestApplication;
   module: TestingModule;
 }> {
   let testingModuleBuilder = Test.createTestingModule({
-    imports: [AppModule],
+    imports: [moduleUnderTest],
   });
 
   for (const {provide, useValue} of overrides) {
