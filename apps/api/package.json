@@ -30,6 +30,7 @@
     "@wander/types": "workspace:^",
     "ai": "^7.0.79",
     "axios": "^1.15.0",
+    "chrono-node": "^2.10.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "ioredis": "^5.10.1",
@@ -104,7 +105,10 @@
     "coveragePathIgnorePatterns": [
       "main.ts",
       ".module.ts",
-      "test-utils"
+      "test-utils",
+      "A.I/ai.service.ts",
+      "A.I/wander-agents-prompts.ts",
+      "velib.controller.ts"
     ]
   }
 }

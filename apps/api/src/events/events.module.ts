@@ -7,5 +7,6 @@ import {ParisEventsModule} from '../paris-events/paris-events.module';
   imports: [ParisEventsModule],
   controllers: [EventsController],
   providers: [EventsService],
+  exports: [EventsService],
 })
 export class EventsModule {}

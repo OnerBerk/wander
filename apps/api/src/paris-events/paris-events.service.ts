@@ -59,7 +59,12 @@ export class ParisEventsService {
       const all = await this.redisService.get<EventData[]>(EVENTS_REDIS_KEY);
       if (!all) return { total: 0, events: [] };
 
-      const { start, end } = getDateRangeForPeriod(query.period);
+      const { start, end } = query.dateFrom
+        ? {
+            start: DateTime.fromISO(query.dateFrom).startOf('day'),
+            end: DateTime.fromISO(query.dateTo ?? query.dateFrom).endOf('day'),
+          }
+        : getDateRangeForPeriod(query.period);
 
       const events = all.filter((e) => {
         if (!e.dateStart) return false;

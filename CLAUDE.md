@@ -70,6 +70,37 @@ wander/
 - DTOs validés avec `class-validator` sur toutes les entrées
 - Tests unitaires obligatoires par module (`*.spec.ts`)
 
+### Tests API (NestJS / Jest)
+
+Toujours le même setup — ne pas inventer un autre pattern :
+
+**Service (unitaire)**
+
+- `setupUnitTest(Service, [{ provide: Dep, useValue: mock }])`
+- mocks = `jest.fn()` vides en haut de fichier
+- `beforeAll` : créer le service (+ `setupEvents(today)` si besoin de données events)
+- `afterEach` : `jest.clearAllMocks()`
+- configurer les mocks **dans** chaque `it` (ou `beforeEach` après le clear)
+- mocker uniquement le collaborateur direct — jamais d’appel réseau réel (IA, APIs externes)
+
+**Controller (HTTP)**
+
+- `setupApi(DomainModule, overrides?)` + `TestTool`
+- `beforeAll` / `afterAll(testTool.destroy)` / `afterEach(clearAllMocks)`
+- GET via `testTool.get`, POST via `testTool.post`
+- override des services lourds (Redis, AiService, HttpClient…) comme sur Weather / AI
+- peu de cas : happy path + validation 400
+
+**Données events de test**
+
+- `setupEvents(today: DateTime)` dans `test-utils/setup-events.ts` — dates relatives au jour passé en paramètre
+- réutilisable pour les tests AI et autres modules
+
+**Coverage**
+
+- glue SDK IA (`ai.service.ts`, prompts) exclu via `coveragePathIgnorePatterns`
+- tester la logique métier (tools, filtres, DTO), pas les retours de `generateText`
+
 ### Frontend (React)
 
 - **Un composant React par fichier** : un seul composant exporté (souvent `export default`). Helpers en fonction nommée (`renderXxx`), pas en second composant. Exceptions : découpage impossible sans nuire à la lisibilité — documenter brièvement pourquoi. ESLint : `react-refresh/only-export-components` (déjà dans le projet).

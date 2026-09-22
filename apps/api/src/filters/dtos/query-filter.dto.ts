@@ -1,4 +1,4 @@
-import { IsOptional, IsArray, IsInt, Min, Max, IsIn } from 'class-validator';
+import { IsOptional, IsArray, IsInt, Min, Max, IsIn, IsDateString } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
 import { PriceType, EventTag, EventPeriod } from '@wander/types';
 
@@ -46,4 +46,12 @@ export class QueryFilterDto {
   @Min(1, { message: 'limit must be at least 1' })
   @Max(100, { message: 'limit cannot exceed 100' })
   limit?: number;
+
+  @IsOptional()
+  @IsDateString()
+  dateFrom?: string;
+
+  @IsOptional()
+  @IsDateString()
+  dateTo?: string;
 }

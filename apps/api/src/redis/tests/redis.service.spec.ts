@@ -1,5 +1,5 @@
-import {Test} from '@nestjs/testing';
-import {RedisService} from '../redis.service';
+import { Test } from '@nestjs/testing';
+import { RedisService } from '../redis.service';
 
 const mockRedisClient = {
   on: jest.fn(),
@@ -27,10 +27,15 @@ describe('RedisService', () => {
 
     service = module.get<RedisService>(RedisService);
     errorCallback = mockRedisClient.on.mock.calls.find((call: [string, unknown]) => call[0] === 'error')?.[1] as (
-      err: Error
+      err: Error,
     ) => void;
-    readyCallback = mockRedisClient.on.mock.calls.find((call: [string, unknown]) => call[0] === 'ready')?.[1] as () => void;
-    retryStrategy = mockRedisClient.on.mock.calls.length >= 0 ? (jest.requireMock('ioredis').mock.calls[0][1].retryStrategy as (attempt: number) => number) : () => 0;
+    readyCallback = mockRedisClient.on.mock.calls.find(
+      (call: [string, unknown]) => call[0] === 'ready',
+    )?.[1] as () => void;
+    retryStrategy =
+      mockRedisClient.on.mock.calls.length >= 0
+        ? (jest.requireMock('ioredis').mock.calls[0][1].retryStrategy as (attempt: number) => number)
+        : () => 0;
   });
 
   afterEach(() => {
@@ -45,9 +50,9 @@ describe('RedisService', () => {
     });
 
     it('returns parsed value when key exists', async () => {
-      mockRedisClient.get.mockResolvedValue(JSON.stringify({foo: 'bar'}));
-      const result = await service.get<{foo: string}>('key');
-      expect(result).toEqual({foo: 'bar'});
+      mockRedisClient.get.mockResolvedValue(JSON.stringify({ foo: 'bar' }));
+      const result = await service.get<{ foo: string }>('key');
+      expect(result).toEqual({ foo: 'bar' });
     });
 
     it('returns null when cached JSON is invalid', async () => {
@@ -58,20 +63,20 @@ describe('RedisService', () => {
 
   describe('set', () => {
     it('serializes and stores with TTL', async () => {
-      await service.set('key', {foo: 'bar'}, 60);
-      expect(mockRedisClient.set).toHaveBeenCalledWith('key', JSON.stringify({foo: 'bar'}), 'EX', 60);
+      await service.set('key', { foo: 'bar' }, 60);
+      expect(mockRedisClient.set).toHaveBeenCalledWith('key', JSON.stringify({ foo: 'bar' }), 'EX', 60);
     });
   });
 
   describe('setPersist', () => {
     it('serializes and stores without TTL', async () => {
-      await service.setPersist('key', {foo: 'bar'});
-      expect(mockRedisClient.set).toHaveBeenCalledWith('key', JSON.stringify({foo: 'bar'}));
+      await service.setPersist('key', { foo: 'bar' });
+      expect(mockRedisClient.set).toHaveBeenCalledWith('key', JSON.stringify({ foo: 'bar' }));
     });
 
     it('does not throw when setPersist fails', async () => {
       mockRedisClient.set.mockRejectedValue(new Error('Connection is closed'));
-      await expect(service.setPersist('key', {foo: 'bar'})).resolves.toBeUndefined();
+      await expect(service.setPersist('key', { foo: 'bar' })).resolves.toBeUndefined();
     });
   });
 
@@ -112,7 +117,7 @@ describe('RedisService', () => {
       mockRedisClient.set.mockRejectedValue(new Error('Connection is closed'));
       mockRedisClient.del.mockRejectedValue(new Error('Connection is closed'));
 
-      await expect(service.set('key', {foo: 'bar'}, 60)).resolves.toBeUndefined();
+      await expect(service.set('key', { foo: 'bar' }, 60)).resolves.toBeUndefined();
       await expect(service.del('key')).resolves.toBeUndefined();
     });
   });
@@ -130,7 +135,7 @@ describe('RedisService', () => {
     });
 
     it('returns invalid label for malformed redis URL helper', () => {
-      const helper = (service as unknown as {getRedisTargetLabel: () => string; redisUrl: string});
+      const helper = service as unknown as { getRedisTargetLabel: () => string; redisUrl: string };
       helper.redisUrl = '::::';
       expect(helper.getRedisTargetLabel()).toBe('invalid REDIS_URL format');
     });
@@ -138,9 +143,9 @@ describe('RedisService', () => {
     it('resets runtime fallback flag on ready callback', async () => {
       mockRedisClient.get.mockRejectedValueOnce(new Error('Connection is closed'));
       await service.get('key');
-      expect((service as unknown as {hasLoggedRuntimeFallback: boolean}).hasLoggedRuntimeFallback).toBe(true);
+      expect((service as unknown as { hasLoggedRuntimeFallback: boolean }).hasLoggedRuntimeFallback).toBe(true);
       readyCallback();
-      expect((service as unknown as {hasLoggedRuntimeFallback: boolean}).hasLoggedRuntimeFallback).toBe(false);
+      expect((service as unknown as { hasLoggedRuntimeFallback: boolean }).hasLoggedRuntimeFallback).toBe(false);
     });
   });
 });

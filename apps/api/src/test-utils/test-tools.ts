@@ -8,6 +8,10 @@ export class TestTool {
     return request(this.app.getHttpServer()).get(url).expect(expectedStatus);
   }
 
+  async post(url: string, body: object, expectedStatus = 201): Promise<Response> {
+    return request(this.app.getHttpServer()).post(url).send(body).expect(expectedStatus);
+  }
+
   async destroy(): Promise<void> {
     await this.app.close();
   }

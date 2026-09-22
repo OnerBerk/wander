@@ -1,10 +1,10 @@
 import 'reflect-metadata';
-import {plainToInstance} from 'class-transformer';
-import {EventsService} from '../events.service';
-import {ParisEventsService} from '../../paris-events/paris-events.service';
-import {setupUnitTest} from '../../test-utils/setup-unit-test';
-import {QueryFilterDto} from '../../filters/dtos/query-filter.dto';
-import {EventData} from '@wander/types';
+import { plainToInstance } from 'class-transformer';
+import { EventsService } from '../events.service';
+import { ParisEventsService } from '../../paris-events/paris-events.service';
+import { setupUnitTest } from '../../test-utils/setup-unit-test';
+import { QueryFilterDto } from '../../filters/dtos/query-filter.dto';
+import { EventData } from '@wander/types';
 
 const mockEvent: EventData = {
   id: '1',
@@ -14,7 +14,7 @@ const mockEvent: EventData = {
   dateStart: '',
   dateEnd: '',
   occurrences: null,
-  location: {lat: 48.8566, lng: 2.3522},
+  location: { lat: 48.8566, lng: 2.3522 },
   coverUrl: null,
   coverAlt: null,
   priceType: 'free',
@@ -42,17 +42,17 @@ describe('EventsService', () => {
   let service: EventsService;
 
   beforeAll(async () => {
-    service = await setupUnitTest(EventsService, [{provide: ParisEventsService, useValue: mockParisEventsService}]);
+    service = await setupUnitTest(EventsService, [{ provide: ParisEventsService, useValue: mockParisEventsService }]);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  const dto = plainToInstance(QueryFilterDto, {lat: 48.8566, lng: 2.3522, radius: 5});
+  const dto = plainToInstance(QueryFilterDto, { lat: 48.8566, lng: 2.3522, radius: 5 });
 
   it('returns aggregated events from all sources', async () => {
-    mockParisEventsService.getEvents.mockResolvedValue({total: 1, events: [mockEvent]});
+    mockParisEventsService.getEvents.mockResolvedValue({ total: 1, events: [mockEvent] });
 
     const result = await service.getAll(dto);
 

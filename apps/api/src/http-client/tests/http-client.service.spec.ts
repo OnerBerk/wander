@@ -1,6 +1,6 @@
-import {Test} from '@nestjs/testing';
-import axios, {AxiosError} from 'axios';
-import {HttpClientService} from '../http-client.service';
+import { Test } from '@nestjs/testing';
+import axios, { AxiosError } from 'axios';
+import { HttpClientService } from '../http-client.service';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -22,9 +22,9 @@ describe('HttpClientService', () => {
 
   describe('get', () => {
     it('returns data on success', async () => {
-      mockedAxios.get.mockResolvedValue({data: {foo: 'bar'}});
-      const result = await service.get<{foo: string}>('https://api.test.com');
-      expect(result).toEqual({foo: 'bar'});
+      mockedAxios.get.mockResolvedValue({ data: { foo: 'bar' } });
+      const result = await service.get<{ foo: string }>('https://api.test.com');
+      expect(result).toEqual({ foo: 'bar' });
       expect(mockedAxios.get).toHaveBeenCalledWith('https://api.test.com');
     });
 
