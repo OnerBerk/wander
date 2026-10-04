@@ -1,11 +1,11 @@
-import {useEffect, useRef} from 'react';
+import { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
-import {EventData} from '@wander/types';
-import {buildEventsGeoJson, getEventMarkerImageId} from '@/components/map/events-geojson';
-import {createEventMarkerElement} from '@/components/map/event-layers';
-import {EVENTS_SOURCE_ID} from '@/constants/map-constants';
+import { EventData } from '@wander/types';
+import { buildEventsGeoJson, getEventMarkerImageId } from '@/components/map/events-geojson';
+import { createEventMarkerElement } from '@/components/map/event-layers';
+import { EVENTS_SOURCE_ID } from '@/constants/map-constants';
 import useMarkerStore from '@/store/zustand/useMarkerStore';
-import type {UseEventLayersParams} from '@/hooks/map/event-layers-types';
+import type { UseEventLayersParams } from '@/hooks/map/event-layers-types';
 
 type EventMarkerEntry = {
   marker: maplibregl.Marker;
@@ -20,13 +20,14 @@ const clearAllEventMarkers = (markersById: Map<string, EventMarkerEntry>): void 
   markersById.clear();
 };
 
-export const useEventDomMarkers = ({map, events, areLayersReady}: UseEventLayersParams): void => {
+export const useEventDomMarkers = ({ map, events, areLayersReady }: UseEventLayersParams): void => {
   const eventsByIdRef = useRef<Map<string, EventData>>(new Map());
   const eventMarkersByIdRef = useRef<Map<string, EventMarkerEntry>>(new Map());
 
   useEffect(() => {
+    const markersById = eventMarkersByIdRef.current;
     return () => {
-      clearAllEventMarkers(eventMarkersByIdRef.current);
+      clearAllEventMarkers(markersById);
     };
   }, []);
 
@@ -77,7 +78,7 @@ export const useEventDomMarkers = ({map, events, areLayersReady}: UseEventLayers
           const latest = eventsByIdRef.current.get(eventId);
           if (latest) useMarkerStore.getState().openEventDetail(latest);
         },
-        {signal: abortClick.signal}
+        { signal: abortClick.signal },
       );
       return abortClick;
     };
@@ -98,7 +99,7 @@ export const useEventDomMarkers = ({map, events, areLayersReady}: UseEventLayers
         existing.abortClick.abort();
         const element = existing.marker.getElement();
         const abortClick = attachClick(element, eventId);
-        eventMarkersByIdRef.current.set(eventId, {marker: existing.marker, abortClick});
+        eventMarkersByIdRef.current.set(eventId, { marker: existing.marker, abortClick });
         continue;
       }
 
@@ -107,8 +108,8 @@ export const useEventDomMarkers = ({map, events, areLayersReady}: UseEventLayers
       const markerIcon = getEventMarkerImageId(event.tags);
       const element = createEventMarkerElement(markerIcon, delayMs);
       const abortClick = attachClick(element, eventId);
-      const marker = new maplibregl.Marker({element}).setLngLat(lngLat).addTo(currentMap);
-      eventMarkersByIdRef.current.set(eventId, {marker, abortClick});
+      const marker = new maplibregl.Marker({ element }).setLngLat(lngLat).addTo(currentMap);
+      eventMarkersByIdRef.current.set(eventId, { marker, abortClick });
     }
   }, [areLayersReady, events, map]);
 };
