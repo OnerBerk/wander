@@ -2,14 +2,19 @@ import { EventData } from '@wander/types';
 import Barcode from '@/components/cards/barcode';
 import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
 import { formatEventDate } from '@/utils/card-utils';
+import { getOptimizedImageUrl } from '@/utils/get-optimized-image-url';
+
+const PRIORITY_CARD_COUNT = 4;
 
 interface EventCardProps {
   event: EventData;
+  index: number;
 }
 
-const EventCard = ({ event }: EventCardProps) => {
+const EventCard = ({ event, index }: EventCardProps) => {
   const date = formatEventDate(event.dateStart);
   const option = EVENT_TAG_OPTIONS.find((item) => event.tags.includes(item.value));
+  const isPriority = index < PRIORITY_CARD_COUNT;
 
   return (
     <li
@@ -22,10 +27,16 @@ const EventCard = ({ event }: EventCardProps) => {
       <div className="aspect-7/8 overflow-hidden rounded-2xl">
         {event.coverUrl && (
           <img
-            src={event.coverUrl}
+            src={getOptimizedImageUrl(event.coverUrl, 640)}
+            srcSet={`${getOptimizedImageUrl(event.coverUrl, 384)} 384w, ${getOptimizedImageUrl(event.coverUrl, 640)} 640w`}
+            sizes="(min-width: 1280px) 300px, (min-width: 1024px) 24vw, (min-width: 640px) 36vw, 70vw"
             alt={event.coverAlt ?? event.title}
-            loading="lazy"
+            width={384}
+            height={439}
             className="h-full w-full object-cover"
+            {...(isPriority
+              ? { fetchPriority: 'high' as const }
+              : { loading: 'lazy' as const, decoding: 'async' as const })}
           />
         )}
       </div>

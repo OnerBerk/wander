@@ -39,7 +39,7 @@ const ListPage = () => {
           <ul className="mt-8 grid w-full grid-cols-1 gap-4 pb-16 sm:grid-cols-2 lg:grid-cols-3 xl:mx-auto xl:max-w-7xl xl:grid-cols-4">
             {isLoading && eventsEnabled
               ? Array.from({ length: 8 }, (_, index) => <EventCardSkeleton key={index} />)
-              : visibleItems.map((event) => <EventCard key={event.id} event={event} />)}
+              : visibleItems.map((event, index) => <EventCard key={event.id} event={event} index={index} />)}
           </ul>
           {hasMore && <div ref={sentinelRef} className="h-px w-full" aria-hidden />}
         </div>
