@@ -18,14 +18,16 @@ const Header = () => {
     <header className={`relative z-60 hidden h-20 shrink-0 p-2 md:block ${isDay ? 'header-day' : 'header-night'}`}>
       <div className="font-alternate flex h-16 justify-between">
         <div className="flex items-center gap-3">
-          <img className="h-20" src={wanderLogoPaper} alt="Wander" width={200} height={200} />
+          <img className="h-20 w-auto object-contain" src={wanderLogoPaper} alt="Wander" />
           <div className="hidden flex-col items-center md:block">
             <p className="text-wander-orange text-3xl font-semibold md:text-5xl">Wander</p>
             <p className="text-xs font-medium md:text-base">Explorer votre ville autrement</p>
           </div>
         </div>
         <div className="flex h-16 items-start justify-between gap-2">
-          {icon && <img className="weather-icon h-40 w-auto shrink-0" src={icon.src} alt={icon.alt} />}
+          {icon && (
+            <img className="weather-icon h-40 w-auto shrink-0 object-contain" src={icon.src} alt={icon.alt} />
+          )}
           <div className="weather-info flex h-full flex-col justify-center">
             <p className={`text-2xl font-semibold`}>{weather ? `${weather?.temperature}°C` : ''}</p>
             <p className="text-sm md:text-base">{weather ? `${weather?.windSpeed} km/h` : ''}</p>

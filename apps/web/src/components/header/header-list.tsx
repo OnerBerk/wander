@@ -13,7 +13,7 @@ const HeaderList = () => {
       <div className="font-alternate flex justify-between">
         <div className="w-full">
           <div className="flex items-center">
-            <img className="h-25" src={wanderLogoPaper} alt="Wander" width={200} height={200} />
+            <img className="h-25 w-auto object-contain" src={wanderLogoPaper} alt="Wander" />
             <div className="hidden flex-col items-center md:block">
               <p className="text-wander-orange text-3xl font-semibold md:text-5xl">Wander</p>
               <p className="text-xs font-medium md:text-base">Explorer votre ville autrement</p>

@@ -1,5 +1,5 @@
 import { createBikeMarkerElement } from '@/assets/markers/bike/bike-marker';
-import maplibregl from 'maplibre-gl';
+import type maplibregl from 'maplibre-gl';
 
 const MARKER_BOUNCE_IN_CLASS = 'marker-bounce-in-twice';
 

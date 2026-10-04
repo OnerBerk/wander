@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { loadMapPage } from '@/pages/load-map-page';
 
 const BOUNCE = 'ease-[cubic-bezier(0.68,-0.55,0.27,1.55)]';
 
@@ -24,6 +25,12 @@ const ViewSwitch: React.FC<ViewSwitchProps> = ({ className = '' }) => {
       aria-label={isMap ? 'Passer en vue liste' : 'Passer en vue carte'}
       data-view={isMap ? 'map' : 'list'}
       onClick={toggleView}
+      onPointerEnter={() => {
+        void loadMapPage();
+      }}
+      onTouchStart={() => {
+        void loadMapPage();
+      }}
       className={`group relative inline-flex h-9 w-[88px] shrink-0 cursor-pointer overflow-hidden rounded-full shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${className}`}
     >
       <span className="absolute inset-0 bg-[linear-gradient(135deg,#f8fafc,#cbd5e1)]" />
