@@ -1,5 +1,5 @@
 import { useWeather } from '@/api/features/weather/queries/use-weather';
-import wanderLogoPaper from '@/assets/logo/wander-logo-paper.png';
+import wanderLogoPaper from '@/assets/logo/wander-logo-paper.webp';
 
 import usePanelStore from '@/store/zustand/usePanelStore';
 import { useIsDay } from '@/hooks/useIsDay';
@@ -18,7 +18,7 @@ const Header = () => {
     <header className={`relative z-60 hidden h-20 shrink-0 p-2 md:block ${isDay ? 'header-day' : 'header-night'}`}>
       <div className="font-alternate flex h-16 justify-between">
         <div className="flex items-center gap-3">
-          <img className="h-20" src={wanderLogoPaper} alt="Wander" />
+          <img className="h-20" src={wanderLogoPaper} alt="Wander" width={200} height={200} />
           <div className="hidden flex-col items-center md:block">
             <p className="text-wander-orange text-3xl font-semibold md:text-5xl">Wander</p>
             <p className="text-xs font-medium md:text-base">Explorer votre ville autrement</p>

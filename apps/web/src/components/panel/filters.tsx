@@ -1,7 +1,7 @@
 import { useEventFilters } from '@/hooks/use-event-filters';
 import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
-import NoMarker from '@/assets/markers/no-marker.png';
-import AllMarker from '@/assets/markers/all-marker.png';
+import NoMarker from '@/assets/markers/no-marker.webp';
+import AllMarker from '@/assets/markers/all-marker.webp';
 import FilterBadge from '@/ui-components/filter-badge';
 import PeriodSelect from '@/ui-components/period-select';
 

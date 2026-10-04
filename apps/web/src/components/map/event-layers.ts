@@ -1,18 +1,18 @@
 import maplibregl from 'maplibre-gl';
-import defaultMarkerImageUrl from '@/assets/markers/marker-default.png';
-import historyMarkerImageUrl from '@/assets/markers/marker-history.png';
-import musicMarkerImageUrl from '@/assets/markers/music-marker.png';
-import treeMarkerImageUrl from '@/assets/markers/marker-tree.png';
-import bookMarkerImageUrl from '@/assets/markers/marker-book.png';
-import kidsMarkerImageUrl from '@/assets/markers/marker-kids.png';
-import theatreMarkerImageUrl from '@/assets/markers/marker-theatre.png';
-import artMarkerImageUrl from '@/assets/markers/marker-art.png';
-import photoMarkerImageUrl from '@/assets/markers/marker-photo.png';
-import foodMarkerImageUrl from '@/assets/markers/marker-food.png';
-import streetArtMarkerImageUrl from '@/assets/markers/marker-street-art.png';
-import brocanteMarkerImageUrl from '@/assets/markers/marker-brocante.png';
-import healthMarkerImageUrl from '@/assets/markers/marker-health.png';
-import sportMarkerImageUrl from '@/assets/markers/marker-sport.png';
+import defaultMarkerImageUrl from '@/assets/markers/marker-default.webp';
+import historyMarkerImageUrl from '@/assets/markers/marker-history.webp';
+import musicMarkerImageUrl from '@/assets/markers/music-marker.webp';
+import treeMarkerImageUrl from '@/assets/markers/marker-tree.webp';
+import bookMarkerImageUrl from '@/assets/markers/marker-book.webp';
+import kidsMarkerImageUrl from '@/assets/markers/marker-kids.webp';
+import theatreMarkerImageUrl from '@/assets/markers/marker-theatre.webp';
+import artMarkerImageUrl from '@/assets/markers/marker-art.webp';
+import photoMarkerImageUrl from '@/assets/markers/marker-photo.webp';
+import foodMarkerImageUrl from '@/assets/markers/marker-food.webp';
+import streetArtMarkerImageUrl from '@/assets/markers/marker-street-art.webp';
+import brocanteMarkerImageUrl from '@/assets/markers/marker-brocante.webp';
+import healthMarkerImageUrl from '@/assets/markers/marker-health.webp';
+import sportMarkerImageUrl from '@/assets/markers/marker-sport.webp';
 
 import { applyMarkerEntranceBounce } from '@/utils/map-utils';
 import {
@@ -176,6 +176,8 @@ export const createEventMarkerElement = (markerIcon: EventMarkerImageId, delayMs
   const image = document.createElement('img');
   image.src = EVENT_MARKER_IMAGE_URL_BY_ID[markerIcon];
   image.alt = '';
+  image.width = 40;
+  image.height = 40;
   image.className = 'h-8 w-8 object-contain md:h-10 md:w-10';
 
   const marker = applyMarkerEntranceBounce(image, delayMs);

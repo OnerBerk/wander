@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl';
-import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
+import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.webp';
 import type { MetroGeoJsonFeatureCollection } from '@/components/map/metro-geojson';
 import { applyMarkerEntranceBounce } from '@/utils/map-utils';
 import {
@@ -73,6 +73,8 @@ export const createMetroMarkerElement = (delayMs = 0): HTMLElement => {
   const image = document.createElement('img');
   image.src = subwayMarkerImageUrl;
   image.alt = '';
+  image.width = 36;
+  image.height = 36;
   image.className = 'h-7 w-7 object-contain md:h-9 md:w-9';
 
   const marker = applyMarkerEntranceBounce(image, delayMs);

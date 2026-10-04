@@ -37,7 +37,13 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({
         className="flex h-[78%] w-[78%] items-center justify-center"
       >
         {icon ? (
-          <img src={icon} alt="" className={`h-full w-auto object-contain ${dim ? 'brightness-[.6]' : ''}`} />
+          <img
+            src={icon}
+            alt=""
+            width={80}
+            height={80}
+            className={`h-full w-auto object-contain ${dim ? 'brightness-[.6]' : ''}`}
+          />
         ) : (
           <span className="px-1 text-center text-xs font-semibold text-white">{label}</span>
         )}

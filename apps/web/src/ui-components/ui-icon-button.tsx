@@ -17,6 +17,8 @@ const UIIconButton: React.FC<UIIconButtonProps> = ({ isVisible, onToggle, icon, 
       <img
         src={icon}
         alt=""
+        width={48}
+        height={48}
         className={`h-10 w-10 object-contain transition md:h-12 md:w-12 ${isVisible ? '' : 'opacity-40 grayscale'}`}
       />
       {!isVisible && <span className="absolute h-0.5 w-8 rotate-45 rounded-full bg-slate-700 md:w-10" />}

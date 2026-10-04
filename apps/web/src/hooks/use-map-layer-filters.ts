@@ -1,6 +1,6 @@
-import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
-import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
-import spaceInvaderMarkerImageUrl from '@/assets/markers/invaders/marker-invaders.png';
+import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.webp';
+import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.webp';
+import spaceInvaderMarkerImageUrl from '@/assets/markers/invaders/marker-invaders.webp';
 import useMapLayersStore from '@/store/zustand/useMapLayersStore';
 
 export interface MapLayerFilter {

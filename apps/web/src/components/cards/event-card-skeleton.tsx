@@ -1,4 +1,4 @@
-import markerArt from '@/assets/markers/marker-art.png';
+import markerArt from '@/assets/markers/marker-art.webp';
 import Barcode from '@/components/cards/barcode';
 
 const EventCardSkeleton = () => {
@@ -8,7 +8,7 @@ const EventCardSkeleton = () => {
       aria-hidden
     >
       <div className="aspect-3/4 overflow-hidden rounded-2xl">
-        <img src={markerArt} alt="" className="h-full w-full object-contain" />
+        <img src={markerArt} alt="" width={80} height={80} className="h-full w-full object-contain" />
       </div>
       <div className="flex items-center gap-1 text-black">
         <p className="shrink-0 text-[20px] font-medium capitalize">patiente un peu</p>

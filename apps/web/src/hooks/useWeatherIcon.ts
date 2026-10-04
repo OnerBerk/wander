@@ -2,16 +2,16 @@ import { useWeather } from '@/api/features/weather/queries/use-weather';
 import { useIsDay } from './useIsDay';
 import { useMemo } from 'react';
 
-import cloudyDayImg from '@/assets/weather/weather-cloudy-day.png';
-import cloudyNightImg from '@/assets/weather/weather-cloudy-night.png';
-import fullDayImg from '@/assets/weather/weather-full-day.png';
-import fullNightImg from '@/assets/weather/weather-full-night.png';
-import rainyDayImg from '@/assets/weather/weather-rainy-day.png';
-import rainyNightImg from '@/assets/weather/weather-rainy-night.png';
-import snowDayImg from '@/assets/weather/weather-snow-day.png';
-import snowNightImg from '@/assets/weather/weather-snow-night.png';
-import stormyDayImg from '@/assets/weather/weather-stormy-day.png';
-import stormyNightImg from '@/assets/weather/weather-stormy-night.png';
+import cloudyDayImg from '@/assets/weather/weather-cloudy-day.webp';
+import cloudyNightImg from '@/assets/weather/weather-cloudy-night.webp';
+import fullDayImg from '@/assets/weather/weather-full-day.webp';
+import fullNightImg from '@/assets/weather/weather-full-night.webp';
+import rainyDayImg from '@/assets/weather/weather-rainy-day.webp';
+import rainyNightImg from '@/assets/weather/weather-rainy-night.webp';
+import snowDayImg from '@/assets/weather/weather-snow-day.webp';
+import snowNightImg from '@/assets/weather/weather-snow-night.webp';
+import stormyDayImg from '@/assets/weather/weather-stormy-day.webp';
+import stormyNightImg from '@/assets/weather/weather-stormy-night.webp';
 
 type WeatherCondition = 'full' | 'cloudy' | 'rainy' | 'snow' | 'stormy';
 interface WeatherIcon {

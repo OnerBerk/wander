@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import AllMarker from '@/assets/markers/all-marker.png';
-import NoMarker from '@/assets/markers/no-marker.png';
+import AllMarker from '@/assets/markers/all-marker.webp';
+import NoMarker from '@/assets/markers/no-marker.webp';
 import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
 import { useEventFilters } from '@/hooks/use-event-filters';
 import FilterBadge from '@/ui-components/filter-badge';
 import PeriodSelect from '@/ui-components/period-select';
-import bgMarine from '@/assets/bg/bg-marine.png';
 import { ChevronDown } from 'lucide-react';
 
 const FilterPanelList = () => {
@@ -51,7 +50,7 @@ const FilterPanelList = () => {
               value={period}
               onChange={handlePeriodChange}
               chipColorClassName="border-white text-white"
-              chipBackgroundStyle={{ backgroundImage: `url(${bgMarine})` }}
+              chipBackgroundStyle={{ backgroundImage: 'url(/bg-marine.webp)' }}
             />
           </div>
         </div>
