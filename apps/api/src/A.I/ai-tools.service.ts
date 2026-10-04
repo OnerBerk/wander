@@ -89,12 +89,20 @@ export class AiToolsService {
   private parseDateRange(datePhrase?: string): { dateFrom?: string; dateTo?: string } {
     if (!datePhrase) return {};
 
-    const [result] = chrono.fr.parse(datePhrase, DateTime.now().setZone('Europe/Paris').toJSDate(), {
-      forwardDate: true,
-    });
+    const parisNow = DateTime.now().setZone('Europe/Paris');
+    const [result] = chrono.fr.parse(
+      datePhrase,
+      new Date(parisNow.year, parisNow.month - 1, parisNow.day, parisNow.hour, parisNow.minute, parisNow.second),
+      { forwardDate: true },
+    );
     if (!result) return {};
 
-    const resolved = DateTime.fromJSDate(result.start.date());
+    const year = result.start.get('year');
+    const month = result.start.get('month');
+    const day = result.start.get('day');
+    if (year == null || month == null || day == null) return {};
+
+    const resolved = DateTime.fromObject({ year, month, day }, { zone: 'Europe/Paris' });
 
     let start = resolved;
     let end = resolved;
