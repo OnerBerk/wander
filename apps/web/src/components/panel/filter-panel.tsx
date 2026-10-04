@@ -1,9 +1,6 @@
-import useMapLayersStore from '@/store/zustand/useMapLayersStore';
 import usePanelStore from '@/store/zustand/usePanelStore';
-import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
-import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
-import spaceInvaderMarkerImageUrl from '@/assets/markers/invaders/marker-invaders.png';
-import HexagonBadge from '@/ui-components/hexagon-badge';
+import { useMapLayerFilters } from '@/hooks/use-map-layer-filters';
+import FilterBadge from '@/ui-components/filter-badge';
 import Filters from './filters';
 import { useId } from 'react';
 import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
@@ -12,12 +9,7 @@ const FilterPanel = () => {
   const titleId = useId();
   const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
   const closePanel = usePanelStore((state) => state.closePanel);
-  const isVelibMarkersVisible = useMapLayersStore((state) => state.isVelibMarkersVisible);
-  const isMetroMarkersVisible = useMapLayersStore((state) => state.isMetroMarkersVisible);
-  const isSpaceInvadersVisible = useMapLayersStore((state) => state.isSpaceInvadersVisible);
-  const toggleVelibMarkers = useMapLayersStore((state) => state.toggleVelibMarkers);
-  const toggleMetroMarkers = useMapLayersStore((state) => state.toggleMetroMarkers);
-  const toggleSpaceInvaders = useMapLayersStore((state) => state.toggleSpaceInvaders);
+  const mapLayers = useMapLayerFilters();
 
   return (
     <div
@@ -31,33 +23,20 @@ const FilterPanel = () => {
     >
       <UIClosePanelButton ariaLabel="Fermer les filtres" onClose={closePanel} />
 
-      <div className="flex flex-col justify-center gap-2">
+      <div className="mt-10 flex flex-col justify-center gap-2">
         <div className="text-xl font-bold">Metro Vélib Invaders</div>
         <div className="filter-panel flex flex-wrap gap-5">
-          <HexagonBadge
-            label="Métro"
-            icon={subwayMarkerImageUrl}
-            selected={isMetroMarkersVisible}
-            onClick={toggleMetroMarkers}
-            ariaLabel="stations métro et RER"
-            className="max-w-22"
-          />
-          <HexagonBadge
-            label="Vélib"
-            icon={velibMarkerImageUrl}
-            selected={isVelibMarkersVisible}
-            onClick={toggleVelibMarkers}
-            ariaLabel="stations Vélib"
-            className="max-w-22"
-          />
-          <HexagonBadge
-            label="Invaders"
-            icon={spaceInvaderMarkerImageUrl}
-            selected={isSpaceInvadersVisible}
-            onClick={toggleSpaceInvaders}
-            ariaLabel="Space Invaders"
-            className="max-w-22"
-          />
+          {mapLayers.map((layer) => (
+            <FilterBadge
+              key={layer.label}
+              label={layer.label}
+              icon={layer.icon}
+              selected={layer.selected}
+              onClick={layer.onClick}
+              ariaLabel={layer.ariaLabel}
+              className="max-w-25"
+            />
+          ))}
         </div>
       </div>
       <div className="text-xl font-bold">Filtrer vos événements</div>

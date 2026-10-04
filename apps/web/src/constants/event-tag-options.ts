@@ -19,21 +19,72 @@ export type EventTagOption = {
   label: string;
   accent: string;
   icon: string;
+  bg?: string;
+  color?: string;
 };
 
+const DEFAULT_CLEAR_COLOR = '#f5f5f5';
+
 export const EVENT_TAG_OPTIONS: EventTagOption[] = [
-  { value: 'Art contemporain', label: 'Art', accent: 'accent-rose-400', icon: markerArt },
-  { value: 'Théâtre', label: 'Théâtre', accent: 'accent-red-400', icon: markerTheatre },
-  { value: 'Enfants', label: 'Enfants', accent: 'accent-amber-400', icon: markerKids },
-  { value: 'Brocante', label: 'Brocante', accent: 'accent-stone-400', icon: markerBrocante },
-  { value: 'Photo', label: 'Photo', accent: 'accent-cyan-500', icon: markerPhoto },
-  { value: 'Santé', label: 'Santé', accent: 'accent-emerald-400', icon: markerHealth },
-  { value: 'Street-art', label: 'Street-art', accent: 'accent-rose-400', icon: markerStreetArt },
+  {
+    value: 'Art contemporain',
+    label: 'Art',
+    accent: 'accent-rose-400',
+    icon: markerArt,
+    bg: '#A6A246',
+  },
+  {
+    value: 'Théâtre',
+    label: 'Théâtre',
+    accent: 'accent-red-400',
+    icon: markerTheatre,
+    bg: '#617891',
+    color: DEFAULT_CLEAR_COLOR,
+  },
+  {
+    value: 'Enfants',
+    label: 'Enfants',
+    accent: 'accent-amber-400',
+    icon: markerKids,
+    bg: '#FFC0CB',
+  },
+  {
+    value: 'Brocante',
+    label: 'Brocante',
+    accent: 'accent-stone-400',
+    icon: markerBrocante,
+    bg: '#7A2038',
+    color: DEFAULT_CLEAR_COLOR,
+  },
+  {
+    value: 'Photo',
+    label: 'Photo',
+    accent: 'accent-cyan-500',
+    icon: markerPhoto,
+    bg: '#30373E',
+    color: DEFAULT_CLEAR_COLOR,
+  },
+  {
+    value: 'Santé',
+    label: 'Santé',
+    accent: 'accent-emerald-400',
+    icon: markerHealth,
+    bg: '#0A4F54',
+    color: DEFAULT_CLEAR_COLOR,
+  },
+  { value: 'Street-art', label: 'Street-art', accent: 'accent-rose-400', icon: markerStreetArt, bg: '#C49B4C' },
   { value: 'Concert', label: 'Concert', accent: 'accent-violet-400', icon: markerMusic },
   { value: 'Expo', label: 'Expo', accent: 'accent-cyan-500', icon: markerDefault },
   { value: 'Festival', label: 'Festival', accent: 'accent-fuchsia-400', icon: markerMusic },
   { value: 'Gourmand', label: 'Gourmand', accent: 'accent-orange-400', icon: markerFood },
-  { value: 'Histoire', label: 'Histoire', accent: 'accent-lime-500', icon: markerHistory },
+  {
+    value: 'Histoire',
+    label: 'Histoire',
+    accent: 'accent-lime-500',
+    icon: markerHistory,
+    bg: '#6F4D38',
+    color: DEFAULT_CLEAR_COLOR,
+  },
   { value: 'Littérature', label: 'Littérature', accent: 'accent-yellow-600', icon: markerBook },
   { value: 'Loisirs', label: 'Loisirs', accent: 'accent-blue-400', icon: markerDefault },
   { value: 'Nature', label: 'Nature', accent: 'accent-green-400', icon: markerTree },

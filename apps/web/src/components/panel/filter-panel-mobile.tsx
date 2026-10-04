@@ -1,11 +1,8 @@
 import { useEffect, useId, useState } from 'react';
 import usePanelStore from '@/store/zustand/usePanelStore';
 import { SlidersHorizontal, X } from 'lucide-react';
-import HexagonBadge from '@/ui-components/hexagon-badge';
-import useMapLayersStore from '@/store/zustand/useMapLayersStore';
-import velibMarkerImageUrl from '@/assets/markers/bike/marker-bike.png';
-import subwayMarkerImageUrl from '@/assets/markers/subway/marker-subway.png';
-import spaceInvaderMarkerImageUrl from '@/assets/markers/invaders/marker-invaders.png';
+import FilterBadge from '@/ui-components/filter-badge';
+import { useMapLayerFilters } from '@/hooks/use-map-layer-filters';
 import Filters from './filters';
 
 const FilterPanelMobile = () => {
@@ -13,12 +10,7 @@ const FilterPanelMobile = () => {
   const togglePanel = usePanelStore((state) => state.togglePanel);
   const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
 
-  const isVelibMarkersVisible = useMapLayersStore((state) => state.isVelibMarkersVisible);
-  const isMetroMarkersVisible = useMapLayersStore((state) => state.isMetroMarkersVisible);
-  const isSpaceInvadersVisible = useMapLayersStore((state) => state.isSpaceInvadersVisible);
-  const toggleVelibMarkers = useMapLayersStore((state) => state.toggleVelibMarkers);
-  const toggleMetroMarkers = useMapLayersStore((state) => state.toggleMetroMarkers);
-  const toggleSpaceInvaders = useMapLayersStore((state) => state.toggleSpaceInvaders);
+  const mapLayers = useMapLayerFilters();
 
   const [phase, setPhase] = useState<'closed' | 'bubble' | 'expanded'>('closed');
 
@@ -117,30 +109,17 @@ const FilterPanelMobile = () => {
             Filtres
           </h2>
           <div className="filter-panel-mobile grid w-full grid-cols-4 gap-2 border-b border-white/20 pb-4">
-            <HexagonBadge
-              label="Métro"
-              icon={subwayMarkerImageUrl}
-              selected={isMetroMarkersVisible}
-              onClick={toggleMetroMarkers}
-              ariaLabel="stations métro et RER"
-              className="max-w-24"
-            />
-            <HexagonBadge
-              label="Vélib"
-              icon={velibMarkerImageUrl}
-              selected={isVelibMarkersVisible}
-              onClick={toggleVelibMarkers}
-              ariaLabel="stations Vélib"
-              className="max-w-24"
-            />
-            <HexagonBadge
-              label="Invaders"
-              icon={spaceInvaderMarkerImageUrl}
-              selected={isSpaceInvadersVisible}
-              onClick={toggleSpaceInvaders}
-              ariaLabel="Space Invaders"
-              className="max-w-24"
-            />
+            {mapLayers.map((layer) => (
+              <FilterBadge
+                key={layer.label}
+                label={layer.label}
+                icon={layer.icon}
+                selected={layer.selected}
+                onClick={layer.onClick}
+                ariaLabel={layer.ariaLabel}
+                className="max-w-24"
+              />
+            ))}
           </div>
           <div className="mobile-filters">
             <Filters />
