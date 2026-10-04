@@ -2,7 +2,6 @@ import { useEvents } from '@/api/features/events/useEvents';
 import FilterPanelList from '@/components/panel/filter-panel-list';
 import SeoMetadata from '@/components/seo/seo-metadata';
 import useFilterStore from '@/store/zustand/useFilterStore';
-import bgMarine from '@/assets/bg/bg-marine.png';
 import EventCard from '@/components/cards/event-card';
 import EventCardSkeleton from '@/components/cards/event-card-skeleton';
 import { useIncrementalList } from '@/hooks/use-incremental-list';
@@ -23,13 +22,13 @@ const ListPage = () => {
         description="Découvrez les événements culturels à Paris et en Île-de-France : concerts, expos, spectacles et sorties, avec une vue liste et une carte interactive."
         canonicalPath="/"
       />
-      <div className="w-full shrink-0 pt-5" style={{ backgroundImage: `url(${bgMarine})` }}>
+      <div className="w-full shrink-0 pt-5" style={{ backgroundImage: 'url(/bg-marine.webp)' }}>
         <FilterPanelList />
       </div>
       <div
         ref={scrollerRef}
         className="scrollbar-hidden flex min-h-0 flex-1 flex-col overflow-y-auto bg-contain bg-center text-amber-50"
-        style={{ backgroundImage: `url(${bgMarine})` }}
+        style={{ backgroundImage: 'url(/bg-marine.webp)' }}
       >
         <div className="mx-auto flex w-[75%] max-w-450 flex-col items-start">
           {!isLoading && visibleEvents.length === 0 && (

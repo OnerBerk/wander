@@ -1,18 +1,18 @@
 import { EventTag } from '@wander/types';
-import markerDefault from '@/assets/markers/marker-default.png';
-import markerBook from '@/assets/markers/marker-book.png';
-import markerMusic from '@/assets/markers/music-marker.png';
-import markerTree from '@/assets/markers/marker-tree.png';
-import markerKids from '@/assets/markers/marker-kids.png';
-import markerTheatre from '@/assets/markers/marker-theatre.png';
-import markerArt from '@/assets/markers/marker-art.png';
-import markerPhoto from '@/assets/markers/marker-photo.png';
-import markerHistory from '@/assets/markers/marker-history.png';
-import markerFood from '@/assets/markers/marker-food.png';
-import markerStreetArt from '@/assets/markers/marker-street-art.png';
-import markerBrocante from '@/assets/markers/marker-brocante.png';
-import markerHealth from '@/assets/markers/marker-health.png';
-import markerSport from '@/assets/markers/marker-sport.png';
+import markerDefault from '@/assets/markers/marker-default.webp';
+import markerBook from '@/assets/markers/marker-book.webp';
+import markerMusic from '@/assets/markers/music-marker.webp';
+import markerTree from '@/assets/markers/marker-tree.webp';
+import markerKids from '@/assets/markers/marker-kids.webp';
+import markerTheatre from '@/assets/markers/marker-theatre.webp';
+import markerArt from '@/assets/markers/marker-art.webp';
+import markerPhoto from '@/assets/markers/marker-photo.webp';
+import markerHistory from '@/assets/markers/marker-history.webp';
+import markerFood from '@/assets/markers/marker-food.webp';
+import markerStreetArt from '@/assets/markers/marker-street-art.webp';
+import markerBrocante from '@/assets/markers/marker-brocante.webp';
+import markerHealth from '@/assets/markers/marker-health.webp';
+import markerSport from '@/assets/markers/marker-sport.webp';
 
 export type EventTagOption = {
   value: EventTag;

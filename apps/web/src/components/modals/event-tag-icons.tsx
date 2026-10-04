@@ -24,7 +24,7 @@ const EventTagIcons: React.FC<EventTagIconsProps> = ({
     <ul className={`flex list-none flex-wrap items-center gap-2 p-0 ${className}`.trim()} aria-label="Catégories">
       {icons.map(({ icon, label }) => (
         <li key={icon}>
-          <img src={icon} alt={label} title={label} className={iconClassName} />
+          <img src={icon} alt={label} title={label} width={32} height={32} className={iconClassName} />
         </li>
       ))}
     </ul>

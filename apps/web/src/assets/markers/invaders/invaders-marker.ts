@@ -1,8 +1,8 @@
-import markerInvadersUrl from './marker-invaders.png';
-import markerInvaders1Url from './marker-invaders1.png';
-import markerInvaders2Url from './marker-invaders2.png';
-import markerInvaders3Url from './marker-invaders3.png';
-import markerInvaders4Url from './marker-invaders4.png';
+import markerInvadersUrl from './marker-invaders.webp';
+import markerInvaders1Url from './marker-invaders1.webp';
+import markerInvaders2Url from './marker-invaders2.webp';
+import markerInvaders3Url from './marker-invaders3.webp';
+import markerInvaders4Url from './marker-invaders4.webp';
 import { applyMarkerEntranceBounce } from '@/utils/map-utils';
 
 const SPACE_INVADER_MARKER_URLS = [
@@ -22,6 +22,8 @@ export const createSpaceInvaderMarkerElement = (invaderId: number, delayMs = 0):
   const image = document.createElement('img');
   image.src = getSpaceInvaderMarkerUrl(invaderId);
   image.alt = '';
+  image.width = 40;
+  image.height = 40;
   image.className = 'h-8 w-8 object-contain md:h-10 md:w-10';
   return applyMarkerEntranceBounce(image, delayMs);
 };
