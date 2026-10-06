@@ -46,7 +46,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
         <p className="apitalize shrink-0 text-[22px] font-medium capitalize">{date.month}</p>
       </div>
       <h2 className="flex h-20 items-center justify-center text-center">
-        <span className="line-clamp-3 text-[19px] capitalize">{event.title.toLocaleLowerCase()}</span>
+        <span className="line-clamp-3 text-[14px] capitalize sm:text-[19px]">{event.title.toLocaleLowerCase()}</span>
       </h2>
       <div className="mt-auto">
         <div className="border-b-5 border-dotted border-current" aria-hidden />
@@ -63,7 +63,9 @@ const EventCard = ({ event, index }: EventCardProps) => {
               }}
             />
           </div>
-          <Barcode />
+          <div className="hidden sm:contents">
+            <Barcode />
+          </div>
         </div>
       </div>
     </li>

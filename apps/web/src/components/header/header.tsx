@@ -1,5 +1,5 @@
 import { useWeather } from '@/api/features/weather/queries/use-weather';
-import wanderLogoPaper from '@/assets/logo/wander-logo-paper.webp';
+import wanderLogoPaper from '@/assets/logo/wander-logo-paper.png';
 
 import usePanelStore from '@/store/zustand/usePanelStore';
 import { useIsDay } from '@/hooks/useIsDay';
@@ -25,9 +25,7 @@ const Header = () => {
           </div>
         </div>
         <div className="flex h-16 items-start justify-between gap-2">
-          {icon && (
-            <img className="weather-icon h-40 w-auto shrink-0 object-contain" src={icon.src} alt={icon.alt} />
-          )}
+          {icon && <img className="weather-icon h-40 w-auto shrink-0 object-contain" src={icon.src} alt={icon.alt} />}
           <div className="weather-info flex h-full flex-col justify-center">
             <p className={`text-2xl font-semibold`}>{weather ? `${weather?.temperature}°C` : ''}</p>
             <p className="text-sm md:text-base">{weather ? `${weather?.windSpeed} km/h` : ''}</p>
