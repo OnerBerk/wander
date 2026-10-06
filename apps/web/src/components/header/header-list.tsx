@@ -1,5 +1,5 @@
 //import { useWeather } from '@/api/features/weather/queries/use-weather';
-import wanderLogoPaper from '@/assets/logo/wander-logo-paper.webp';
+import wanderLogoPaper from '@/assets/logo/wander-logo-paper.png';
 
 import { useWeatherIcon } from '@/hooks/useWeatherIcon';
 import bgCreme from '@/assets/bg/bg-crem.webp';

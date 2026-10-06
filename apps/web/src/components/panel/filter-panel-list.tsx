@@ -29,15 +29,15 @@ const FilterPanelList = () => {
         }`}
       >
         <div className={open ? 'overflow-visible' : 'overflow-hidden'}>
-          <div className="flex flex-wrap items-center gap-3 pb-3">
-            <div className="w-18 shrink-0">
+          <div className="flex flex-wrap items-center justify-center gap-0 pb-3 sm:justify-start sm:gap-2.5">
+            <div className="w-15 shrink-0 sm:w-18">
               <FilterBadge label="Tout" icon={AllMarker} selected={all} onClick={handleAll} />
             </div>
-            <div className="w-18 shrink-0">
+            <div className="w-15 shrink-0 sm:w-18">
               <FilterBadge label="Aucun" icon={NoMarker} selected={none} onClick={handleNone} />
             </div>
             {EVENT_TAG_OPTIONS.map(({ value, label, icon }) => (
-              <div key={value} className="w-18 shrink-0">
+              <div key={value} className="w-15 shrink-0 sm:w-18">
                 <FilterBadge
                   label={label}
                   icon={icon}

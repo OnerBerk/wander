@@ -40,7 +40,7 @@ const PeriodSelect = ({
       >
         <span
           style={chipBackgroundStyle}
-          className={`flex h-13 w-13 items-center justify-center rounded-full border-2 bg-cover bg-center ${chipColorClassName}`}
+          className={`flex h-10 w-10 items-center justify-center rounded-full border-2 bg-cover bg-center sm:h-13 sm:w-13 ${chipColorClassName}`}
         >
           <Calendar className="h-6 w-6" aria-hidden="true" />
         </span>
