@@ -16,5 +16,5 @@ export function slugify(text: string): string {
 export function eventPath(event: EventData): string {
   const option = EVENT_TAG_OPTIONS.find((item) => event.tags.includes(item.value));
   const categorie = slugify(option?.label ?? 'autre');
-  return `/evenement/${categorie}/${slugify(event.title)}/${event.id}`;
+  return `/event/${categorie}/${slugify(event.title)}/${event.id}`;
 }
