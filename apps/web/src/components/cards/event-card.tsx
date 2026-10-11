@@ -20,7 +20,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
     <li
       className="flex h-full cursor-pointer flex-col gap-1 rounded-2xl p-2"
       style={{
-        backgroundColor: option?.bg ?? '#ffffff',
+        backgroundColor: option?.bg ?? '#FAF8F6',
         color: option?.color ?? '#25344F',
       }}
     >

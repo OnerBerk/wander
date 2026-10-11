@@ -23,7 +23,7 @@ export type EventTagOption = {
   color?: string;
 };
 
-const DEFAULT_CLEAR_COLOR = '#f5f5f5';
+const DEFAULT_CLEAR_COLOR = '#E8E4DA';
 
 export const EVENT_TAG_OPTIONS: EventTagOption[] = [
   {
@@ -53,7 +53,7 @@ export const EVENT_TAG_OPTIONS: EventTagOption[] = [
     label: 'Brocante',
     accent: 'accent-stone-400',
     icon: markerBrocante,
-    bg: '#7A2038',
+    bg: '#68180F',
     color: DEFAULT_CLEAR_COLOR,
   },
   {
@@ -69,7 +69,7 @@ export const EVENT_TAG_OPTIONS: EventTagOption[] = [
     label: 'Santé',
     accent: 'accent-emerald-400',
     icon: markerHealth,
-    bg: '#0A4F54',
+    bg: '#4C5A3F',
     color: DEFAULT_CLEAR_COLOR,
   },
   { value: 'Street-art', label: 'Street-art', accent: 'accent-rose-400', icon: markerStreetArt, bg: '#C49B4C' },
@@ -80,15 +80,14 @@ export const EVENT_TAG_OPTIONS: EventTagOption[] = [
     label: 'Festival',
     accent: 'accent-fuchsia-400',
     icon: markerMusic,
-    bg: '#6B4570',
-    color: DEFAULT_CLEAR_COLOR,
+    bg: '#A18594',
   },
   {
     value: 'Gourmand',
     label: 'Gourmand',
     accent: 'accent-orange-400',
     icon: markerFood,
-    bg: '#A33B3B',
+    bg: '#802626',
     color: DEFAULT_CLEAR_COLOR,
   },
   {
@@ -112,8 +111,7 @@ export const EVENT_TAG_OPTIONS: EventTagOption[] = [
     label: 'Nature',
     accent: 'accent-green-400',
     icon: markerTree,
-    bg: '#3E6B48',
-    color: DEFAULT_CLEAR_COLOR,
+    bg: '#C4CCB7',
   },
   {
     value: 'Spectacle musical',

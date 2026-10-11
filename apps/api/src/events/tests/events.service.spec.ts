@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { plainToInstance } from 'class-transformer';
 import { EventsService } from '../events.service';
 import { ParisEventsService } from '../../paris-events/paris-events.service';
+import { RedisService } from '../../redis/redis.service';
 import { setupUnitTest } from '../../test-utils/setup-unit-test';
 import { QueryFilterDto } from '../../filters/dtos/query-filter.dto';
 import { EventData } from '@wander/types';
@@ -38,11 +39,19 @@ const mockParisEventsService = {
   getEvents: jest.fn(),
   canHandle: jest.fn().mockReturnValue(true),
 };
+
+const mockRedisService = {
+  get: jest.fn(),
+};
+
 describe('EventsService', () => {
   let service: EventsService;
 
   beforeAll(async () => {
-    service = await setupUnitTest(EventsService, [{ provide: ParisEventsService, useValue: mockParisEventsService }]);
+    service = await setupUnitTest(EventsService, [
+      { provide: ParisEventsService, useValue: mockParisEventsService },
+      { provide: RedisService, useValue: mockRedisService },
+    ]);
   });
 
   afterEach(() => {
@@ -74,5 +83,26 @@ describe('EventsService', () => {
     const result = await service.getAll(dto);
 
     expect(result).toEqual([]);
+  });
+
+  describe('getOne', () => {
+    it.each([null, []])('returns null when Redis returns %j', async (cached) => {
+      mockRedisService.get.mockResolvedValue(cached);
+
+      await expect(service.getOne('1')).resolves.toBeNull();
+      expect(mockRedisService.get).toHaveBeenCalledWith('events:actifs');
+    });
+
+    it('returns the event when id is found', async () => {
+      mockRedisService.get.mockResolvedValue([mockEvent]);
+
+      await expect(service.getOne('1')).resolves.toEqual(mockEvent);
+    });
+
+    it('returns null when id is not found', async () => {
+      mockRedisService.get.mockResolvedValue([mockEvent]);
+
+      await expect(service.getOne('missing')).resolves.toBeNull();
+    });
   });
 });

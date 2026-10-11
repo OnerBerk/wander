@@ -2,12 +2,18 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EventData } from '@wander/types';
 import { QueryFilterDto } from '../filters/dtos/query-filter.dto';
 import { ParisEventsService } from '../paris-events/paris-events.service';
+import { RedisService } from '../redis/redis.service';
+
+const EVENTS_REDIS_KEY = 'events:actifs';
 
 @Injectable()
 export class EventsService {
   private readonly logger = new Logger(EventsService.name);
 
-  constructor(private readonly parisEventsService: ParisEventsService) {}
+  constructor(
+    private readonly parisEventsService: ParisEventsService,
+    private readonly redisService: RedisService,
+  ) {}
 
   async getAll(query: QueryFilterDto): Promise<EventData[]> {
     const sources = [this.parisEventsService];
@@ -23,5 +29,12 @@ export class EventsService {
       }
       return acc;
     }, []);
+  }
+
+  async getOne(id: string): Promise<EventData | null> {
+    const allEvents = await this.redisService.get<EventData[]>(EVENTS_REDIS_KEY);
+    if (!allEvents?.length) return null;
+
+    return allEvents.find((event) => event.id === id) ?? null;
   }
 }
