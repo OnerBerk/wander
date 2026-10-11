@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { RedisModule } from './redis/redis.module';
 import { WeatherModule } from './weather/weather.module';
 import { EventsModule } from './events/events.module';
+import { SitemapModule } from './sitemap/sitemap.module';
 import { VelibModule } from './velib/velib.module';
 import { IngestionModule } from './ingestion/ingestion.module';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -14,6 +15,7 @@ import { ConfigModule } from '@nestjs/config';
     RedisModule,
     WeatherModule,
     EventsModule,
+    SitemapModule,
     VelibModule,
     IngestionModule,
     AiModule,

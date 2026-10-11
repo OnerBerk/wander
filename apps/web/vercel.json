@@ -23,6 +23,7 @@
   ],
   "rewrites": [
     { "source": "/stats/script.js", "destination": "https://cloud.umami.is/script.js" },
+    { "source": "/sitemap.xml", "destination": "https://api.wandercity.fr/sitemap.xml" },
     { "source": "/((?!_vercel/).*)", "destination": "/" }
   ]
 }

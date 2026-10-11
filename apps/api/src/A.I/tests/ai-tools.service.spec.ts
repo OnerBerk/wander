@@ -63,7 +63,7 @@ describe('AiToolsService', () => {
     });
 
     const matched = onEventsFound.mock.calls[0][0] as EventData[];
-    expect(eventIds(matched)).toEqual(['today-expo']);
+    expect(eventIds(matched)).toEqual(['100003']);
     expect(result).toEqual({ count: 1 });
   });
 
@@ -74,7 +74,7 @@ describe('AiToolsService', () => {
     });
 
     const matched = onEventsFound.mock.calls[0][0] as EventData[];
-    expect(eventIds(matched)).toEqual(['today-concert']);
+    expect(eventIds(matched)).toEqual(['100002']);
     expect(matched.every((event) => event.tags.includes('Concert'))).toBe(true);
   });
 
@@ -85,7 +85,7 @@ describe('AiToolsService', () => {
     });
 
     const matched = onEventsFound.mock.calls[0][0] as EventData[];
-    expect(eventIds(matched)).toEqual(['next-month-expo']);
+    expect(eventIds(matched)).toEqual(['100008']);
   });
 
   it('returns empty list when nothing matches', async () => {
