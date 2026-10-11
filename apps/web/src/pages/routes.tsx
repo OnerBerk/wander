@@ -3,6 +3,7 @@ import MapLayout from '@/components/layout/map-layout';
 import RootLayout from '@/components/layout/root-layout';
 import { type RouteObject } from 'react-router-dom';
 import AboutPage from './about-page';
+import EventDetailsPage from './event-details-page';
 import ListPage from './list-page';
 import NotFoundPage from './not-found-page';
 
@@ -23,6 +24,10 @@ export const routes: RouteObject[] = [
             element: <MapLayout />,
           },
         ],
+      },
+      {
+        path: 'evenement/:categorie/:slug/:id',
+        element: <EventDetailsPage />,
       },
       {
         path: 'about',
