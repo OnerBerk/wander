@@ -2,6 +2,9 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { Outlet, useMatch } from 'react-router-dom';
 import ViewSwitch from '@/ui-components/view-switch';
 import { loadMapPage } from '@/pages/load-map-page';
+import usePanelStore from '@/store/zustand/usePanelStore';
+import paneOpen from '@/assets/icons/pane-open.svg';
+import paneClose from '@/assets/icons/pane-close.svg';
 
 const LazyMapPage = lazy(loadMapPage);
 
@@ -17,6 +20,8 @@ const scheduleMapPreload = (load: () => void): (() => void) => {
 
 const BrowseLayout = () => {
   const isMap = Boolean(useMatch({ path: '/map', end: true }));
+  const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
+  const togglePanel = usePanelStore((state) => state.togglePanel);
   const [hasShownMap, setHasShownMap] = useState(isMap);
   const showMap = isMap || hasShownMap;
 
@@ -37,7 +42,7 @@ const BrowseLayout = () => {
         <div className={`absolute inset-0 ${isMap ? '' : 'pointer-events-none invisible'}`} aria-hidden={!isMap}>
           <Suspense
             fallback={
-              <div className="absolute inset-0 flex items-center justify-center bg-[#e7e2d9]">
+              <div className="bg-wander-crem absolute inset-0 flex items-center justify-center">
                 <span className="h-8 w-8 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" />
               </div>
             }
@@ -51,8 +56,18 @@ const BrowseLayout = () => {
       >
         <Outlet />
       </div>
-      <div className="pointer-events-auto fixed right-10 bottom-4 z-70">
+      <div className="bg-wander-orange/30 pointer-events-auto fixed top-37 left-5 z-70 flex w-fit items-center gap-2 rounded-2xl px-4 py-2">
         <ViewSwitch />
+        {isMap && (
+          <button
+            type="button"
+            aria-label={isPanelOpen ? 'Fermer les filtres' : 'Ouvrir les filtres'}
+            onClick={togglePanel}
+            className="toggle-filter-panel cursor-pointer rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+          >
+            <img src={isPanelOpen ? paneClose : paneOpen} alt="" className="h-11 w-11" />
+          </button>
+        )}
       </div>
     </div>
   );

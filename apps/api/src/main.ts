@@ -8,8 +8,9 @@ import type {Request, Response} from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const isProduction = process.env.NODE_ENV === 'production';
   app.enableCors({
-    origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
+    origin: isProduction ? ['https://www.wandercity.fr', 'https://wandercity.fr'] : true,
   });
   app.useGlobalPipes(
     new ValidationPipe({
