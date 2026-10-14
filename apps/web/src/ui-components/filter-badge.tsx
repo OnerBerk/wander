@@ -7,6 +7,7 @@ interface FilterBadgeProps {
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  isDark?: boolean;
   ariaLabel?: string;
 }
 
@@ -17,6 +18,7 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({
   disabled = false,
   onClick,
   className = '',
+  isDark = false,
   ariaLabel,
 }) => {
   const interactive = Boolean(onClick) && !disabled;
@@ -53,7 +55,9 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({
         <div
           className={`borderpx-1 z-10 flex h-5 w-full shrink-0 items-center justify-center rounded-md ${dim ? 'opacity-70' : ''}`}
         >
-          <span className="text-wander-text-white w-full truncate text-center text-[12px] leading-none font-semibold">
+          <span
+            className={`${isDark ? 'text-wander-crem' : 'text-wander-text'} w-full truncate text-center text-[12px] leading-none font-semibold`}
+          >
             {label}
           </span>
         </div>

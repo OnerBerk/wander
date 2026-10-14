@@ -1,6 +1,7 @@
 import { useWeather } from '@/api/features/weather/queries/use-weather';
-import { useIsDay } from './useIsDay';
+import { DateTime } from 'luxon';
 import { useMemo } from 'react';
+import { useIsDay } from './useIsDay';
 
 import cloudyDayImg from '@/assets/weather/weather-cloudy-day.webp';
 import cloudyNightImg from '@/assets/weather/weather-cloudy-night.webp';
@@ -17,6 +18,7 @@ type WeatherCondition = 'full' | 'cloudy' | 'rainy' | 'snow' | 'stormy';
 interface WeatherIcon {
   src: string;
   alt: string;
+  line: string;
 }
 
 const DAY_ICONS: Record<WeatherCondition, string> = {
@@ -41,6 +43,17 @@ const CONDITION_LABELS: Record<WeatherCondition, string> = {
   rainy: 'pluie',
   snow: 'neige',
   stormy: 'orage',
+};
+
+const weatherLine = (hour: string, temp: number, wind: number, condition: WeatherCondition) => {
+  const lines: Record<WeatherCondition, string> = {
+    full: `Il est ${hour}, le ciel est dégagé, ${temp}°C, le vent file à ${wind} km/h.`,
+    cloudy: `Il est ${hour}, le ciel est couvert, ${temp}°C, le vent file à ${wind} km/h.`,
+    rainy: `Il est ${hour}, il pleut, ${temp}°C, vent à ${wind} km/h, le parapluie est de sortie.`,
+    snow: `Il est ${hour}, il neige, ${temp}°C, vent à ${wind} km/h, les gants sont de sortie.`,
+    stormy: `Il est ${hour}, l'orage gronde, ${temp}°C, vent à ${wind} km/h.`,
+  };
+  return lines[condition];
 };
 
 const CODE_TO_CONDITION: Record<number, WeatherCondition> = {
@@ -82,9 +95,11 @@ export const useWeatherIcon = (): WeatherIcon | null => {
     if (!weather) return null;
     const condition = CODE_TO_CONDITION[weather.weatherCode];
     if (!condition) return null;
+    const hour = DateTime.now().setZone('Europe/Paris').toFormat("H'h'mm");
     return {
       src: isDay ? DAY_ICONS[condition] : NIGHT_ICONS[condition],
       alt: `Météo actuelle : ${CONDITION_LABELS[condition]}`,
+      line: weatherLine(hour, Math.round(weather.temperature), Math.round(weather.windSpeed), condition),
     };
   }, [weather, isDay]);
 };

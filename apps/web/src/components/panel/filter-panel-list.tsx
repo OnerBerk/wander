@@ -17,7 +17,7 @@ const FilterPanelList = () => {
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full cursor-pointer items-center justify-center gap-2 py-2 text-sm font-medium text-white"
+        className="flex w-full cursor-pointer items-center justify-center gap-2 py-2 text-xl font-medium text-white"
       >
         Filtres
         <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} aria-hidden />
@@ -31,10 +31,10 @@ const FilterPanelList = () => {
         <div className={open ? 'overflow-visible' : 'overflow-hidden'}>
           <div className="flex flex-wrap items-center justify-center gap-0 pb-3 sm:justify-start sm:gap-2.5">
             <div className="w-15 shrink-0 sm:w-18">
-              <FilterBadge label="Tout" icon={AllMarker} selected={all} onClick={handleAll} />
+              <FilterBadge label="Tout" icon={AllMarker} selected={all} onClick={handleAll} isDark />
             </div>
             <div className="w-15 shrink-0 sm:w-18">
-              <FilterBadge label="Aucun" icon={NoMarker} selected={none} onClick={handleNone} />
+              <FilterBadge label="Aucun" icon={NoMarker} selected={none} onClick={handleNone} isDark />
             </div>
             {EVENT_TAG_OPTIONS.map(({ value, label, icon }) => (
               <div key={value} className="w-15 shrink-0 sm:w-18">
@@ -43,6 +43,7 @@ const FilterPanelList = () => {
                   icon={icon}
                   selected={tags.includes(value)}
                   onClick={() => toggleTag(value)}
+                  isDark
                 />
               </div>
             ))}

@@ -4,7 +4,7 @@ import Barcode from '@/components/cards/barcode';
 const EventCardSkeleton = () => {
   return (
     <li
-      className="pointer-events-none flex h-full flex-col gap-1 rounded-2xl bg-white p-2 opacity-55 grayscale"
+      className="pointer-events-none flex h-full flex-col gap-1 rounded-2xl bg-white p-2 opacity-5 grayscale"
       aria-hidden
     >
       <div className="aspect-3/4 overflow-hidden rounded-2xl">

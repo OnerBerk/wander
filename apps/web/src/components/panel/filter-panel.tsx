@@ -3,12 +3,10 @@ import { useMapLayerFilters } from '@/hooks/use-map-layer-filters';
 import FilterBadge from '@/ui-components/filter-badge';
 import Filters from './filters';
 import { useId } from 'react';
-import UIClosePanelButton from '@/ui-components/ui-close-panel-button';
 
 const FilterPanel = () => {
   const titleId = useId();
   const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
-  const closePanel = usePanelStore((state) => state.closePanel);
   const mapLayers = useMapLayerFilters();
 
   return (
@@ -21,8 +19,6 @@ const FilterPanel = () => {
         isPanelOpen ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
-      <UIClosePanelButton ariaLabel="Fermer les filtres" onClose={closePanel} />
-
       <div className="mt-10 flex flex-col justify-center gap-2">
         <div className="text-xl font-bold">Metro Vélib Invaders</div>
         <div className="filter-panel flex flex-wrap gap-5">

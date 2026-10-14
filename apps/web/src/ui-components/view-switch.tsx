@@ -31,7 +31,7 @@ const ViewSwitch: React.FC<ViewSwitchProps> = ({ className = '' }) => {
       onTouchStart={() => {
         void loadMapPage();
       }}
-      className={`group relative inline-flex h-9 w-[88px] shrink-0 cursor-pointer overflow-hidden rounded-full shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${className}`}
+      className={`group relative inline-flex h-9 w-22 shrink-0 cursor-pointer overflow-hidden rounded-full shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${className}`}
     >
       <span className="absolute inset-0 bg-[linear-gradient(135deg,#f8fafc,#cbd5e1)]" />
 
@@ -56,10 +56,10 @@ const ViewSwitch: React.FC<ViewSwitchProps> = ({ className = '' }) => {
         <path d="M0 18 H90" fill="none" stroke="#fbbf24" strokeWidth="0.6" strokeDasharray="2 2" />
       </svg>
 
-      <Pin className="top-[5px] left-[9px] delay-150" />
-      <Pin className="top-[9px] left-[36px] delay-300" />
+      <Pin className="top-1.25 left-2.25 delay-150" />
+      <Pin className="top-2.25 left-9 delay-300" />
 
-      <span className="absolute top-1/2 right-3 flex -translate-y-1/2 flex-col gap-[3px]" aria-hidden>
+      <span className="absolute top-1/2 right-3 flex -translate-y-1/2 flex-col gap-0.75" aria-hidden>
         {['delay-0', 'delay-75', 'delay-150'].map((delay, i) => (
           <span
             key={delay}
