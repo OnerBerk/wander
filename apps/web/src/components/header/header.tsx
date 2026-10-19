@@ -1,4 +1,5 @@
 import wanderLogoPaper from '@/assets/logo/wander-logo-paper.png';
+import { useMatch } from 'react-router-dom';
 
 import { useIsDay } from '@/hooks/useIsDay';
 
@@ -7,6 +8,7 @@ import { useWeatherIcon } from '@/hooks/useWeatherIcon';
 const Header = () => {
   const icon = useWeatherIcon();
   const isDay = useIsDay();
+  const isMap = Boolean(useMatch({ path: '/map', end: true }));
 
   return (
     <header className={`relative z-60 block h-32 shrink-0 p-2 ${isDay ? 'header-day' : 'header-night'}`}>
@@ -18,7 +20,7 @@ const Header = () => {
             <p className="text-xs font-medium md:text-2xl">Explorer votre ville autrement</p>
           </div>
         </div>
-        <div className="group relative flex h-full items-start">
+        <div className={`group relative h-full items-start ${isMap ? 'hidden md:flex' : 'flex'}`}>
           {icon && (
             <>
               <p
@@ -27,6 +29,7 @@ const Header = () => {
                 <span className="animate-weather-marquee inline-block whitespace-nowrap">{icon.line}</span>
               </p>
               <img
+                data-colibri-cible
                 className="weather-icon relative z-10 mr-2 h-45 w-auto shrink-0 object-contain"
                 src={icon.src}
                 alt={icon.alt}

@@ -3,6 +3,8 @@ import FilterPanelList from '@/components/panel/filter-panel-list';
 import SeoMetadata from '@/components/seo/seo-metadata';
 import useFilterStore from '@/store/zustand/useFilterStore';
 import EventCard from '@/components/cards/event-card';
+import EventCardHorizontal from '@/components/cards/event-card-horizontal';
+import EventCardHorizontalSkeleton from '@/components/cards/event-card-horizontal-skeleton';
 import EventCardSkeleton from '@/components/cards/event-card-skeleton';
 import { useIncrementalList } from '@/hooks/use-incremental-list';
 import { EventData } from '@wander/types';
@@ -30,12 +32,19 @@ const ListPage = () => {
         className="scrollbar-hidden flex min-h-0 flex-1 flex-col overflow-y-auto bg-contain bg-center text-amber-50"
         style={{ backgroundImage: 'url(/bg-marine.webp)' }}
       >
-        <div className="mx-auto flex w-[75%] max-w-450 flex-col items-start">
+        <div className="mx-auto flex w-full max-w-450 flex-col items-start px-4 sm:w-[75%] sm:px-0">
           {!isLoading && visibleEvents.length === 0 && (
             <p className="mt-8 text-sm text-slate-500">Aucun événement pour ces filtres.</p>
           )}
 
-          <ul className="mt-8 grid w-full grid-cols-1 gap-4 pb-16 sm:grid-cols-2 lg:grid-cols-3 xl:mx-auto xl:max-w-7xl xl:grid-cols-4">
+          <ul className="mt-8 grid w-full grid-cols-1 gap-4 pb-16 sm:hidden">
+            {isLoading && eventsEnabled
+              ? Array.from({ length: 8 }, (_, index) => <EventCardHorizontalSkeleton key={index} />)
+              : visibleItems.map((event, index) => (
+                  <EventCardHorizontal key={event.id} event={event} index={index} />
+                ))}
+          </ul>
+          <ul className="mt-8 hidden w-full gap-4 pb-16 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:mx-auto xl:max-w-7xl xl:grid-cols-4">
             {isLoading && eventsEnabled
               ? Array.from({ length: 8 }, (_, index) => <EventCardSkeleton key={index} />)
               : visibleItems.map((event, index) => <EventCard key={event.id} event={event} index={index} />)}

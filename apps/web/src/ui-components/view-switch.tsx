@@ -18,6 +18,7 @@ const ViewSwitch: React.FC<ViewSwitchProps> = ({ className = '' }) => {
   };
 
   return (
+    <span className="relative inline-block h-[calc(2.25rem*0.7)] w-[calc(5.5rem*0.7)] md:h-9 md:w-22">
     <button
       type="button"
       role="switch"
@@ -31,7 +32,7 @@ const ViewSwitch: React.FC<ViewSwitchProps> = ({ className = '' }) => {
       onTouchStart={() => {
         void loadMapPage();
       }}
-      className={`group relative inline-flex h-9 w-22 shrink-0 cursor-pointer overflow-hidden rounded-full shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ${className}`}
+      className={`group absolute top-0 left-0 inline-flex h-9 w-22 origin-top-left scale-[0.7] cursor-pointer overflow-hidden rounded-full shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 md:scale-100 ${className}`}
     >
       <span className="absolute inset-0 bg-[linear-gradient(135deg,#f8fafc,#cbd5e1)]" />
 
@@ -101,6 +102,7 @@ const ViewSwitch: React.FC<ViewSwitchProps> = ({ className = '' }) => {
         </svg>
       </span>
     </button>
+    </span>
   );
 };
 

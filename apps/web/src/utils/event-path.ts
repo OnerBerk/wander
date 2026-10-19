@@ -18,3 +18,10 @@ export function eventPath(event: EventData): string {
   const categorie = slugify(option?.label ?? 'autre');
   return `/event/${categorie}/${slugify(event.title)}/${event.id}`;
 }
+
+export function eventBackPath(state: unknown): '/' | '/map' {
+  if (typeof state === 'object' && state !== null && 'from' in state && state.from === '/map') {
+    return '/map';
+  }
+  return '/';
+}

@@ -56,14 +56,18 @@ const BrowseLayout = () => {
       >
         <Outlet />
       </div>
-      <div className="bg-wander-orange/30 pointer-events-auto fixed top-37 left-5 z-70 flex w-fit items-center gap-2 rounded-2xl px-4 py-2">
+      <div
+        className={`bg-wander-orange/30 pointer-events-auto fixed z-70 flex w-fit items-center gap-2 rounded-2xl px-2 py-1 md:px-4 md:py-2 ${
+          isMap ? 'right-4 bottom-4 md:top-37 md:right-auto md:bottom-auto md:left-5' : 'top-37 left-5'
+        }`}
+      >
         <ViewSwitch />
         {isMap && (
           <button
             type="button"
             aria-label={isPanelOpen ? 'Fermer les filtres' : 'Ouvrir les filtres'}
             onClick={togglePanel}
-            className="toggle-filter-panel cursor-pointer rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="toggle-filter-panel hidden cursor-pointer rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:block"
           >
             <img src={isPanelOpen ? paneClose : paneOpen} alt="" className="h-11 w-11" />
           </button>

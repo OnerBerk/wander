@@ -11,13 +11,6 @@ const mockEventsService = {
   getAll: jest.fn(),
 };
 
-type GetEventsTool = {
-  execute: (input: {
-    filters: Array<{ category?: EventData['tags'][number]; keyword?: string }>;
-    datePhrase?: string;
-  }) => Promise<{ count: number }>;
-};
-
 function eventIds(events: EventData[]): string[] {
   return events.map((event) => event.id).sort();
 }
@@ -25,7 +18,6 @@ function eventIds(events: EventData[]): string[] {
 describe('AiToolsService', () => {
   let service: AiToolsService;
   let events: EventData[];
-  let onEventsFound: jest.Mock;
 
   beforeAll(async () => {
     events = setupEvents(DateTime.now().setZone('Europe/Paris'));
@@ -37,64 +29,64 @@ describe('AiToolsService', () => {
   });
 
   beforeEach(() => {
-    onEventsFound = jest.fn();
     mockEventsService.getAll.mockImplementation((query: QueryFilterDto) =>
       Promise.resolve(filterEvents(events, query)),
     );
   });
 
-  function getEventsTool(): GetEventsTool {
-    return service.getTools(onEventsFound).getEvents as GetEventsTool;
+  function search(input: { filters: Array<{ category?: EventData['tags'][number]; keyword?: string }>; datePhrase?: string }) {
+    const execute = service.getTools().getEvents.execute;
+    if (!execute) throw new Error('getEvents.execute missing');
+    return execute(input, { toolCallId: 'test', messages: [], context: {} });
   }
 
   it.each(['Concert', 'Expo'] as const)('returns only %s events when filtering by category', async (category) => {
-    const result = await getEventsTool().execute({
+    const result = await search({
       filters: [{ category }],
     });
 
-    const matched = onEventsFound.mock.calls[0][0] as EventData[];
-    expect(eventIds(matched)).toEqual(eventIds(events.filter((event) => event.tags.includes(category))));
-    expect(result).toEqual({ count: matched.length });
+    const expected = events.filter((event) => event.tags.includes(category));
+    expect(eventIds(result.events)).toEqual(eventIds(expected));
+    expect(result.count).toBe(expected.length);
   });
 
   it('returns events matching a keyword in title or description', async () => {
-    const result = await getEventsTool().execute({
+    const result = await search({
       filters: [{ keyword: 'argentiques' }],
     });
 
-    const matched = onEventsFound.mock.calls[0][0] as EventData[];
-    expect(eventIds(matched)).toEqual(['100003']);
-    expect(result).toEqual({ count: 1 });
+    expect(eventIds(result.events)).toEqual(['100003']);
+    expect(result.count).toBe(1);
   });
 
   it('returns only today events for datePhrase "aujourd\'hui"', async () => {
-    await getEventsTool().execute({
+    const result = await search({
       filters: [{ category: 'Concert' }],
       datePhrase: "aujourd'hui",
     });
 
-    const matched = onEventsFound.mock.calls[0][0] as EventData[];
-    expect(eventIds(matched)).toEqual(['100002']);
-    expect(matched.every((event) => event.tags.includes('Concert'))).toBe(true);
+    expect(eventIds(result.events)).toEqual(['100002']);
+    expect(result.events.every((event: EventData) => event.tags.includes('Concert'))).toBe(true);
+    expect(result.count).toBe(1);
   });
 
   it('returns next-month events for datePhrase "le mois prochain"', async () => {
-    await getEventsTool().execute({
+    const result = await search({
       filters: [{ category: 'Expo' }],
       datePhrase: 'le mois prochain',
     });
 
-    const matched = onEventsFound.mock.calls[0][0] as EventData[];
-    expect(eventIds(matched)).toEqual(['100008']);
+    expect(eventIds(result.events)).toEqual(['100008']);
+    expect(result.count).toBe(1);
   });
 
   it('returns empty list when nothing matches', async () => {
-    const result = await getEventsTool().execute({
+    const result = await search({
       filters: [{ category: 'Expo', keyword: 'inexistant-xyz' }],
       datePhrase: "aujourd'hui",
     });
 
-    expect(onEventsFound).toHaveBeenCalledWith([]);
-    expect(result).toEqual({ count: 0 });
+    expect(result.events).toEqual([]);
+    expect(result.count).toBe(0);
   });
 });
