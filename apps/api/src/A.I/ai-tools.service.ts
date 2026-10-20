@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { tool, ToolSet } from 'ai';
+import { tool, type ToolSet } from 'ai';
 import { z } from 'zod';
 import { DateTime } from 'luxon';
 import * as chrono from 'chrono-node';
@@ -41,7 +41,7 @@ type EventFilter = z.infer<typeof eventFilterSchema>;
 export class AiToolsService {
   constructor(private readonly eventsService: EventsService) {}
 
-  getTools(onEventsFound: (events: EventData[]) => void): ToolSet {
+  getTools(): ToolSet {
     return {
       getEvents: tool({
         description:
@@ -56,10 +56,13 @@ export class AiToolsService {
             ),
         }),
         execute: async ({ filters, datePhrase }) => {
-          const results = await this.searchEvents(filters, datePhrase);
-          onEventsFound(results);
-          return { count: results.length };
+          const events = await this.searchEvents(filters, datePhrase);
+          return { count: events.length, events };
         },
+        toModelOutput: ({ output }) => ({
+          type: 'text' as const,
+          value: `${output.count} événements trouvés.`,
+        }),
       }),
     };
   }

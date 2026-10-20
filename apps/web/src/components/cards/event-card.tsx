@@ -11,9 +11,10 @@ const PRIORITY_CARD_COUNT = 4;
 interface EventCardProps {
   event: EventData;
   index: number;
+  from?: '/' | '/map';
 }
 
-const EventCard = ({ event, index }: EventCardProps) => {
+const EventCard = ({ event, index, from = '/' }: EventCardProps) => {
   const date = formatEventDate(event.dateStart);
   const option = EVENT_TAG_OPTIONS.find((item) => event.tags.includes(item.value));
   const isPriority = index < PRIORITY_CARD_COUNT;
@@ -22,6 +23,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
     <li className="h-full">
       <Link
         to={eventPath(event)}
+        state={{ from }}
         className="flex h-full cursor-pointer flex-col gap-1 rounded-2xl p-2"
         style={{
           backgroundColor: option?.bg ?? '#FAF8F6',
