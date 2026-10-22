@@ -57,7 +57,7 @@ const BrowseLayout = () => {
         <Outlet />
       </div>
       <div
-        className={`bg-wander-orange/30 pointer-events-auto fixed z-70 flex w-fit items-center gap-2 rounded-2xl px-4 py-2 ${
+        className={`bg-wander-orange/30 pointer-events-auto fixed z-70 flex w-fit items-center gap-2 rounded-2xl px-2 py-1 md:px-4 md:py-2 ${
           isMap ? 'right-4 bottom-4 md:top-37 md:right-auto md:bottom-auto md:left-5' : 'top-37 left-5'
         }`}
       >

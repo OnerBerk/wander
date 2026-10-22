@@ -90,6 +90,7 @@ const EventDetailsPage = () => {
   const stops = findNearestStations(event.location, metroData?.stationsById.values() ?? []);
   const bg = { backgroundImage: `url(${event.coverUrl})` };
   const bloc = ' bg-cover bg-center md:bg-fixed';
+  const ink = '[text-shadow:0_0_2px_#e8e4da,0_0_8px_#e8e4da,0_0_16px_#e8e4da]';
 
   return (
     <main className="bg-wander-crem flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3 md:overflow-hidden">
@@ -100,12 +101,12 @@ const EventDetailsPage = () => {
       <div className="mx-auto w-full md:my-auto md:h-[80vh] md:w-[75vw]" style={{ containerType: 'size' }}>
         <div className="grid w-full grid-cols-1 gap-4 md:h-[80vh] md:grid-cols-3 md:grid-rows-[minmax(0,1fr)_minmax(0,2fr)]">
           <div className="relative min-h-96 overflow-hidden md:col-span-2 md:row-span-2 md:min-h-0">
-            <div className={`${bloc} absolute inset-0 blur-xl brightness-125 grayscale-80 md:-inset-4`} style={bg} />
+            <div className={`${bloc} absolute inset-0 blur-xl brightness-150 grayscale-80 md:-inset-4`} style={bg} />
             <div className="relative min-h-96 md:h-full">
               <img src={form} alt="" className="absolute top-4 left-4 z-10 h-8 w-8 md:h-11 md:w-11" />
               <div className="scrollbar-hidden h-full overflow-y-auto p-6 md:p-20">
                 <p
-                  className="text-wander-black max-w-5xl rounded-b-lg p-2 text-justify text-sm font-medium **:text-sm sm:text-sm sm:**:text-sm md:text-lg md:**:text-lg lg:text-2xl lg:**:text-2xl"
+                  className={`${ink} text-wander-black max-w-5xl rounded-b-lg p-2 text-justify text-sm font-medium **:text-sm sm:text-sm sm:**:text-sm md:text-lg md:**:text-lg lg:text-2xl lg:**:text-2xl`}
                   dangerouslySetInnerHTML={{ __html: event.description ?? '' }}
                 />
               </div>
@@ -118,7 +119,7 @@ const EventDetailsPage = () => {
             <div className={`${bloc} absolute inset-0 brightness-125 grayscale`} style={bg} />
             <div className="relative min-h-48 md:h-full">
               <img src={formWhite} alt="" className="absolute right-4 bottom-4 z-10 h-8 w-8 md:h-11 md:w-11" />
-              <div className="scrollbar-hidden grid h-full grid-rows-[1fr_auto_1fr] overflow-y-auto">
+              <div className={`${ink} scrollbar-hidden grid h-full grid-rows-[1fr_auto_1fr] overflow-y-auto`}>
                 <div className="text-wander-black flex w-full flex-col pt-4 pl-4 text-left">
                   {dateLabel ? (
                     <p className="w-full text-sm font-bold sm:text-sm md:text-base lg:text-xl">{dateLabel}</p>
@@ -136,9 +137,11 @@ const EventDetailsPage = () => {
             </div>
           </div>
           <div className="relative overflow-hidden p-3 md:min-h-0 md:p-10">
-            <div className={`${bloc} absolute inset-0 brightness-125 grayscale-30`} style={bg} />
+            <div className={`${bloc} absolute inset-0 blur-sm brightness-125 grayscale-20`} style={bg} />
             <div className="relative md:h-full">
-              <div className="scrollbar-hidden text-wander-black flex h-auto flex-col gap-3 overflow-y-auto bg-gray-300/20 p-2 md:h-full">
+              <div
+                className={`${ink} scrollbar-hidden text-wander-black flex h-auto flex-col gap-3 overflow-y-auto p-2 md:h-full`}
+              >
                 <p className="text-lg font-bold">Infos pratiques</p>
                 <p className="w-full font-bold">{event.addressName}</p>
                 <a
@@ -150,7 +153,10 @@ const EventDetailsPage = () => {
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
                   {addressLine}
                 </a>
-                <div ref={spotMapRef} className="h-28 w-full" />
+                <div
+                  ref={spotMapRef}
+                  className="h-28 w-full overflow-hidden rounded-xl [mask-image:linear-gradient(to_right,transparent,black_3px,black_calc(100%_-_3px),transparent),linear-gradient(to_bottom,transparent,black_3px,black_calc(100%_-_3px),transparent)] [mask-composite:intersect] [&_.maplibregl-ctrl-logo]:hidden [&_canvas]:grayscale"
+                />
                 {price ? (
                   <p className="flex gap-2 font-bold">
                     <Ticket className="mt-0.5 h-4 w-4 shrink-0" />
