@@ -16,7 +16,7 @@ const WebGenericDescriptionModal: React.FC = () => {
     return (
       <>
         <button type="button" aria-label="Fermer" className="fixed inset-0 z-40" onClick={closeDetailModal} />
-        <ul className="fixed top-[calc(8rem+(100dvh-8rem)/2)] left-1/2 z-50 h-auto w-[75vw] -translate-x-1/2 -translate-y-1/2 overflow-hidden [&>li]:h-full [&>li>a>:first-child]:aspect-square [&>li>a>:first-child]:w-[calc(95%+0.95rem)] [&>li>a>:first-child]:shrink-0 [&>li>a>:first-child]:self-center md:top-1/2 md:h-auto md:w-[min(75vw,20rem)] md:-translate-y-1/2 md:[&>li]:h-auto md:[&>li>a>:first-child]:aspect-7/8 md:[&>li>a>:first-child]:w-full md:[&>li>a>:first-child]:self-stretch md:[&>li>a>:first-child]:flex-none">
+        <ul className="fixed top-[calc(8rem+(100dvh-8rem)/2)] left-1/2 z-50 h-auto w-[75vw] -translate-x-1/2 -translate-y-1/2 overflow-hidden md:top-1/2 md:h-auto md:w-[min(75vw,20rem)] md:-translate-y-1/2 [&>li]:h-full md:[&>li]:h-auto [&>li>a>:first-child]:aspect-square [&>li>a>:first-child]:w-[calc(95%+0.95rem)] [&>li>a>:first-child]:shrink-0 [&>li>a>:first-child]:self-center md:[&>li>a>:first-child]:aspect-7/8 md:[&>li>a>:first-child]:w-full md:[&>li>a>:first-child]:flex-none md:[&>li>a>:first-child]:self-stretch">
           <EventCard event={detailModal.data} index={0} from="/map" />
         </ul>
       </>
