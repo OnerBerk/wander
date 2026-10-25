@@ -20,6 +20,7 @@ import form from '@/assets/icons/form.svg';
 import formWhite from '@/assets/icons/form-white.svg';
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import EventTagIcons from '@/components/modals/event-tag-icons';
+import SeoMetadata from '@/components/seo/seo-metadata';
 
 const lineIcons = (lines: string[], icons: Record<string, string>) => {
   if (lines.length === 0) return null;
@@ -94,6 +95,11 @@ const EventDetailsPage = () => {
 
   return (
     <main className="bg-wander-crem flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3 md:overflow-hidden">
+      <SeoMetadata
+        title={`${event.title} | Wander`}
+        description={event.leadText || 'Événement à Paris et en Île-de-France.'}
+        canonicalPath={eventPath(event)}
+      />
       <Link to={backTo} aria-label="Retour" className="mb-4 inline-flex w-fit items-center gap-2">
         <ArrowLeft className="h-5 w-5" />
         Retour

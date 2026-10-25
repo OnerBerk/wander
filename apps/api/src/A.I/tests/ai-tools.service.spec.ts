@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { DateTime } from 'luxon';
+import { DateTime, Settings } from 'luxon';
 import { EventData } from '@wander/types';
 import { AiToolsService } from '../ai-tools.service';
 import { EventsService } from '../../events/events.service';
@@ -15,13 +15,20 @@ function eventIds(events: EventData[]): string[] {
   return events.map((event) => event.id).sort();
 }
 
+const fixedNow = DateTime.fromObject({ year: 2026, month: 6, day: 10, hour: 12 }, { zone: 'Europe/Paris' });
+
 describe('AiToolsService', () => {
   let service: AiToolsService;
   let events: EventData[];
 
   beforeAll(async () => {
+    Settings.now = () => fixedNow.toMillis();
     events = setupEvents(DateTime.now().setZone('Europe/Paris'));
     service = await setupUnitTest(AiToolsService, [{ provide: EventsService, useValue: mockEventsService }]);
+  });
+
+  afterAll(() => {
+    Settings.now = () => Date.now();
   });
 
   afterEach(() => {
