@@ -3,6 +3,7 @@ import { EventData } from '@wander/types';
 import { IngestionService } from '../ingestion.service';
 import { RedisService } from '../../redis/redis.service';
 import { ParisEventsService } from '../../paris-events/paris-events.service';
+import { EventsCatalogService } from '../../paris-events/events-catalog.service';
 import { setupUnitTest } from '../../test-utils/setup-unit-test';
 
 jest.mock('../../geo-zones/idf/idf.zones', () => ({
@@ -46,6 +47,10 @@ const mockParisEventsService = {
   fetchEventsByZone: jest.fn(),
 };
 
+const mockEventsCatalog = {
+  invalidate: jest.fn(),
+};
+
 describe('IngestionService', () => {
   let service: IngestionService;
 
@@ -53,6 +58,7 @@ describe('IngestionService', () => {
     service = await setupUnitTest(IngestionService, [
       { provide: RedisService, useValue: mockRedisService },
       { provide: ParisEventsService, useValue: mockParisEventsService },
+      { provide: EventsCatalogService, useValue: mockEventsCatalog },
     ]);
   });
 
@@ -87,6 +93,7 @@ describe('IngestionService', () => {
     expect(mockParisEventsService.fetchEventsByZone).toHaveBeenCalledWith(48.85, 2.35, 5, 'all');
     expect(mockRedisService.setPersist).toHaveBeenCalledWith('events:en-cours', [event1, event2]);
     expect(mockRedisService.rename).toHaveBeenCalledWith('events:en-cours', 'events:actifs');
+    expect(mockEventsCatalog.invalidate).toHaveBeenCalledTimes(1);
   });
 
   it('does not update Redis when a zone fetch fails', async () => {
@@ -96,6 +103,7 @@ describe('IngestionService', () => {
 
     expect(mockRedisService.setPersist).not.toHaveBeenCalled();
     expect(mockRedisService.rename).not.toHaveBeenCalled();
+    expect(mockEventsCatalog.invalidate).not.toHaveBeenCalled();
   });
 
   it('does not update Redis when a zone fetch fails with a non-Error value', async () => {
@@ -105,6 +113,7 @@ describe('IngestionService', () => {
 
     expect(mockRedisService.setPersist).not.toHaveBeenCalled();
     expect(mockRedisService.rename).not.toHaveBeenCalled();
+    expect(mockEventsCatalog.invalidate).not.toHaveBeenCalled();
   });
 
   it('logs swap failure without throwing when Redis rename fails', async () => {
@@ -114,6 +123,7 @@ describe('IngestionService', () => {
 
     await expect(runIngestion()).resolves.toBeUndefined();
     expect(mockRedisService.setPersist).toHaveBeenCalled();
+    expect(mockEventsCatalog.invalidate).not.toHaveBeenCalled();
   });
 
   it('logs swap failure without throwing when Redis rename fails with a non-Error value', async () => {
@@ -122,5 +132,6 @@ describe('IngestionService', () => {
     mockRedisService.rename.mockRejectedValue('rename failed');
 
     await expect(runIngestion()).resolves.toBeUndefined();
+    expect(mockEventsCatalog.invalidate).not.toHaveBeenCalled();
   });
 });

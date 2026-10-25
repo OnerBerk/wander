@@ -2,6 +2,7 @@ import { InternalServerErrorException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { ParisEventsService } from '../paris-events.service';
 import { RedisService } from '../../redis/redis.service';
+import { EventsCatalogService } from '../events-catalog.service';
 import { HttpClientService } from '../../http-client/http-client.service';
 import { EventData } from '@wander/types';
 import { setupUnitTest } from '../../test-utils/setup-unit-test';
@@ -70,6 +71,10 @@ const mockRedisService = {
   setPersist: jest.fn(),
 };
 
+const mockEventsCatalog = {
+  getAll: jest.fn(),
+};
+
 const mockHttpClient = {
   get: jest.fn(),
 };
@@ -81,6 +86,7 @@ describe('ParisEventsService', () => {
     service = await setupUnitTest(ParisEventsService, [
       { provide: RedisService, useValue: mockRedisService },
       { provide: HttpClientService, useValue: mockHttpClient },
+      { provide: EventsCatalogService, useValue: mockEventsCatalog },
     ]);
   });
 
@@ -90,18 +96,16 @@ describe('ParisEventsService', () => {
 
   const dto = plainToInstance(QueryFilterDto, { limit: 5 });
 
-  // ─── getEvents (lecture Redis) ───────────────────────────────────────────
-
   describe('getEvents', () => {
-    it('returns empty when Redis is empty', async () => {
-      mockRedisService.get.mockResolvedValue(null);
+    it('returns empty when the catalog is empty', async () => {
+      mockEventsCatalog.getAll.mockResolvedValue([]);
       const result = await service.getEvents(dto);
       expect(result).toEqual({ total: 0, events: [] });
     });
 
     it('returns all events when no filter', async () => {
       const event = makeEvent();
-      mockRedisService.get.mockResolvedValue([event]);
+      mockEventsCatalog.getAll.mockResolvedValue([event]);
       const result = await service.getEvents(dto);
       expect(result.total).toBe(1);
       expect(result.events[0]).toEqual(event);
@@ -110,7 +114,7 @@ describe('ParisEventsService', () => {
     it('filters by tag', async () => {
       const concert = makeEvent({ id: '1', tags: ['Concert'] });
       const expo = makeEvent({ id: '2', tags: ['Expo'] });
-      mockRedisService.get.mockResolvedValue([concert, expo]);
+      mockEventsCatalog.getAll.mockResolvedValue([concert, expo]);
 
       const dtoWithTag = plainToInstance(QueryFilterDto, { tags: ['Concert'] });
       const result = await service.getEvents(dtoWithTag);
@@ -122,7 +126,7 @@ describe('ParisEventsService', () => {
     it('filters by free price', async () => {
       const free = makeEvent({ id: '1', priceType: 'free' });
       const paid = makeEvent({ id: '2', priceType: 'paid' });
-      mockRedisService.get.mockResolvedValue([free, paid]);
+      mockEventsCatalog.getAll.mockResolvedValue([free, paid]);
 
       const dtoFree = plainToInstance(QueryFilterDto, { price: 'free' });
       const result = await service.getEvents(dtoFree);
@@ -134,7 +138,7 @@ describe('ParisEventsService', () => {
     it('filters by paid price', async () => {
       const free = makeEvent({ id: '1', priceType: 'free' });
       const paid = makeEvent({ id: '2', priceType: 'paid' });
-      mockRedisService.get.mockResolvedValue([free, paid]);
+      mockEventsCatalog.getAll.mockResolvedValue([free, paid]);
 
       const dtoPaid = plainToInstance(QueryFilterDto, { price: 'paid' });
       const result = await service.getEvents(dtoPaid);
@@ -146,7 +150,7 @@ describe('ParisEventsService', () => {
     it('filters out past events', async () => {
       const past = makeEvent({ id: '1', dateStart: '2020-01-01T00:00:00+00:00' });
       const future = makeEvent({ id: '2', dateStart: '2099-01-01T00:00:00+00:00' });
-      mockRedisService.get.mockResolvedValue([past, future]);
+      mockEventsCatalog.getAll.mockResolvedValue([past, future]);
 
       const result = await service.getEvents(dto);
 
@@ -154,8 +158,8 @@ describe('ParisEventsService', () => {
       expect(result.events[0].id).toBe('2');
     });
 
-    it('throws InternalServerErrorException when Redis throws', async () => {
-      mockRedisService.get.mockRejectedValue(new Error('Redis error'));
+    it('throws InternalServerErrorException when the catalog throws', async () => {
+      mockEventsCatalog.getAll.mockRejectedValue(new Error('Redis error'));
       await expect(service.getEvents(dto)).rejects.toThrow(InternalServerErrorException);
     });
   });

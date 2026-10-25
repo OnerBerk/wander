@@ -5,10 +5,15 @@ import { setupApi } from '../../test-utils/setup-api';
 import { setupEvents } from '../../test-utils/setup-events';
 import { TestTool } from '../../test-utils/test-tools';
 import { RedisService } from '../../redis/redis.service';
+import { EventsCatalogService } from '../../paris-events/events-catalog.service';
 import { EventsModule } from '../events.module';
 
 const mockRedisService = {
   get: jest.fn(),
+};
+
+const mockEventsCatalog = {
+  getById: jest.fn(),
 };
 
 const invalidEventIdRequests: [string, string][] = [
@@ -26,7 +31,10 @@ describe('GET /events/:id', () => {
   beforeAll(async () => {
     events = setupEvents(DateTime.now().setZone('Europe/Paris'));
     todayConcert = events.find((event) => event.id === '100002')!;
-    ({ app } = await setupApi(EventsModule, [{ provide: RedisService, useValue: mockRedisService }]));
+    ({ app } = await setupApi(EventsModule, [
+      { provide: RedisService, useValue: mockRedisService },
+      { provide: EventsCatalogService, useValue: mockEventsCatalog },
+    ]));
     testTool = new TestTool(app);
   });
 
@@ -39,13 +47,13 @@ describe('GET /events/:id', () => {
   });
 
   it('returns 200 with an EventData', async () => {
-    mockRedisService.get.mockResolvedValue(events);
+    mockEventsCatalog.getById.mockResolvedValue(todayConcert);
 
     const res = await testTool.get(`/events/${todayConcert.id}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(todayConcert);
-    expect(mockRedisService.get).toHaveBeenCalledWith('events:actifs');
+    expect(mockEventsCatalog.getById).toHaveBeenCalledWith(todayConcert.id);
   });
 
   it.each(invalidEventIdRequests)('returns 400 with %s for %s', async (expectedMessage, url) => {
@@ -53,6 +61,6 @@ describe('GET /events/:id', () => {
 
     expect(res.status).toBe(400);
     expect(res.body.message).toEqual(expect.arrayContaining([expectedMessage]));
-    expect(mockRedisService.get).not.toHaveBeenCalled();
+    expect(mockEventsCatalog.getById).not.toHaveBeenCalled();
   });
 });

@@ -2,19 +2,19 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EventData } from '@wander/types';
 import { QueryFilterDto } from '../filters/dtos/query-filter.dto';
 import { ParisEventsService } from '../paris-events/paris-events.service';
-import { RedisService } from '../redis/redis.service';
+import { EventsCatalogService } from '../paris-events/events-catalog.service';
 
-const EVENTS_REDIS_KEY = 'events:actifs';
-
+/** Liste et fiche événement. Les deux lisent le catalogue en mémoire, pas Redis. */
 @Injectable()
 export class EventsService {
   private readonly logger = new Logger(EventsService.name);
 
   constructor(
     private readonly parisEventsService: ParisEventsService,
-    private readonly redisService: RedisService,
+    private readonly eventsCatalog: EventsCatalogService,
   ) {}
 
+  /** Filtre le catalogue déjà chargé (période, tags, prix). */
   async getAll(query: QueryFilterDto): Promise<EventData[]> {
     const sources = [this.parisEventsService];
     const eligibleSources = sources.filter((s) => s.canHandle(query));
@@ -31,10 +31,8 @@ export class EventsService {
     }, []);
   }
 
+  /** Une fiche, retrouvée par id dans la même copie mémoire. */
   async getOne(id: string): Promise<EventData | null> {
-    const allEvents = await this.redisService.get<EventData[]>(EVENTS_REDIS_KEY);
-    if (!allEvents?.length) return null;
-
-    return allEvents.find((event) => event.id === id) ?? null;
+    return this.eventsCatalog.getById(id);
   }
 }
