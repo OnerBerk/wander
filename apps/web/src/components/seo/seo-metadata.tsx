@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SITE_ORIGIN = 'https://www.wandercity.fr';
@@ -28,6 +29,10 @@ const SeoMetadata: React.FC<SeoMetadataProps> = ({
 }) => {
   const canonicalUrl = toAbsoluteUrl(canonicalPath);
   const imageUrl = toAbsoluteUrl(imagePath);
+
+  useEffect(() => {
+    document.head.querySelectorAll('[data-seo-default]').forEach((node) => node.remove());
+  }, []);
 
   return (
     <Helmet>
