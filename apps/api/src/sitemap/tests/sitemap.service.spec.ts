@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { EventData } from '@wander/types';
 import { RedisService } from '../../redis/redis.service';
+import { EventsCatalogService } from '../../paris-events/events-catalog.service';
 import { setupUnitTest } from '../../test-utils/setup-unit-test';
 import { SitemapService } from '../sitemap.service';
 
@@ -37,11 +38,18 @@ const mockRedisService = {
   set: jest.fn(),
 };
 
+const mockEventsCatalog = {
+  getAll: jest.fn(),
+};
+
 describe('SitemapService', () => {
   let service: SitemapService;
 
   beforeAll(async () => {
-    service = await setupUnitTest(SitemapService, [{ provide: RedisService, useValue: mockRedisService }]);
+    service = await setupUnitTest(SitemapService, [
+      { provide: RedisService, useValue: mockRedisService },
+      { provide: EventsCatalogService, useValue: mockEventsCatalog },
+    ]);
   });
 
   afterEach(() => {
@@ -55,13 +63,12 @@ describe('SitemapService', () => {
     await expect(service.getSitemap()).resolves.toBe(cached);
     expect(mockRedisService.get).toHaveBeenCalledWith('sitemap:xml');
     expect(mockRedisService.set).not.toHaveBeenCalled();
+    expect(mockEventsCatalog.getAll).not.toHaveBeenCalled();
   });
 
   it('builds an event url without lastmod and caches it', async () => {
-    mockRedisService.get.mockImplementation(async (key: string) => {
-      if (key === 'sitemap:xml') return null;
-      return [mockEvent];
-    });
+    mockRedisService.get.mockResolvedValue(null);
+    mockEventsCatalog.getAll.mockResolvedValue([mockEvent]);
 
     const xml = await service.getSitemap();
 

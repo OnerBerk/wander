@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { EventData, EventTag } from '@wander/types';
 import { RedisService } from '../redis/redis.service';
+import { EventsCatalogService } from '../paris-events/events-catalog.service';
 
-const EVENTS_REDIS_KEY = 'events:actifs';
 const SITEMAP_REDIS_KEY = 'sitemap:xml';
 const SITEMAP_TTL_SECONDS = 12 * 60 * 60;
 const SITEMAP_URL_LIMIT = 50_000;
@@ -79,13 +79,16 @@ function buildSitemap(events: EventData[]): string {
 
 @Injectable()
 export class SitemapService {
-  constructor(private readonly redisService: RedisService) {}
+  constructor(
+    private readonly redisService: RedisService,
+    private readonly eventsCatalog: EventsCatalogService,
+  ) {}
 
   async getSitemap(): Promise<string> {
     const cached = await this.redisService.get<string>(SITEMAP_REDIS_KEY);
     if (cached) return cached;
 
-    const events = await this.redisService.get<EventData[]>(EVENTS_REDIS_KEY);
+    const events = await this.eventsCatalog.getAll();
     const xml = buildSitemap(events ?? []);
     if (events?.length) {
       await this.redisService.set(SITEMAP_REDIS_KEY, xml, SITEMAP_TTL_SECONDS);

@@ -53,7 +53,7 @@ wander/
 | Types partagés | `@wander/types` (workspace pnpm)                |
 | Conteneurs     | Docker + Compose (dev)                          |
 | CI/CD          | GitHub Actions                                  |
-| Déploiement    | Vercel (web), Render (api)                      |
+| Déploiement    | Vercel (web), Railway (api)                     |
 | IA             | Claude API (parcours / suggestions côté API)    |
 
 ---
@@ -63,8 +63,18 @@ wander/
 | Source            | Données                | TTL cache Redis (cible) |
 | ----------------- | ---------------------- | ----------------------- |
 | Vélib API         | Disponibilité stations | 60 s                    |
-| Que Faire à Paris | Événements temps réel  | 300 s                   |
+| Que Faire à Paris | Événements             | ingestion quotidienne, puis mémoire |
 | Open-Meteo        | Météo (sans clé API)   | 900 s                   |
+
+---
+
+## Événements
+
+L'ingestion (tous les jours à 2 h, en production) écrit tous les événements dans une seule clé Redis, `events:actifs`. Elle pèse 4 à 6 Mo.
+
+Cette clé n'est pas relue à chaque visite. `EventsCatalogService` la charge une fois dans la mémoire de l'API. La liste, la fiche, l'assistant et le sitemap lisent cette copie. Redis n'est rappelé que dans deux cas : au plus toutes les 12 h, et juste après une ingestion réussie. Si cet appel échoue, l'ancienne copie reste servie et un nouvel essai a lieu 15 minutes plus tard.
+
+Vélib et la météo, eux, restent des caches Redis courts, une clé par réponse.
 
 ---
 

@@ -1,6 +1,7 @@
 import { Injectable, Logger, InternalServerErrorException } from '@nestjs/common';
 import { DateTime } from 'luxon';
 import { RedisService } from '../redis/redis.service';
+import { EventsCatalogService } from './events-catalog.service';
 import { HttpClientService } from '../http-client/http-client.service';
 import { EventData, PriceType, Coordinates, EventTag, EventPeriod } from '@wander/types';
 import { QueryFilterDto } from '../filters/dtos/query-filter.dto';
@@ -12,7 +13,6 @@ import { parisEventRawSchema, ParisEventRaw } from './schemas/paris-event-raw.sc
 const GEOCODE_CACHE_TTL = 86400;
 const PARIS_DEFAULT_COORDINATES: Coordinates = { lat: 48.856578, lng: 2.351828 };
 const DEFAULT_COORDINATE_EPSILON = 0.00001;
-const EVENTS_REDIS_KEY = 'events:actifs';
 const ALLOWED_TAGS: EventTag[] = [
   'Art contemporain',
   'Conférence',
@@ -43,6 +43,7 @@ export class ParisEventsService {
   constructor(
     private readonly redisService: RedisService,
     private readonly httpClient: HttpClientService,
+    private readonly eventsCatalog: EventsCatalogService,
   ) {}
 
   canHandle(query: QueryFilterDto): boolean {
@@ -51,13 +52,13 @@ export class ParisEventsService {
   }
 
   /**
-   * Lit la base d'events depuis Redis et filtre en mémoire.
-   * La base est remplie par le job d'ingestion via fetchEventsByZone.
+   * Lit le catalogue en mémoire et filtre.
+   * La base Redis est remplie par le job d'ingestion via fetchEventsByZone.
    */
   async getEvents(query: QueryFilterDto): Promise<{ total: number; events: EventData[] }> {
     try {
-      const all = await this.redisService.get<EventData[]>(EVENTS_REDIS_KEY);
-      if (!all) return { total: 0, events: [] };
+      const all = await this.eventsCatalog.getAll();
+      if (!all.length) return { total: 0, events: [] };
 
       const { start, end } = query.dateFrom
         ? {

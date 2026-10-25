@@ -32,7 +32,7 @@ wander/
 | Package manager | pnpm workspaces                      |
 | Conteneurs      | Docker + Docker Compose (dev)        |
 | CI/CD           | GitHub Actions                       |
-| Déploiement     | Vercel (web), Render (api)           |
+| Déploiement     | Vercel (web), Railway (api)          |
 | IA              | Claude API (suggestions de parcours) |
 
 ---
@@ -67,6 +67,7 @@ wander/
 - Un module par domaine fonctionnel (`VelibModule`, `EventsModule`, etc.)
 - Les controllers ne contiennent pas de logique métier — déléguer aux services
 - Chaque appel API externe passe par le cache Redis avant de sortir
+- Exception : `events:actifs` (4 à 6 Mo) est chargé une fois en mémoire par `EventsCatalogService`. Les lectures d'événements ne retournent pas à Redis. Relecture au plus toutes les 12 h, et après l'ingestion. Une relecture ratée garde l'ancienne copie et réessaie 15 min plus tard
 - DTOs validés avec `class-validator` sur toutes les entrées
 - Tests unitaires obligatoires par module (`*.spec.ts`)
 

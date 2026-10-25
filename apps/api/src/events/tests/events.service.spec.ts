@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { plainToInstance } from 'class-transformer';
 import { EventsService } from '../events.service';
 import { ParisEventsService } from '../../paris-events/paris-events.service';
-import { RedisService } from '../../redis/redis.service';
+import { EventsCatalogService } from '../../paris-events/events-catalog.service';
 import { setupUnitTest } from '../../test-utils/setup-unit-test';
 import { QueryFilterDto } from '../../filters/dtos/query-filter.dto';
 import { EventData } from '@wander/types';
@@ -40,8 +40,8 @@ const mockParisEventsService = {
   canHandle: jest.fn().mockReturnValue(true),
 };
 
-const mockRedisService = {
-  get: jest.fn(),
+const mockEventsCatalog = {
+  getById: jest.fn(),
 };
 
 describe('EventsService', () => {
@@ -50,7 +50,7 @@ describe('EventsService', () => {
   beforeAll(async () => {
     service = await setupUnitTest(EventsService, [
       { provide: ParisEventsService, useValue: mockParisEventsService },
-      { provide: RedisService, useValue: mockRedisService },
+      { provide: EventsCatalogService, useValue: mockEventsCatalog },
     ]);
   });
 
@@ -86,23 +86,17 @@ describe('EventsService', () => {
   });
 
   describe('getOne', () => {
-    it.each([null, []])('returns null when Redis returns %j', async (cached) => {
-      mockRedisService.get.mockResolvedValue(cached);
+    it('returns null when the catalog has no match', async () => {
+      mockEventsCatalog.getById.mockResolvedValue(null);
 
       await expect(service.getOne('1')).resolves.toBeNull();
-      expect(mockRedisService.get).toHaveBeenCalledWith('events:actifs');
+      expect(mockEventsCatalog.getById).toHaveBeenCalledWith('1');
     });
 
     it('returns the event when id is found', async () => {
-      mockRedisService.get.mockResolvedValue([mockEvent]);
+      mockEventsCatalog.getById.mockResolvedValue(mockEvent);
 
       await expect(service.getOne('1')).resolves.toEqual(mockEvent);
-    });
-
-    it('returns null when id is not found', async () => {
-      mockRedisService.get.mockResolvedValue([mockEvent]);
-
-      await expect(service.getOne('missing')).resolves.toBeNull();
     });
   });
 });
