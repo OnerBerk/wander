@@ -11,13 +11,15 @@ const Header = () => {
   const isMap = Boolean(useMatch({ path: '/map', end: true }));
 
   return (
-    <header className={`relative z-60 block h-32 shrink-0 p-2 ${isDay ? 'header-day' : 'header-night'}`}>
+    <header
+      className={`relative z-60 block h-[5.6rem] shrink-0 p-[0.35rem] md:h-32 md:p-2 ${isDay ? 'header-day' : 'header-night'}`}
+    >
       <div className="font-alternate flex h-full justify-between">
-        <div className="flex h-full items-center gap-3">
-          <img className="h-20 w-auto object-contain" src={wanderLogoPaper} alt="Wander" />
+        <div className="flex h-full items-center gap-[0.525rem] md:gap-3">
+          <img className="h-14 w-auto object-contain md:h-20" src={wanderLogoPaper} alt="Wander" />
           <div className="block flex-col items-center">
-            <p className="text-wander-orange text-3xl font-semibold md:text-5xl">Wander</p>
-            <p className="text-xs font-medium md:text-2xl">Explorer votre ville autrement</p>
+            <p className="text-wander-orange text-[1.3125rem] font-semibold md:text-5xl">Wander</p>
+            <p className="text-[0.525rem] font-medium md:text-2xl">Explorer votre ville autrement</p>
           </div>
         </div>
         <div className={`group relative h-full items-start ${isMap ? 'hidden md:flex' : 'flex'}`}>
@@ -30,7 +32,7 @@ const Header = () => {
               </p>
               <img
                 data-colibri-cible
-                className="weather-icon relative z-10 mr-2 h-45 w-auto shrink-0 object-contain"
+                className="weather-icon relative z-10 mr-[0.35rem] h-[7.875rem] w-auto shrink-0 object-contain md:mr-2 md:h-45"
                 src={icon.src}
                 alt={icon.alt}
               />

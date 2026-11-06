@@ -32,7 +32,7 @@ const WeatherMobile = () => {
 
   const panelStyle = {
     closed: {
-      top: '8.5rem',
+      top: '6.1rem',
       left: '40px',
       width: '44px',
       height: '44px',
@@ -41,7 +41,7 @@ const WeatherMobile = () => {
       backdropFilter: 'blur(0px)',
     },
     bubble: {
-      top: 'calc(8.5rem + 56px)',
+      top: 'calc(6.1rem + 56px)',
       left: '40px',
       width: '44px',
       height: '44px',
@@ -52,10 +52,10 @@ const WeatherMobile = () => {
       backdropFilter: 'blur(0px)',
     },
     expanded: {
-      top: '8.5rem',
+      top: '6.1rem',
       left: '16px',
       width: 'calc(100vw - 32px)',
-      height: 'calc(100dvh - 8.5rem - 80px)',
+      height: 'calc(100dvh - 6.1rem - 80px)',
       borderRadius: '24px',
       opacity: 1,
       transform: 'translateX(0) scale(1)',
@@ -138,7 +138,7 @@ const WeatherMobile = () => {
         aria-label={isOpen ? 'Fermer la météo' : 'Ouvrir la météo'}
         onClick={toggleWeatherPanel}
         style={{ zIndex: 100 }}
-        className="weather-mobile-toggle fixed top-[8.5rem] left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-sky-100/60 bg-sky-200/60 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="weather-mobile-toggle fixed top-[6.1rem] left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-sky-100/60 bg-sky-200/60 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         {isOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <CloudSun className="h-6 w-6" aria-hidden="true" />}
       </button>
