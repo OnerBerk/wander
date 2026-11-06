@@ -1,10 +1,13 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
+import { CloudSun, SlidersHorizontal, X } from 'lucide-react';
 import { Outlet, useMatch } from 'react-router-dom';
 import ViewSwitch from '@/ui-components/view-switch';
 import { loadMapPage } from '@/pages/load-map-page';
 import usePanelStore from '@/store/zustand/usePanelStore';
 import paneOpen from '@/assets/icons/pane-open.svg';
 import paneClose from '@/assets/icons/pane-close.svg';
+import WeatherMobile from '@/components/weather/weather-mobile';
+import FilterPanelMobile from '@/components/panel/filter-panel-mobile';
 
 const LazyMapPage = lazy(loadMapPage);
 
@@ -21,7 +24,9 @@ const scheduleMapPreload = (load: () => void): (() => void) => {
 const BrowseLayout = () => {
   const isMap = Boolean(useMatch({ path: '/map', end: true }));
   const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
+  const isWeatherOpen = usePanelStore((state) => state.isWeatherPanelOpen);
   const togglePanel = usePanelStore((state) => state.togglePanel);
+  const toggleWeatherPanel = usePanelStore((state) => state.toggleWeatherPanel);
   const [hasShownMap, setHasShownMap] = useState(isMap);
   const showMap = isMap || hasShownMap;
 
@@ -56,12 +61,32 @@ const BrowseLayout = () => {
       >
         <Outlet />
       </div>
-      <div
-        className={`bg-wander-orange/30 pointer-events-auto fixed z-70 flex w-fit items-center gap-2 rounded-2xl px-2 py-1 md:px-4 md:py-2 ${
-          isMap ? 'right-4 bottom-4 md:top-37 md:right-auto md:bottom-auto md:left-5' : 'top-37 left-5'
-        }`}
-      >
+      <div className="bg-wander-crem/30 pointer-events-auto fixed top-21 left-5 z-100 flex w-fit items-center gap-2 rounded-2xl px-2 py-1 md:top-37 md:z-70 md:px-4 md:py-2">
         <ViewSwitch />
+        <button
+          type="button"
+          aria-label={isWeatherOpen ? 'Fermer la météo' : 'Ouvrir la météo'}
+          onClick={toggleWeatherPanel}
+          className="weather-mobile-toggle flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-sky-100/60 bg-sky-200/60 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:outline-none md:hidden"
+        >
+          {isWeatherOpen ? (
+            <X className="h-4 w-4" aria-hidden="true" />
+          ) : (
+            <CloudSun className="h-4 w-4" aria-hidden="true" />
+          )}
+        </button>
+        <button
+          type="button"
+          aria-label={isPanelOpen ? 'Fermer les filtres' : 'Ouvrir les filtres'}
+          onClick={togglePanel}
+          className="toggle-filter-panel-mobile bg-wander-orange/40 focus-visible:ring-wander-orange flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:hidden"
+        >
+          {isPanelOpen ? (
+            <X className="h-4 w-4" aria-hidden="true" />
+          ) : (
+            <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
+          )}
+        </button>
         {isMap && (
           <button
             type="button"
@@ -73,6 +98,8 @@ const BrowseLayout = () => {
           </button>
         )}
       </div>
+      <WeatherMobile />
+      <FilterPanelMobile />
     </div>
   );
 };

@@ -24,12 +24,12 @@ const ListPage = () => {
         description="Découvrez les événements culturels à Paris et en Île-de-France : concerts, expos, spectacles et sorties, avec une vue liste et une carte interactive."
         canonicalPath="/"
       />
-      <div className="w-full shrink-0 pt-5" style={{ backgroundImage: 'url(/bg-marine.webp)' }}>
+      <div className="hidden w-full shrink-0 pt-5 md:block" style={{ backgroundImage: 'url(/bg-marine.webp)' }}>
         <FilterPanelList />
       </div>
       <div
         ref={scrollerRef}
-        className="scrollbar-hidden flex min-h-0 flex-1 flex-col overflow-y-auto bg-contain bg-center text-amber-50"
+        className="scrollbar-hidden flex min-h-0 flex-1 flex-col overflow-y-auto bg-contain bg-center pt-12 text-amber-50 md:pt-0"
         style={{ backgroundImage: 'url(/bg-marine.webp)' }}
       >
         <div className="mx-auto flex w-full max-w-450 flex-col items-start px-4 sm:w-[75%] sm:px-0">

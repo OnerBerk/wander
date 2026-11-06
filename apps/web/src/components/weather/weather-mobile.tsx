@@ -1,5 +1,4 @@
 import { useEffect, useId, useState } from 'react';
-import { CloudSun, X } from 'lucide-react';
 import { useIsDay } from '@/hooks/useIsDay';
 import { useWeatherIcon } from '@/hooks/useWeatherIcon';
 import { useWeather } from '@/api/features/weather/queries/use-weather';
@@ -12,7 +11,6 @@ const WeatherMobile = () => {
 
   const { data: weather } = useWeather();
   const isOpen = usePanelStore((state) => state.isWeatherPanelOpen);
-  const toggleWeatherPanel = usePanelStore((state) => state.toggleWeatherPanel);
   const closeWeatherPanel = usePanelStore((state) => state.closeWeatherPanel);
 
   const icon = useWeatherIcon();
@@ -32,8 +30,8 @@ const WeatherMobile = () => {
 
   const panelStyle = {
     closed: {
-      top: '6.1rem',
-      left: '40px',
+      top: '5.5rem',
+      left: '114px',
       width: '44px',
       height: '44px',
       opacity: 0,
@@ -41,8 +39,8 @@ const WeatherMobile = () => {
       backdropFilter: 'blur(0px)',
     },
     bubble: {
-      top: 'calc(6.1rem + 56px)',
-      left: '40px',
+      top: 'calc(5.5rem + 56px)',
+      left: '114px',
       width: '44px',
       height: '44px',
       borderRadius: '9999px',
@@ -52,10 +50,10 @@ const WeatherMobile = () => {
       backdropFilter: 'blur(0px)',
     },
     expanded: {
-      top: '6.1rem',
+      top: '8.25rem',
       left: '16px',
       width: 'calc(100vw - 32px)',
-      height: 'calc(100dvh - 6.1rem - 80px)',
+      height: 'calc(100dvh - 8.25rem - 80px)',
       borderRadius: '24px',
       opacity: 1,
       transform: 'translateX(0) scale(1)',
@@ -132,16 +130,6 @@ const WeatherMobile = () => {
           )}
         </div>
       </div>
-
-      <button
-        type="button"
-        aria-label={isOpen ? 'Fermer la météo' : 'Ouvrir la météo'}
-        onClick={toggleWeatherPanel}
-        style={{ zIndex: 100 }}
-        className="weather-mobile-toggle fixed top-[6.1rem] left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-sky-100/60 bg-sky-200/60 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:outline-none"
-      >
-        {isOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <CloudSun className="h-6 w-6" aria-hidden="true" />}
-      </button>
     </div>
   );
 };

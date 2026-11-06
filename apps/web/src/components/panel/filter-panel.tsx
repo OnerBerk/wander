@@ -15,11 +15,16 @@ const FilterPanel = () => {
       aria-modal="true"
       aria-labelledby={titleId}
       aria-hidden={!isPanelOpen}
-      className={`absolute top-0 right-0 z-100 hidden h-full w-140 flex-col gap-2 border-l-2 border-white/30 px-4 pt-4 backdrop-blur-sm transition-transform duration-500 ease-in-out md:flex ${
+      className={`text-wander-crem absolute top-0 right-0 z-100 hidden h-full w-140 flex-col gap-2 overflow-y-auto border-l-2 border-white/30 px-4 pt-4 backdrop-blur-sm transition-transform duration-500 ease-in-out md:flex ${
         isPanelOpen ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
-      <div className="mt-10 flex flex-col justify-center gap-2">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-90"
+        style={{ backgroundImage: 'url(/bg-marine.webp)' }}
+      />
+      <div className="relative mt-10 flex flex-col justify-center gap-2">
         <div className="text-xl font-bold">Metro Vélib Invaders</div>
         <div className="filter-panel flex flex-wrap gap-5">
           {mapLayers.map((layer) => (
@@ -31,15 +36,16 @@ const FilterPanel = () => {
               onClick={layer.onClick}
               ariaLabel={layer.ariaLabel}
               className="max-w-25"
+              isDark
             />
           ))}
         </div>
       </div>
-      <div className="text-xl font-bold">Filtrer vos événements</div>
-      <div className="tag-filters flex gap-2">
+      <div className="relative text-xl font-bold">Filtrer vos événements</div>
+      <div className="tag-filters relative flex gap-2">
         <Filters />
       </div>
-      <p className="mt-auto px-2 pb-1 text-[10px] text-slate-600">
+      <p className="relative mt-auto px-2 pb-1 text-[10px] text-white/80">
         ©{' '}
         <a className="underline" href="https://www.maptiler.com/" target="_blank" rel="noreferrer">
           MapTiler

@@ -1,16 +1,24 @@
 import { useEffect, useId, useState } from 'react';
-import usePanelStore from '@/store/zustand/usePanelStore';
-import { SlidersHorizontal, X } from 'lucide-react';
-import FilterBadge from '@/ui-components/filter-badge';
+import { useMatch } from 'react-router-dom';
+import AllMarker from '@/assets/markers/all-marker.webp';
+import NoMarker from '@/assets/markers/no-marker.webp';
+import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
+import { useEventFilters } from '@/hooks/use-event-filters';
 import { useMapLayerFilters } from '@/hooks/use-map-layer-filters';
-import Filters from './filters';
+import usePanelStore from '@/store/zustand/usePanelStore';
+import FilterBadge from '@/ui-components/filter-badge';
+import PeriodSelect from '@/ui-components/period-select';
 
 const FilterPanelMobile = () => {
   const titleId = useId();
-  const togglePanel = usePanelStore((state) => state.togglePanel);
+  const isMap = Boolean(useMatch({ path: '/map', end: true }));
   const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
-
+  const { period, tags, all, none, handlePeriodChange, toggleTag, handleAll, handleNone } = useEventFilters();
   const mapLayers = useMapLayerFilters();
+  const mobileLayers = ['Vélib', 'Métro', 'Invaders'].flatMap((label) => {
+    const layer = mapLayers.find((item) => item.label === label);
+    return layer ? [layer] : [];
+  });
 
   const [phase, setPhase] = useState<'closed' | 'bubble' | 'expanded'>('closed');
 
@@ -28,8 +36,8 @@ const FilterPanelMobile = () => {
 
   const panelStyle = {
     closed: {
-      left: '40px',
-      bottom: '16px',
+      top: '5.5rem',
+      left: '154px',
       width: '44px',
       height: '44px',
       borderRadius: '9999px',
@@ -39,8 +47,8 @@ const FilterPanelMobile = () => {
       backdropFilter: 'blur(0px)',
     },
     bubble: {
-      left: '40px',
-      bottom: '80px',
+      top: 'calc(5.5rem + 56px)',
+      left: '154px',
       width: '44px',
       height: '44px',
       borderRadius: '9999px',
@@ -50,15 +58,17 @@ const FilterPanelMobile = () => {
       backdropFilter: 'blur(0px)',
     },
     expanded: {
+      top: '8.25rem',
       left: '16px',
-      bottom: '5px',
       width: 'calc(100vw - 32px)',
-      height: 'calc(100dvh - 8rem - 1.25rem)',
+      height: 'calc(100dvh - 8.25rem - 80px)',
       borderRadius: '24px',
       opacity: 1,
       transform: 'translateX(0) scale(1)',
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-      backdropFilter: 'blur(12px)',
+      backgroundImage: 'url(/bg-marine.webp)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backdropFilter: 'blur(0px)',
     },
   }[phase];
 
@@ -77,7 +87,7 @@ const FilterPanelMobile = () => {
           WebkitBackdropFilter: panelStyle.backdropFilter,
           pointerEvents: phase === 'expanded' ? 'auto' : 'none',
           transition: 'all 600ms cubic-bezier(0.34, 1.4, 0.64, 1)',
-          transformOrigin: 'bottom left',
+          transformOrigin: 'top left',
           boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
         }}
       >
@@ -103,43 +113,62 @@ const FilterPanelMobile = () => {
             transitionDelay: phase === 'expanded' ? '300ms' : '0ms',
             opacity: phase === 'expanded' ? 1 : 0,
           }}
-          className="p-6"
+          className="h-full overflow-y-auto p-4"
         >
           <h2 id={titleId} className="sr-only">
             Filtres
           </h2>
-          <div className="filter-panel-mobile grid w-full grid-cols-4 gap-2 border-b border-white/20 pb-4">
-            {mapLayers.map((layer) => (
+          <div className="grid grid-cols-4 items-start gap-3">
+            {isMap
+              ? mobileLayers.map((layer) => (
+                  <FilterBadge
+                    key={layer.label}
+                    label={layer.label}
+                    icon={layer.icon}
+                    selected={layer.selected}
+                    onClick={layer.onClick}
+                    ariaLabel={layer.ariaLabel}
+                    isDark
+                  />
+                ))
+              : null}
+            <FilterBadge
+              className="col-start-1 [&_img]:scale-[0.8]"
+              label="Aucun"
+              icon={NoMarker}
+              selected={none}
+              onClick={handleNone}
+              isDark
+            />
+            <FilterBadge
+              className="[&_img]:scale-[0.8]"
+              label="Tout"
+              icon={AllMarker}
+              selected={all}
+              onClick={handleAll}
+              isDark
+            />
+            <PeriodSelect
+              badge
+              value={period}
+              onChange={handlePeriodChange}
+              chipColorClassName="border-white text-white"
+              chipBackgroundStyle={{ backgroundImage: 'url(/bg-marine.webp)' }}
+            />
+            {EVENT_TAG_OPTIONS.map(({ value, label, icon }, index) => (
               <FilterBadge
-                key={layer.label}
-                label={layer.label}
-                icon={layer.icon}
-                selected={layer.selected}
-                onClick={layer.onClick}
-                ariaLabel={layer.ariaLabel}
-                className="max-w-24"
+                key={value}
+                className={index === 0 ? 'col-start-1' : ''}
+                label={label}
+                icon={icon}
+                selected={tags.includes(value)}
+                onClick={() => toggleTag(value)}
+                isDark
               />
             ))}
           </div>
-          <div className="mobile-filters">
-            <Filters />
-          </div>
         </div>
       </div>
-
-      <button
-        type="button"
-        aria-label={isPanelOpen ? 'Fermer les filtres' : 'Ouvrir les filtres'}
-        onClick={togglePanel}
-        style={{ zIndex: 100 }}
-        className="toggle-filter-panel-mobile bg-wander-orange/40 focus-visible:ring-wander-orange fixed bottom-4 left-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-white/20 shadow-lg backdrop-blur-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-      >
-        {isPanelOpen ? (
-          <X className="h-6 w-6" aria-hidden="true" />
-        ) : (
-          <SlidersHorizontal className="h-6 w-6" aria-hidden="true" />
-        )}
-      </button>
     </div>
   );
 };
