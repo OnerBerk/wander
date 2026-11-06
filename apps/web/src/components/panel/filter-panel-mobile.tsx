@@ -61,7 +61,7 @@ const FilterPanelMobile = () => {
       top: '8.25rem',
       left: '16px',
       width: 'calc(100vw - 32px)',
-      height: 'calc(100dvh - 8.25rem - 80px)',
+      height: 'calc(100dvh - 8.25rem - 16px)',
       borderRadius: '24px',
       opacity: 1,
       transform: 'translateX(0) scale(1)',
