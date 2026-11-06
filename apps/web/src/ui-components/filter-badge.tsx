@@ -32,7 +32,7 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({
       aria-pressed={interactive ? selected : undefined}
       aria-label={ariaLabel ?? label}
       style={{ opacity: disabled ? 0.6 : 1 }}
-      className={`relative flex aspect-square w-full flex-col items-center justify-center overflow-visible select-none focus:outline-none ${interactive ? 'cursor-pointer' : 'cursor-default'} disabled:cursor-not-allowed ${className}`}
+      className={`relative flex aspect-square w-18 flex-col items-center justify-center overflow-visible select-none focus:outline-none md:w-full ${interactive ? 'cursor-pointer' : 'cursor-default'} disabled:cursor-not-allowed ${className}`}
     >
       <div
         style={{ filter: disabled ? 'grayscale(1) blur(1px)' : undefined }}

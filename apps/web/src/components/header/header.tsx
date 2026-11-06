@@ -1,5 +1,4 @@
 import wanderLogoPaper from '@/assets/logo/wander-logo-paper.png';
-import { useMatch } from 'react-router-dom';
 
 import { useIsDay } from '@/hooks/useIsDay';
 
@@ -8,11 +7,10 @@ import { useWeatherIcon } from '@/hooks/useWeatherIcon';
 const Header = () => {
   const icon = useWeatherIcon();
   const isDay = useIsDay();
-  const isMap = Boolean(useMatch({ path: '/map', end: true }));
 
   return (
     <header
-      className={`relative z-60 block h-[5.6rem] shrink-0 p-[0.35rem] md:h-32 md:p-2 ${isDay ? 'header-day' : 'header-night'}`}
+      className={`relative z-60 block h-16 shrink-0 p-[0.35rem] md:h-32 md:p-2 ${isDay ? 'header-day' : 'header-night'}`}
     >
       <div className="font-alternate flex h-full justify-between">
         <div className="flex h-full items-center gap-[0.525rem] md:gap-3">
@@ -22,7 +20,7 @@ const Header = () => {
             <p className="text-[0.525rem] font-medium md:text-2xl">Explorer votre ville autrement</p>
           </div>
         </div>
-        <div className={`group relative h-full items-start ${isMap ? 'hidden md:flex' : 'flex'}`}>
+        <div className="group relative hidden h-full items-start md:flex">
           {icon && (
             <>
               <p
