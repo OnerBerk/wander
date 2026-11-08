@@ -29,7 +29,6 @@ const Header = () => {
                 <span className="animate-weather-marquee inline-block whitespace-nowrap">{icon.line}</span>
               </p>
               <img
-                data-colibri-cible
                 className="weather-icon relative z-10 mr-[0.35rem] h-[7.875rem] w-auto shrink-0 object-contain md:mr-2 md:h-45"
                 src={icon.src}
                 alt={icon.alt}

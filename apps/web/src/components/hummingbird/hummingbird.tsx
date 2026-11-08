@@ -14,6 +14,7 @@ type Props = {
 // ---------- réglages ----------
 const FLIGHT = 7.5; // temps de vol en 8 avant de se poser (secondes)
 const LANDING = 2.4; // durée de la descente (secondes)
+const STAY = 3; // temps resté posé avant de disparaître (secondes)
 const PITCH = 0.5; // inclinaison du corps en vol : 0 = debout, plus grand = plus horizontal (radians)
 const LAND_PITCH = 0.05; // inclinaison une fois posé
 const HEAD_LEAD = 0.45; // à quel point la tête anticipe le virage (0 = jamais)
@@ -104,7 +105,7 @@ const Hummingbird = ({ targetSelector, src = colibriUrl }: Props) => {
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        zIndex: '50',
+        zIndex: '105',
       });
       document.body.appendChild(canvas);
 
@@ -160,6 +161,7 @@ const Hummingbird = ({ targetSelector, src = colibriUrl }: Props) => {
         last = 0,
         raf = 0;
       let landed = false;
+      let hideTimer = 0;
       let yaw = Math.PI / 2 - 0.4;
       let head = 0;
       let phase = 0;
@@ -171,7 +173,7 @@ const Hummingbird = ({ targetSelector, src = colibriUrl }: Props) => {
         const el = document.querySelector(targetSelector);
         if (el) {
           const r = el.getBoundingClientRect();
-          return { x: r.left + r.width / 2, y: r.top - size * 0.4 };
+          return { x: r.left + r.width / 2 - size * 0.22, y: r.top + size * 0.06 };
         }
         return { x: W * 0.85, y: H * 0.9 };
       };
@@ -198,7 +200,10 @@ const Hummingbird = ({ targetSelector, src = colibriUrl }: Props) => {
         camera.right = W;
         camera.top = H;
         camera.updateProjectionMatrix();
-        size = Math.min(Math.max(Math.min(W, H) * 0.12, 60), 105);
+        size =
+          W >= 768
+            ? Math.min(Math.max(Math.min(W, H) * 0.09, 67), 75)
+            : Math.min(Math.max(Math.min(W, H) * 0.12, 60), 105);
         pivot.scale.setScalar(size / modelHeight);
         if (landed) {
           placeLanded();
@@ -286,16 +291,27 @@ const Hummingbird = ({ targetSelector, src = colibriUrl }: Props) => {
         else {
           placeLanded();
           renderer.render(scene, camera);
+          scheduleHide();
         }
+      };
+
+      const scheduleHide = () => {
+        if (hideTimer) return;
+        hideTimer = window.setTimeout(() => cleanup(), STAY * 1000);
       };
 
       if (reduce) {
         landed = true;
         placeLanded();
         renderer.render(scene, camera);
+        scheduleHide();
       } else raf = requestAnimationFrame(frame);
 
+      let removed = false;
       cleanup = () => {
+        if (removed) return;
+        removed = true;
+        window.clearTimeout(hideTimer);
         cancelAnimationFrame(raf);
         window.removeEventListener('resize', resize);
         scene.traverse((o) => {

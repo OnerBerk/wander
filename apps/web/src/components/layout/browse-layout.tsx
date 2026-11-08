@@ -8,6 +8,8 @@ import paneOpen from '@/assets/icons/pane-open.svg';
 import paneClose from '@/assets/icons/pane-close.svg';
 import WeatherMobile from '@/components/weather/weather-mobile';
 import FilterPanelMobile from '@/components/panel/filter-panel-mobile';
+import AiPanel from '@/components/panel/ai-panel';
+import iaIcon from '@/assets/icons/IA-icon.png';
 
 const LazyMapPage = lazy(loadMapPage);
 
@@ -25,8 +27,10 @@ const BrowseLayout = () => {
   const isMap = Boolean(useMatch({ path: '/map', end: true }));
   const isPanelOpen = usePanelStore((state) => state.isPanelOpen);
   const isWeatherOpen = usePanelStore((state) => state.isWeatherPanelOpen);
+  const isAiPanelOpen = usePanelStore((state) => state.isAiPanelOpen);
   const togglePanel = usePanelStore((state) => state.togglePanel);
   const toggleWeatherPanel = usePanelStore((state) => state.toggleWeatherPanel);
+  const toggleAiPanel = usePanelStore((state) => state.toggleAiPanel);
   const [hasShownMap, setHasShownMap] = useState(isMap);
   const showMap = isMap || hasShownMap;
 
@@ -61,7 +65,7 @@ const BrowseLayout = () => {
       >
         <Outlet />
       </div>
-      <div className="bg-wander-crem/30 pointer-events-auto fixed top-21 left-5 z-100 flex w-fit items-center gap-2 rounded-2xl px-2 py-1 md:top-37 md:z-70 md:px-4 md:py-2">
+      <div className="bg-wander-crem/90 pointer-events-auto fixed top-21 left-5 z-100 flex w-fit items-center gap-2 rounded-2xl px-2 py-1 md:top-37 md:z-70 md:px-4 md:py-2">
         <ViewSwitch />
         <button
           type="button"
@@ -97,9 +101,19 @@ const BrowseLayout = () => {
             <img src={isPanelOpen ? paneClose : paneOpen} alt="" className="h-11 w-11" />
           </button>
         )}
+        <button
+          type="button"
+          aria-label={isAiPanelOpen ? 'Fermer l’assistant' : 'Ouvrir l’assistant'}
+          aria-expanded={isAiPanelOpen}
+          onClick={toggleAiPanel}
+          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:h-11 md:w-11"
+        >
+          <img data-colibri-cible src={iaIcon} alt="" className="h-full w-full object-contain" />
+        </button>
       </div>
       <WeatherMobile />
       <FilterPanelMobile />
+      <AiPanel />
     </div>
   );
 };
