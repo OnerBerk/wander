@@ -1,8 +1,17 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Zekton';
+  src: url('../assets/fonts/zekton/Zekton-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-default: 'Montserrat Alternates', sans-serif;
   --font-alternate: 'Montserrat Alternates', sans-serif;
+  --font-zekton: 'Zekton', sans-serif;
   --color-wander-orange: #cc4b10;
   --color-wander-text: #032553;
   --color-wander-black: #101010;

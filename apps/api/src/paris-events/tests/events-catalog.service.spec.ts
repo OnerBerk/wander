@@ -101,6 +101,29 @@ describe('EventsCatalogService', () => {
     });
   });
 
+  describe('date order', () => {
+    let service: EventsCatalogService;
+
+    beforeAll(async () => {
+      service = await setupUnitTest(EventsCatalogService, [{ provide: RedisService, useValue: mockRedisService }]);
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('returns events in chronological order with undated events last', async () => {
+      const later = { ...eventA, id: 'later', dateStart: '2099-06-01T00:00:00+00:00' };
+      const sooner = { ...eventA, id: 'sooner', dateStart: '2099-02-01T00:00:00+00:00' };
+      const undated = { ...eventA, id: 'undated', dateStart: '' };
+      mockRedisService.get.mockResolvedValueOnce([later, undated, sooner]);
+
+      const events = await service.getAll();
+
+      expect(events.map((event) => event.id)).toEqual(['sooner', 'later', 'undated']);
+    });
+  });
+
   describe('concurrent callers', () => {
     let service: EventsCatalogService;
 

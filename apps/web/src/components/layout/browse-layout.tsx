@@ -8,7 +8,7 @@ import paneOpen from '@/assets/icons/pane-open.svg';
 import paneClose from '@/assets/icons/pane-close.svg';
 import WeatherMobile from '@/components/weather/weather-mobile';
 import FilterPanelMobile from '@/components/panel/filter-panel-mobile';
-import AiPanel from '@/components/panel/ai-panel';
+import AiPanel from '@/components/panel/ai-panel/ai-panel';
 import iaIcon from '@/assets/icons/IA-icon.png';
 
 const LazyMapPage = lazy(loadMapPage);
