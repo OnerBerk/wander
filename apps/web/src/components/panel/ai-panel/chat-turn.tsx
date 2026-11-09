@@ -15,16 +15,16 @@ const ChatTurn = ({ turn }: ChatTurnProps) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex max-w-[80%] items-center gap-2 self-end">
-        <p className="bg-wander-crem text-wander-text border-wander-black rounded-2xl border-2 px-3 py-2 text-sm">
+      <div className="flex w-full items-center justify-end gap-2">
+        <p className="bg-wander-crem text-wander-text border-wander-black min-w-0 rounded-2xl border-2 px-3 py-2 text-sm">
           {turn.userMessage}
         </p>
         <img src={avatarHuman} alt="" className="h-12 w-12 shrink-0 object-cover" />
       </div>
       {turn.reply ? (
-        <div className="flex max-w-[80%] items-center gap-2">
+        <div className="flex w-full items-center gap-2">
           <img src={avatarIa} alt="" className="h-12 w-12 shrink-0 object-cover" />
-          <p className="font-zekton text-wander-black text-sm md:text-lg">{turn.reply.message}</p>
+          <p className="font-zekton text-wander-black min-w-0 text-sm md:text-lg">{turn.reply.message}</p>
         </div>
       ) : null}
       {events.length > 0 ? (

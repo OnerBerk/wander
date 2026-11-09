@@ -1,4 +1,5 @@
 import { useId, useState, type SubmitEvent } from 'react';
+import { Send, X } from 'lucide-react';
 import iaIcon from '@/assets/icons/IA-icon.png';
 import { useAiConversation } from '@/hooks/use-ai-conversation';
 import usePanelStore from '@/store/zustand/usePanelStore';
@@ -24,6 +25,11 @@ const AiPanel = () => {
     setDraft('');
   };
 
+  const onReset = () => {
+    if (!window.confirm('Êtes-vous sûr d’effacer la discussion ?')) return;
+    reset();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -33,14 +39,14 @@ const AiPanel = () => {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="bg-wander-crem relative flex h-[95vh] w-[90vw] max-w-350 flex-col overflow-hidden rounded-2xl p-2"
+        className="bg-wander-crem relative flex h-[90svh] w-[90vw] max-w-350 flex-col overflow-hidden rounded-2xl p-2"
       >
         <header
-          className="flex h-20 shrink-0 items-center justify-between gap-4 rounded-2xl border-2 px-2"
+          className="flex h-14 shrink-0 items-center justify-between gap-4 rounded-2xl border-2 px-2 md:h-20"
           style={{ backgroundImage: 'url(/bg-marine.webp)' }}
         >
           <img src={iaIcon} alt="" className="h-full w-auto object-contain" />
-          <h2 id={titleId} className="text-wander-crem text-xl font-bold md:text-4xl">
+          <h2 id={titleId} className="text-wander-crem text-lg font-bold md:text-4xl">
             Dénicheur de sorties
           </h2>
         </header>
@@ -50,14 +56,6 @@ const AiPanel = () => {
               <ChatTurn key={turn.id} turn={turn} />
             ))}
           </div>
-          <button
-            type="button"
-            onClick={reset}
-            disabled={turns.length === 0}
-            className="mr-3 mb-2 self-end rounded-full bg-red-900 px-3 py-1 text-sm font-semibold text-white disabled:opacity-40"
-          >
-            Effacer la discussion
-          </button>
         </main>
         <form onSubmit={onSubmit} className="flex shrink-0 items-center gap-2 p-2">
           <label htmlFor={inputId} className="sr-only">
@@ -79,10 +77,21 @@ const AiPanel = () => {
           />
           <button
             type="submit"
+            aria-label="Envoyer"
             disabled={!canSend}
-            className="bg-wander-black text-wander-crem rounded-full px-4 py-2 text-sm font-semibold disabled:opacity-40"
+            className="bg-wander-black text-wander-crem flex h-8 w-8 shrink-0 items-center justify-center rounded-full disabled:opacity-40 md:h-auto md:w-auto md:px-4 md:py-2 md:text-sm md:font-semibold"
           >
-            Envoyer
+            <Send className="h-4 w-4 md:hidden" aria-hidden="true" />
+            <span className="hidden md:inline">Envoyer</span>
+          </button>
+          <button
+            type="button"
+            aria-label="Effacer la discussion"
+            onClick={onReset}
+            disabled={turns.length === 0}
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-900 text-white disabled:opacity-40"
+          >
+            <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </form>
       </div>
