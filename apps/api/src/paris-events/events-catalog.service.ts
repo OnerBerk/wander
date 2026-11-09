@@ -6,6 +6,14 @@ const EVENTS_REDIS_KEY = 'events:actifs';
 const MAX_AGE_MS = 12 * 60 * 60 * 1000;
 const RETRY_AFTER_MS = 15 * 60 * 1000;
 
+function byDateStart(a: EventData, b: EventData): number {
+  if (!a.dateStart) return b.dateStart ? 1 : 0;
+  if (!b.dateStart) return -1;
+  if (a.dateStart < b.dateStart) return -1;
+  if (a.dateStart > b.dateStart) return 1;
+  return 0;
+}
+
 /**
  * Copie mémoire de `events:actifs`.
  *
@@ -81,8 +89,9 @@ export class EventsCatalogService {
       return;
     }
 
-    this.events = data;
-    this.byId = new Map(data.map((event) => [event.id, event]));
+    const events = data.toSorted(byDateStart);
+    this.events = events;
+    this.byId = new Map(events.map((event) => [event.id, event]));
     this.loadedAt = Date.now();
     this.retryAt = 0;
     this.refreshDue = false;

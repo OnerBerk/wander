@@ -4,6 +4,7 @@ import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
 import { formatEventDate } from '@/utils/card-utils';
 import { eventPath } from '@/utils/event-path';
 import { getOptimizedImageUrl } from '@/utils/get-optimized-image-url';
+import { toPlainText } from '@/utils/to-plain-text';
 import { Link } from 'react-router-dom';
 
 const PRIORITY_CARD_COUNT = 4;
@@ -62,12 +63,7 @@ const EventCard = ({ event, index, from = '/' }: EventCardProps) => {
                 <span className="h-2 w-2 rounded-full bg-current" />
                 Ticket
               </p>
-              <p
-                className="line-clamp-3 h-12 text-[11px]"
-                dangerouslySetInnerHTML={{
-                  __html: event.description?.toLocaleLowerCase() ?? '',
-                }}
-              />
+              <p className="line-clamp-3 h-12 text-[11px]">{toPlainText(event.description ?? '').toLocaleLowerCase()}</p>
             </div>
             <div className="hidden sm:contents">
               <Barcode />
