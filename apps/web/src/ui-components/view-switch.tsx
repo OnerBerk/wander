@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { loadMapPage } from '@/pages/load-map-page';
 
 const BOUNCE = 'ease-[cubic-bezier(0.68,-0.55,0.27,1.55)]';
@@ -9,23 +9,15 @@ interface ViewSwitchProps {
 }
 
 const ViewSwitch: React.FC<ViewSwitchProps> = ({ className = '' }) => {
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const isMap = pathname.startsWith('/map');
 
-  const toggleView = () => {
-    navigate(isMap ? '/' : '/map');
-  };
-
   return (
     <span className="relative inline-block h-[calc(2.25rem*0.7)] w-[calc(5.5rem*0.7)] md:h-9 md:w-22">
-      <button
-        type="button"
-        role="switch"
-        aria-checked={isMap}
+      <Link
+        to={isMap ? '/' : '/map'}
         aria-label={isMap ? 'Passer en vue liste' : 'Passer en vue carte'}
         data-view={isMap ? 'map' : 'list'}
-        onClick={toggleView}
         onPointerEnter={() => {
           void loadMapPage();
         }}
@@ -101,7 +93,7 @@ const ViewSwitch: React.FC<ViewSwitchProps> = ({ className = '' }) => {
             <circle cx="12" cy="9.5" r="2.5" />
           </svg>
         </span>
-      </button>
+      </Link>
     </span>
   );
 };

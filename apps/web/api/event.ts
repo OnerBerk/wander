@@ -6,6 +6,7 @@ import { injectEventHtml, injectNotFoundEventHtml } from '../src/utils/event-seo
 
 const EVENT_ID_PATTERN = /^[a-zA-Z0-9_-]{1,128}$/;
 const API_TIMEOUT_MS = 5_000;
+const RELATED_TIMEOUT_MS = 2_000;
 const API_BASE_URL = (process.env.API_URL ?? process.env.VITE_API_URL ?? 'https://api.wandercity.fr').replace(
   /\/+$/,
   '',
@@ -69,6 +70,22 @@ async function fetchEvent(id: string): Promise<FetchEventResult> {
   }
 }
 
+async function fetchRelatedEvents(id: string): Promise<EventData[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/events/${encodeURIComponent(id)}/related`, {
+      headers: { Accept: 'application/json' },
+      signal: AbortSignal.timeout(RELATED_TIMEOUT_MS),
+    });
+
+    if (!response.ok) return [];
+
+    const parsed: unknown = await response.json();
+    return Array.isArray(parsed) ? (parsed as EventData[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function GET(request: Request): Promise<Response> {
   const template = await loadHtmlTemplate();
   if (!template) {
@@ -91,7 +108,7 @@ export async function GET(request: Request): Promise<Response> {
     });
   }
 
-  const result = await fetchEvent(id);
+  const [result, relatedEvents] = await Promise.all([fetchEvent(id), fetchRelatedEvents(id)]);
 
   if (result.status === 'error') {
     return new Response(template, {
@@ -115,7 +132,7 @@ export async function GET(request: Request): Promise<Response> {
     });
   }
 
-  return new Response(injectEventHtml(template, result.event), {
+  return new Response(injectEventHtml(template, result.event, relatedEvents), {
     status: 200,
     headers: { ...HTML_HEADERS, 'Cache-Control': CACHE_FOUND },
   });
