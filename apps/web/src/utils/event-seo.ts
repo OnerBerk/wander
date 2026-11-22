@@ -1,5 +1,5 @@
 import type { EventData } from '@wander/types';
-import { eventPath } from './event-path';
+import { eventPath } from './event-path.js';
 
 export const SITE_ORIGIN = 'https://www.wandercity.fr';
 export const DEFAULT_IMAGE_PATH = '/web-app-manifest-512x512.png';

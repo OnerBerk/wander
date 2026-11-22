@@ -1,8 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { EventData } from '@wander/types';
-import { eventPath } from '../src/utils/event-path';
-import { injectEventHtml, injectNotFoundEventHtml } from '../src/utils/event-seo';
+import { eventPath } from '../src/utils/event-path.js';
+import { injectEventHtml, injectNotFoundEventHtml } from '../src/utils/event-seo.js';
 
 const EVENT_ID_PATTERN = /^[a-zA-Z0-9_-]{1,128}$/;
 const API_TIMEOUT_MS = 5_000;

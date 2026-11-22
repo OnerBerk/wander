@@ -1,5 +1,5 @@
 import type { EventData } from '@wander/types';
-import { EVENT_TAG_LABELS } from '../constants/event-tag-labels';
+import { EVENT_TAG_LABELS } from '../constants/event-tag-labels.js';
 
 export function slugify(text: string): string {
   const slug = text
