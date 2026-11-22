@@ -3,6 +3,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { RedisService } from '../redis/redis.service';
 import { ParisEventsService } from '../paris-events/paris-events.service';
 import { EventsCatalogService } from '../paris-events/events-catalog.service';
+import { SitemapService } from '../sitemap/sitemap.service';
 import { IDF_ZONES } from '../geo-zones/idf/idf.zones';
 import { EventData } from '@wander/types';
 
@@ -19,6 +20,7 @@ export class IngestionService {
     private readonly redisService: RedisService,
     private readonly parisEventsService: ParisEventsService,
     private readonly eventsCatalog: EventsCatalogService,
+    private readonly sitemapService: SitemapService,
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_2AM, {
@@ -63,6 +65,7 @@ export class IngestionService {
       await this.redisService.setPersist(STAGING_KEY, events);
       await this.redisService.rename(STAGING_KEY, ACTIVE_KEY);
       await this.eventsCatalog.invalidate();
+      await this.sitemapService.invalidate();
       this.logger.log(`💾 Ingestion terminée — ${events.length} events uniques en base`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';

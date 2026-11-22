@@ -36,6 +36,7 @@ const mockEvent: EventData = {
 const mockRedisService = {
   get: jest.fn(),
   set: jest.fn(),
+  del: jest.fn(),
 };
 
 const mockEventsCatalog = {
@@ -75,5 +76,13 @@ describe('SitemapService', () => {
     expect(xml).toContain('https://www.wandercity.fr/event/concert/test/1');
     expect(xml).not.toContain('lastmod');
     expect(mockRedisService.set).toHaveBeenCalledWith('sitemap:xml', xml, 12 * 60 * 60);
+  });
+
+  it('invalidates the cached sitemap in Redis', async () => {
+    mockRedisService.del.mockResolvedValue(undefined);
+
+    await service.invalidate();
+
+    expect(mockRedisService.del).toHaveBeenCalledWith('sitemap:xml');
   });
 });

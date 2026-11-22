@@ -8,5 +8,6 @@ import { SitemapService } from './sitemap.service';
   imports: [RedisModule, ParisEventsModule],
   controllers: [SitemapController],
   providers: [SitemapService],
+  exports: [SitemapService],
 })
 export class SitemapModule {}

@@ -42,6 +42,7 @@ const mockParisEventsService = {
 
 const mockEventsCatalog = {
   getById: jest.fn(),
+  getAll: jest.fn(),
 };
 
 describe('EventsService', () => {
@@ -97,6 +98,55 @@ describe('EventsService', () => {
       mockEventsCatalog.getById.mockResolvedValue(mockEvent);
 
       await expect(service.getOne('1')).resolves.toEqual(mockEvent);
+    });
+  });
+
+  describe('getRelated', () => {
+    const makeEvent = (id: string, tags: EventData['tags']): EventData => ({
+      ...mockEvent,
+      id,
+      title: `Event ${id}`,
+      tags,
+    });
+
+    it('returns empty array when target event is not found', async () => {
+      mockEventsCatalog.getById.mockResolvedValue(null);
+
+      await expect(service.getRelated('missing')).resolves.toEqual([]);
+      expect(mockEventsCatalog.getAll).not.toHaveBeenCalled();
+    });
+
+    it('prioritizes events sharing a tag, excludes self, and caps at 6', async () => {
+      const target = makeEvent('1', ['Concert']);
+      const catalog = [
+        target,
+        makeEvent('2', ['Expo']),
+        makeEvent('3', ['Concert']),
+        makeEvent('4', ['Concert', 'Festival']),
+        makeEvent('5', ['Théâtre']),
+        makeEvent('6', ['Concert']),
+        makeEvent('7', ['Concert']),
+        makeEvent('8', ['Concert']),
+        makeEvent('9', ['Concert']),
+        makeEvent('10', ['Concert']),
+      ];
+      mockEventsCatalog.getById.mockResolvedValue(target);
+      mockEventsCatalog.getAll.mockResolvedValue(catalog);
+
+      const related = await service.getRelated('1');
+
+      expect(related.map((e) => e.id)).toEqual(['3', '4', '6', '7', '8', '9']);
+    });
+
+    it('fills remaining slots with fallback events when fewer than 6 share a tag', async () => {
+      const target = makeEvent('1', ['Concert']);
+      const catalog = [target, makeEvent('2', ['Expo']), makeEvent('3', ['Concert']), makeEvent('4', ['Théâtre'])];
+      mockEventsCatalog.getById.mockResolvedValue(target);
+      mockEventsCatalog.getAll.mockResolvedValue(catalog);
+
+      const related = await service.getRelated('1');
+
+      expect(related.map((e) => e.id)).toEqual(['3', '2', '4']);
     });
   });
 });
