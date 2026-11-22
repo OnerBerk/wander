@@ -1,4 +1,6 @@
 import { useEvent } from '@/api/features/events/useEvent';
+import { useRelatedEvents } from '@/api/features/events/useRelatedEvents';
+import RelatedEvents from '@/components/events/related-events';
 import { loadMetroStationsData } from '@/components/map/metro-geojson';
 import { metroIconByLine, rerIconByLine } from '@/components/modals/utils';
 import PageLoader from '@/ui-components/page-loader';
@@ -51,6 +53,8 @@ const EventDetailsPage = () => {
   const { pathname, state } = useLocation();
   const backTo = eventBackPath(state);
   const { data: event, isPending } = useEvent(id);
+  const { data: relatedEvents = [] } = useRelatedEvents(event ? id : undefined);
+  const mainRef = useRef<HTMLElement>(null);
   const spotMapRef = useRef<HTMLDivElement>(null);
   const { data: metroData } = useQuery({
     queryKey: ['metro-stations'],
@@ -62,6 +66,7 @@ const EventDetailsPage = () => {
   const spotLng = event?.location.lng;
 
   useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0 });
     if (!spotMapRef.current || spotLat == null || spotLng == null) return;
 
     let spotMap: maplibregl.Map | null = null;
@@ -113,7 +118,7 @@ const EventDetailsPage = () => {
     'relative min-h-0 flex-1 overflow-y-auto rounded-xl bg-wander-crem/17 p-4 backdrop-blur-sm scrollbar-hidden';
 
   return (
-    <main className="bg-wander-crem flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3 md:overflow-hidden">
+    <main ref={mainRef} className="bg-wander-crem flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3">
       <SeoMetadata
         title={seo.title}
         description={seo.description}
@@ -128,7 +133,7 @@ const EventDetailsPage = () => {
         <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
         Retour
       </Link>
-      <div className="mx-auto w-full md:my-auto md:h-[80vh] md:w-[75vw]" style={{ containerType: 'size' }}>
+      <div className="mx-auto w-full md:h-[80vh] md:w-[75vw] md:shrink-0" style={{ containerType: 'size' }}>
         <div className="grid w-full grid-cols-1 gap-4 md:h-[80vh] md:grid-cols-3 md:grid-rows-[minmax(0,1fr)_minmax(0,2fr)]">
           <div className="relative flex min-h-96 flex-col overflow-hidden p-5 md:col-span-2 md:row-span-2 md:h-full md:min-h-0">
             <div className={`${bloc} absolute inset-0 brightness-150 grayscale-80`} style={bg} />
@@ -205,6 +210,7 @@ const EventDetailsPage = () => {
           </div>
         </div>
       </div>
+      <RelatedEvents events={relatedEvents} from={backTo} />
     </main>
   );
 };

@@ -1,8 +1,7 @@
 import wanderLogoPaper from '@/assets/logo/wander-logo-paper.png';
-
 import { useIsDay } from '@/hooks/useIsDay';
-
 import { useWeatherIcon } from '@/hooks/useWeatherIcon';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const icon = useWeatherIcon();
@@ -13,13 +12,13 @@ const Header = () => {
       className={`relative z-60 block h-16 shrink-0 p-[0.35rem] md:h-32 md:p-2 ${isDay ? 'header-day' : 'header-night'}`}
     >
       <div className="font-alternate flex h-full justify-between">
-        <div className="flex h-full items-center gap-[0.525rem] md:gap-3">
+        <Link to="/" className="flex h-full items-center gap-[0.525rem] md:gap-3">
           <img className="h-14 w-auto object-contain md:h-20" src={wanderLogoPaper} alt="Wander" />
           <div className="block flex-col items-center">
             <p className="text-wander-orange text-[1.3125rem] font-semibold md:text-5xl">Wander</p>
             <p className="text-[0.525rem] font-medium md:text-2xl">Explorer votre ville autrement</p>
           </div>
-        </div>
+        </Link>
         <div className="group relative hidden h-full items-start md:flex">
           {icon && (
             <>

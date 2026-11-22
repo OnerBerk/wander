@@ -247,12 +247,16 @@ function formatFallbackDate(iso: string): string {
   }
 }
 
-function buildFallbackBody(event: EventData, description: string): string {
+function buildFallbackBody(event: EventData, description: string, relatedEvents: EventData[]): string {
   const dateText = formatFallbackDate(event.dateStart);
   const addressParts = [event.addressName, event.addressStreet, event.addressZipcode, event.addressCity]
     .map((part) => part.trim())
     .filter(Boolean);
   const addressText = addressParts.join(', ');
+
+  const relatedLinks = relatedEvents
+    .map((item) => `<li><a href="${escapeHtml(eventPath(item))}">${escapeHtml(item.title)}</a></li>`)
+    .join('');
 
   const lines = [
     '<main>',
@@ -261,13 +265,16 @@ function buildFallbackBody(event: EventData, description: string): string {
     addressText ? `<p>${escapeHtml(addressText)}</p>` : '',
     `<p>${escapeHtml(description)}</p>`,
     '<a href="/">Retour aux événements</a>',
+    relatedLinks
+      ? `<nav aria-label="Événements similaires"><h2>Événements similaires</h2><ul>${relatedLinks}</ul></nav>`
+      : '',
     '</main>',
   ];
 
   return lines.filter(Boolean).join('');
 }
 
-export function injectEventHtml(template: string, event: EventData): string {
+export function injectEventHtml(template: string, event: EventData, relatedEvents: EventData[] = []): string {
   const seo = buildEventSeo(event);
   const cleaned = stripDefaultSeoTags(template);
 
@@ -293,7 +300,7 @@ export function injectEventHtml(template: string, event: EventData): string {
   const withHead = cleaned.replace('</head>', () => `    ${headTags}\n  </head>`);
   return withHead.replace(
     /<div\s+id=["']root["']\s*><\/div>/i,
-    () => `<div id="root">${buildFallbackBody(event, seo.description)}</div>`,
+    () => `<div id="root">${buildFallbackBody(event, seo.description, relatedEvents)}</div>`,
   );
 }
 
