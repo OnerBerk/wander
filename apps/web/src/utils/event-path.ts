@@ -1,5 +1,5 @@
-import { EVENT_TAG_OPTIONS } from '@/constants/event-tag-options';
-import { EventData } from '@wander/types';
+import type { EventData } from '@wander/types';
+import { EVENT_TAG_LABELS } from '../constants/event-tag-labels';
 
 export function slugify(text: string): string {
   const slug = text
@@ -13,9 +13,13 @@ export function slugify(text: string): string {
   return slug || 'event';
 }
 
-export function eventPath(event: EventData): string {
-  const option = EVENT_TAG_OPTIONS.find((item) => event.tags.includes(item.value));
-  const categorie = slugify(option?.label ?? 'autre');
+export function eventCategoryLabel(event: Pick<EventData, 'tags'>): string {
+  const option = EVENT_TAG_LABELS.find((item) => event.tags.includes(item.value));
+  return option?.label ?? 'Autre';
+}
+
+export function eventPath(event: Pick<EventData, 'id' | 'title' | 'tags'>): string {
+  const categorie = slugify(eventCategoryLabel(event));
   return `/event/${categorie}/${slugify(event.title)}/${event.id}`;
 }
 
