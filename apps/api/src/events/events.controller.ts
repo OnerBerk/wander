@@ -13,6 +13,11 @@ export class EventsController {
     return this.eventsService.getAll(query);
   }
 
+  @Get(':id/related')
+  async getRelated(@Param() params: EventIdDto): Promise<EventData[]> {
+    return this.eventsService.getRelated(params.id);
+  }
+
   @Get(':id')
   async getOne(@Param() params: EventIdDto): Promise<EventData | null> {
     return this.eventsService.getOne(params.id);

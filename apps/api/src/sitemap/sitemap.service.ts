@@ -95,4 +95,8 @@ export class SitemapService {
     }
     return xml;
   }
+
+  async invalidate(): Promise<void> {
+    await this.redisService.del(SITEMAP_REDIS_KEY);
+  }
 }

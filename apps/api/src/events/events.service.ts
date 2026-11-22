@@ -4,6 +4,8 @@ import { QueryFilterDto } from '../filters/dtos/query-filter.dto';
 import { ParisEventsService } from '../paris-events/paris-events.service';
 import { EventsCatalogService } from '../paris-events/events-catalog.service';
 
+const RELATED_EVENTS_LIMIT = 6;
+
 /** Liste et fiche événement. Les deux lisent le catalogue en mémoire, pas Redis. */
 @Injectable()
 export class EventsService {
@@ -34,5 +36,29 @@ export class EventsService {
   /** Une fiche, retrouvée par id dans la même copie mémoire. */
   async getOne(id: string): Promise<EventData | null> {
     return this.eventsCatalog.getById(id);
+  }
+
+  /** Jusqu'à 6 événements similaires (mêmes tags en priorité), lus depuis la même copie mémoire. */
+  async getRelated(id: string): Promise<EventData[]> {
+    const target = await this.eventsCatalog.getById(id);
+    if (!target) return [];
+
+    const all = await this.eventsCatalog.getAll();
+    const targetTags = new Set(target.tags);
+    const matching: EventData[] = [];
+    const fallback: EventData[] = [];
+
+    for (const candidate of all) {
+      if (candidate.id === target.id) continue;
+
+      if (targetTags.size > 0 && candidate.tags.some((tag) => targetTags.has(tag))) {
+        matching.push(candidate);
+        if (matching.length === RELATED_EVENTS_LIMIT) return matching;
+      } else if (fallback.length < RELATED_EVENTS_LIMIT) {
+        fallback.push(candidate);
+      }
+    }
+
+    return [...matching, ...fallback].slice(0, RELATED_EVENTS_LIMIT);
   }
 }
