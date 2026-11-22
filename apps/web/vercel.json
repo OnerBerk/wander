@@ -21,9 +21,15 @@
       ]
     }
   ],
+  "functions": {
+    "api/event.ts": {
+      "includeFiles": "dist/index.html"
+    }
+  },
   "rewrites": [
     { "source": "/stats/script.js", "destination": "https://cloud.umami.is/script.js" },
     { "source": "/sitemap.xml", "destination": "https://api.wandercity.fr/sitemap.xml" },
-    { "source": "/((?!_vercel/).*)", "destination": "/" }
+    { "source": "/event/:categorie/:slug/:id", "destination": "/api/event?categorie=:categorie&slug=:slug&id=:id" },
+    { "source": "/((?!_vercel/|api/).*)", "destination": "/" }
   ]
 }

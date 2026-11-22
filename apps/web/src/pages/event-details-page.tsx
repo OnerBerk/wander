@@ -21,6 +21,7 @@ import formWhite from '@/assets/icons/form-white.svg';
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import EventTagIcons from '@/components/modals/event-tag-icons';
 import SeoMetadata from '@/components/seo/seo-metadata';
+import { buildEventSeo } from '@/utils/event-seo';
 
 const lineIcons = (lines: string[], icons: Record<string, string>) => {
   if (lines.length === 0) return null;
@@ -63,17 +64,22 @@ const EventDetailsPage = () => {
   useEffect(() => {
     if (!spotMapRef.current || spotLat == null || spotLng == null) return;
 
-    const spotMap = new maplibregl.Map({
-      container: spotMapRef.current,
-      style: `https://api.maptiler.com/maps/topo-v4/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`,
-      center: [spotLng, spotLat],
-      zoom: 13,
-      interactive: false,
-      attributionControl: false,
-    });
-    new maplibregl.Marker({ color: '#cc4b10' }).setLngLat([spotLng, spotLat]).addTo(spotMap);
+    let spotMap: maplibregl.Map | null = null;
+    try {
+      spotMap = new maplibregl.Map({
+        container: spotMapRef.current,
+        style: `https://api.maptiler.com/maps/topo-v4/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`,
+        center: [spotLng, spotLat],
+        zoom: 13,
+        interactive: false,
+        attributionControl: false,
+      });
+      new maplibregl.Marker({ color: '#cc4b10' }).setLngLat([spotLng, spotLat]).addTo(spotMap);
+    } catch {
+      return;
+    }
 
-    return () => spotMap.remove();
+    return () => spotMap?.remove();
   }, [pathname, spotLat, spotLng]);
 
   if (event && pathname !== eventPath(event)) {
@@ -81,8 +87,20 @@ const EventDetailsPage = () => {
   }
 
   if (isPending) return <PageLoader to={backTo} />;
-  if (!event) return <PageMessage title="Événement terminé" to={backTo} linkLabel="Retour" />;
+  if (!event) {
+    return (
+      <>
+        <SeoMetadata
+          title="Événement terminé | Wander"
+          description="Cet événement n'est plus disponible sur Wander."
+          noIndex
+        />
+        <PageMessage title="Événement terminé" to={backTo} linkLabel="Retour" />
+      </>
+    );
+  }
 
+  const seo = buildEventSeo(event);
   const addressLine = `${event.addressStreet}, ${event.addressZipcode} ${event.addressCity}`;
   const mapsUrl = `https://www.google.com/maps?q=${event.location.lat},${event.location.lng}`;
   const dateLabel = formatDateRange(event.dateStart, event.dateEnd);
@@ -97,9 +115,14 @@ const EventDetailsPage = () => {
   return (
     <main className="bg-wander-crem flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3 md:overflow-hidden">
       <SeoMetadata
-        title={`${event.title} | Wander`}
-        description={event.leadText || 'Événement à Paris et en Île-de-France.'}
-        canonicalPath={eventPath(event)}
+        title={seo.title}
+        description={seo.description}
+        canonicalPath={seo.canonicalPath}
+        imagePath={seo.imageUrl}
+        imageAlt={seo.imageAlt}
+        ogType="article"
+        twitterCard={seo.twitterCard}
+        jsonLd={seo.jsonLd}
       />
       <Link to={backTo} aria-label="Retour" className="mb-4 inline-flex w-fit items-center gap-2 text-sm md:text-base">
         <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
